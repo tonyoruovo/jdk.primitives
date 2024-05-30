@@ -5,7 +5,23 @@
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<name>jdk.primitives</name>
+	<description>A maven package that provides primitive alternatives for generic-based types such as collections, functions, concurrent types, atomic types, streams etc</description>
 	<url>http://maven.apache.org</url>
+
+	<scm>
+		<url>https://github.com/tonyoruovo/jdk.primitives</url>
+		<connection>scm:git:git://github.com/tonyoruovo/jdk.primitives.git</connection>
+		<developerConnection>scm:git:ssh://github.com:yourusername/uuid-generator.git</developerConnection>
+	</scm>
+
+	
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+
 	<properties>
 		<maven.compiler.release>21</maven.compiler.release>
 		<maven.compiler.source>21</maven.compiler.source>
@@ -26,6 +42,7 @@
 	</dependencies>
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -44,6 +61,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -63,6 +81,56 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.0</version>
+				  <executions>
+					  <execution>
+						  <id>attach-sources</id>
+						  <goals>
+							  <goal>jar-no-fork</goal>
+						  </goals>
+					  </execution>
+				  </executions>
+			  </plugin>
+
+			<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.6.3</version>
+				  <executions>
+					  <execution>
+						  <id>attach-javadocs</id>
+						  <goals>
+							  <goal>jar</goal>
+						  </goals>
+					  </execution>
+				  </executions>
+			  </plugin>
 		</plugins>
 	</build>
+
+	<developers>
+		<developer>
+			<id>1</id>
+			<email>tonyoruovo@gmail.com</email>
+			<name>Oruovo E. Anthony</name>
+			<organization>mathaid</organization>
+			<organizationUrl></organizationUrl>
+			<properties>
+				<mathaid.dev.1.github>https://github.com/tonyoruovo</mathaid.dev.1.github>
+			</properties>
+			<roles>
+				<role>Authour</role>
+				<role>Architect</role>
+				<role>Designer</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>WAT — West Africa Time</timezone>
+		</developer>
+	</developers>
 </project>
