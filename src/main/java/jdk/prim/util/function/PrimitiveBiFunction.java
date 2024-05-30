@@ -48,14 +48,14 @@ import java.util.function.ToLongBiFunction;
 	 * of retrofitting their implementation(s) with this one, for instance, the following snippet is from a library in which
 	 * we had no control over how code was written:
 	 * <pre>{@code
-	 * public interface LegacyInterface {
-	 *   ToDoubleBiFunction apiMethod();
+	 * public interface LegacyInterface&lt;T, U&gt; {
+	 *   ToDoubleBiFunction&lt;T, U&gt; apiMethod();
 	 * }
 	 * }</pre>
 	 * But we can re-implement the above, retrofitting it with our primitive {@code double} equivalent:
 	 * <pre>{@code
-	 * public interface MyInterface extends LegacyInterface {
-	 * 	PrimitiveBiFunction apiMethod();
+	 * public interface MyInterface&lt;U, T&gt; extends LegacyInterface&lt;T, U&gt; {
+	 * 	PrimitiveBiFunction.ToDouble&lt;U, T&gt; apiMethod();
 	 * }
 	 * }</pre>
 	 * </li>
@@ -63,7 +63,7 @@ import java.util.function.ToLongBiFunction;
 	 * An Example of this is:
 	 * <pre>{@code
 	 * java.util.function.ToDoubleBiFunction<String, BigInteger> f = (s, i) -> useParamThenReturnDouble(s, i); //The JDK's interface for BiFunction that returns a double
-	 * PrimitiveBiFunction.ToDouble<String, BigInteger> g = (s, i) -> useParamThenReturnDouble(s, i); // the same as the above but with improved naming and functionalities
+	 * PrimitiveBiFunction.ToDouble<BigInteger, String> g = (s, i) -> useParamThenReturnDouble(s, i); // the same as the above but with improved naming and functionalities
 	 * }</pre>
 	 * Another example would be the {@code DoubleBinaryOperator} interface:
 	 * <pre>{@code
@@ -77,7 +77,7 @@ import java.util.function.ToLongBiFunction;
 	 * <pre>{@code
 	 * PrimitiveBiFunction.ToDouble.OfDouble.AndInt f = Math::scalb;
 	 * PrimitiveConsumer.OfDouble c = System.out::println;
-	 * c.acceptDouble(f.apply(25.0, 5));
+	 * c.acceptDouble(f.applyDouble(25.0, 5));
 	 * }</pre>
 	 * The above has no JDK equivalent that extends the {@code BiFunction} interface to provide for returning a {@code double} and taking a {@code double} and an {@code int}.
 	 * Hence all primitives are covered in the subsequent nested sub-interfaces.
@@ -1063,9 +1063,31 @@ import java.util.function.ToLongBiFunction;
 		 */
 			@Override default ToBoolean.AndBoolean<OF> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x, y));}
 		}
-
+		/**
+		 * A {@code BiFunction} that expects a {@code double} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Double, Object)}
+		 */
 		@FunctionalInterface interface OfDouble<AND> extends ToDouble<AND, java.lang.Double>{
+			/**
+			 * Applies the funtion to the {@code double} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Double, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
 			double applyDouble(double x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(double, Object)} consequentially casting
+			 * the argument.
+			 */
 			@Override default double applyDouble(java.lang.Double x, AND y) {return applyDouble((double) x, y);}
 
 			/**
@@ -1144,9 +1166,34 @@ import java.util.function.ToLongBiFunction;
 		 * a more precise implementation for that nested sub-interface. 
 		 */
 			@Override default ToBoolean.OfDouble<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code double} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndDouble extends OfDouble<java.lang.Double>, BinaryOperator<java.lang.Double>, DoubleBinaryOperator {
-				double applyDouble(double x, double y);
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(double x, double y);				
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Double y) {return applyDouble(x, (double) y);}
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @apiNote This is semantically the same as {@link #applyDouble(double, double)}
+				 */
 				@Override default double applyAsDouble(double x, double y) {return applyDouble(x, (double) y);}
 
 				/**
@@ -1226,8 +1273,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfDouble.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code long} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndLong extends OfDouble<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(double x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Long y) {return applyDouble(x, (long) y);}
 
 				/**
@@ -1307,8 +1372,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfDouble.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code int} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndInt extends OfDouble<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(double x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Integer y) {return applyDouble(x, (int) y);}
 
 				/**
@@ -1388,8 +1471,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfDouble.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code float} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndFloat extends OfDouble<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(double x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Float y) {return applyDouble(x, (float) y);}
 
 				/**
@@ -1469,8 +1570,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfDouble.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code char} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndChar extends OfDouble<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(double x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Character y) {return applyDouble(x, (char) y);}
 
 				/**
@@ -1550,8 +1669,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfDouble.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code short} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndShort extends OfDouble<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(double x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Short y) {return applyDouble(x, (short) y);}
 
 				/**
@@ -1631,8 +1768,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfDouble.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code byte} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndByte extends OfDouble<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(double x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
 
 				/**
@@ -1712,8 +1867,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfDouble.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,(byte)y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code double} and {@code boolean} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndBoolean extends OfDouble<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(double x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(double x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
 
 				/**
@@ -1794,8 +1967,31 @@ import java.util.function.ToLongBiFunction;
 				@Override default ToBoolean.OfDouble.AndBoolean andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
 		}
+		/**
+		 * A {@code BiFunction} that expects a {@code long} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Long, Object)}
+		 */
 		@FunctionalInterface interface OfLong<AND> extends ToDouble<AND, java.lang.Long>{
+			/**
+			 * Applies the funtion to the {@code long} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Long, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
 			double applyDouble(long x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(long, Object)} consequentially casting
+			 * the argument.
+			 */
 			@Override default double applyDouble(java.lang.Long x, AND y) {return applyDouble((long) x, y);}
 
 			/**
@@ -1874,8 +2070,26 @@ import java.util.function.ToLongBiFunction;
 		 * a more precise implementation for that nested sub-interface. 
 		 */
 			@Override default ToBoolean.OfLong<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code double} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndDouble extends OfLong<java.lang.Double> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, double y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Double y) {return applyDouble(x, (double) y);}
 
 				/**
@@ -1955,8 +2169,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfLong.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code long} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndLong extends OfLong<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Long y) {return applyDouble(x, (long) y);}
 
 				/**
@@ -2036,8 +2268,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfLong.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code int} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndInt extends OfLong<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Integer y) {return applyDouble(x, (int) y);}
 
 				/**
@@ -2117,8 +2367,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfLong.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code float} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndFloat extends OfLong<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Float y) {return applyDouble(x, (float) y);}
 
 				/**
@@ -2198,8 +2466,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfLong.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code char} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndChar extends OfLong<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Character y) {return applyDouble(x, (char) y);}
 
 				/**
@@ -2279,8 +2565,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfLong.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code short} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndShort extends OfLong<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Short y) {return applyDouble(x, (short) y);}
 
 				/**
@@ -2360,8 +2664,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfLong.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code byte} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndByte extends OfLong<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
 
 				/**
@@ -2441,8 +2763,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfLong.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code long} and {@code boolean} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndBoolean extends OfLong<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(long x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(long x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
 
 				/**
@@ -2523,8 +2863,31 @@ import java.util.function.ToLongBiFunction;
 				@Override default ToBoolean.OfLong.AndBoolean andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
 		}
+		/**
+		 * A {@code BiFunction} that expects an {@code int} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Integer, Object)}
+		 */
 		@FunctionalInterface interface OfInt<AND> extends ToDouble<AND, java.lang.Integer>{
+			/**
+			 * Applies the funtion to the {@code int} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Integer, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
 			double applyDouble(int x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(int, Object)} consequentially casting
+			 * the argument.
+			 */
 			@Override default double applyDouble(java.lang.Integer x, AND y) {return applyDouble((int) x, y);}
 
 			/**
@@ -2603,8 +2966,26 @@ import java.util.function.ToLongBiFunction;
 		 * a more precise implementation for that nested sub-interface. 
 		 */
 			@Override default ToBoolean.OfInt<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code double} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndDouble extends OfInt<java.lang.Double> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, double y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Double y) {return applyDouble(x, (double) y);}
 
 				/**
@@ -2684,8 +3065,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfInt.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code long} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndLong extends OfInt<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Long y) {return applyDouble(x, (long) y);}
 
 				/**
@@ -2765,8 +3164,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfInt.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code int} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndInt extends OfInt<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Integer y) {return applyDouble(x, (int) y);}
 
 				/**
@@ -2846,8 +3263,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfInt.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code float} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndFloat extends OfInt<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Float y) {return applyDouble(x, (float) y);}
 
 				/**
@@ -2927,8 +3362,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfInt.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code char} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndChar extends OfInt<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Character y) {return applyDouble(x, (char) y);}
 
 				/**
@@ -3008,8 +3461,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfInt.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code short} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndShort extends OfInt<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Short y) {return applyDouble(x, (short) y);}
 
 				/**
@@ -3089,8 +3560,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfInt.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code byte} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndByte extends OfInt<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
 
 				/**
@@ -3170,8 +3659,26 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfInt.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**
+			 * A {@code BiFunction} that is specialised to receive {@code int} and {@code boolean} arguments and return a {@code double} result.
+			 */
 			@FunctionalInterface interface AndBoolean extends OfInt<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(int x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(int x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
 
 				/**
@@ -3252,8 +3759,31 @@ import java.util.function.ToLongBiFunction;
 				@Override default ToBoolean.OfInt.AndBoolean andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
 		}
+		/**
+		 * A {@code BiFunction} that expects a {@code float} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Float, Object)}
+		 */
 		@FunctionalInterface interface OfFloat<AND> extends ToDouble<AND, java.lang.Float>{
+			/**
+			 * Applies the funtion to the {@code float} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Float, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
 			double applyDouble(float x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(float, Object)} consequentially casting
+			 * the argument.
+			 */
 			@Override default double applyDouble(java.lang.Float x, AND y) {return applyDouble((float) x, y);}
 
 			/**
@@ -3332,8 +3862,24 @@ import java.util.function.ToLongBiFunction;
 		 * a more precise implementation for that nested sub-interface. 
 		 */
 			@Override default ToBoolean.OfFloat<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code double} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndDouble extends OfFloat<java.lang.Double> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, double y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Double y) {return applyDouble(x, (double) y);}
 
 				/**
@@ -3413,8 +3959,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfFloat.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code long} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndLong extends OfFloat<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Long y) {return applyDouble(x, (long) y);}
 
 				/**
@@ -3494,8 +4056,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfFloat.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code int} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndInt extends OfFloat<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Integer y) {return applyDouble(x, (int) y);}
 
 				/**
@@ -3575,8 +4153,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfFloat.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code float} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndFloat extends OfFloat<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Float y) {return applyDouble(x, (float) y);}
 
 				/**
@@ -3656,8 +4250,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfFloat.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code char} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndChar extends OfFloat<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Character y) {return applyDouble(x, (char) y);}
 
 				/**
@@ -3737,8 +4347,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfFloat.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code short} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndShort extends OfFloat<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Short y) {return applyDouble(x, (short) y);}
 
 				/**
@@ -3818,8 +4444,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfFloat.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code byte} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndByte extends OfFloat<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
 
 				/**
@@ -3899,8 +4541,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfFloat.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code float} and {@code boolean} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndBoolean extends OfFloat<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(float x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(float x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
 
 				/**
@@ -3981,8 +4639,911 @@ import java.util.function.ToLongBiFunction;
 				@Override default ToBoolean.OfFloat.AndBoolean andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
 		}
+		/**
+		 * A {@code BiFunction} that expects a {@code char} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Character, Object)}
+		 */
+		@FunctionalInterface interface OfChar<AND> extends ToDouble<AND, java.lang.Character>{
+			/**
+			 * Applies the funtion to the {@code char} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Character, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
+			double applyDouble(char x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(char, Object)} consequentially casting
+			 * the argument.
+			 */
+			@Override default double applyDouble(java.lang.Character x, AND y) {return applyDouble((char) x, y);}
+
+			/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+			@Override default ToDouble.OfChar<AND> andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToDouble.OfChar<AND> andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToLong.OfChar<AND> andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToInt.OfChar<AND> andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToFloat.OfChar<AND> andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToChar.OfChar<AND> andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToShort.OfChar<AND> andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToByte.OfChar<AND> andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+			@Override default ToBoolean.OfChar<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code double} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndDouble extends OfChar<java.lang.Double> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, double y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Double y) {return applyDouble(x, (double) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndDouble andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndDouble andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndDouble andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndDouble andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndDouble andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndDouble andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndDouble andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndDouble andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code long} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndLong extends OfChar<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Long y) {return applyDouble(x, (long) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndLong andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndLong andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndLong andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndLong andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndLong andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndLong andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndLong andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndLong andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code int} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndInt extends OfChar<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Integer y) {return applyDouble(x, (int) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndInt andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndInt andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndInt andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndInt andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndInt andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndInt andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndInt andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndInt andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code float} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndFloat extends OfChar<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Float y) {return applyDouble(x, (float) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndFloat andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndFloat andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndFloat andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndFloat andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndFloat andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndFloat andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndFloat andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndFloat andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code char} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndChar extends OfChar<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Character y) {return applyDouble(x, (char) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndChar andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndChar andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndChar andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndChar andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndChar andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndChar andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndChar andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndChar andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code short} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndShort extends OfChar<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Short y) {return applyDouble(x, (short) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndShort andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndShort andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndShort andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndShort andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndShort andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndShort andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndShort andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndShort andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code byte} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndByte extends OfChar<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndByte andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndByte andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndByte andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndByte andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndByte andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndByte andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndByte andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndByte andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+			/**A {@code BiFunction} that is specialised to receive {@code char} and {@code boolean} arguments and return a {@code double} result. */
+			@FunctionalInterface interface AndBoolean extends OfChar<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
+				double applyDouble(char x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
+				@Override default double applyDouble(char x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
+
+				/**
+		 * Composes a {@code ToDouble} from {@code this} and the argument, passing the result of {@link #applyDouble} as
+		 * the argument for {@code after} and then returning the result of evaluating {@code after}.
+		 * <p>
+		 * This is a specialised form of {@link #andThenDouble(PrimitiveFunction.ToDouble)} and is recommended instead.
+		 * @param after the function to apply after this function is applied
+		 * @return a composed function that first applies this function and then
+     	 * applies the {@code after} function
+		 */
+				@Override default ToDouble.OfChar.AndBoolean andThenDouble(PrimitiveFunction.ToDouble.AndDouble after) {return (x,y) -> after.applyDouble(applyDouble(x, y));}
+/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @implNote The default implementation calls {@link #andThenDouble(PrimitiveFunction.ToDouble.AndDouble)} and casts the argument to {@code PrimitiveFunction.ToDouble.AndDouble} parameter type
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToDouble.OfChar.AndBoolean andThenDouble(PrimitiveFunction.ToDouble<? super java.lang.Double> after) {if(after instanceof PrimitiveFunction.ToDouble.AndDouble) return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after); return andThenDouble((PrimitiveFunction.ToDouble.AndDouble) after::applyDouble);}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToLong.OfChar.AndBoolean andThenLong(PrimitiveFunction.ToLong<? super java.lang.Double> after) {return (x,y) -> after.applyLong(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToInt.OfChar.AndBoolean andThenInt(PrimitiveFunction.ToInt<? super java.lang.Double> after) {return (x,y) -> after.applyInt(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToFloat.OfChar.AndBoolean andThenFloat(PrimitiveFunction.ToFloat<? super java.lang.Double> after) {return (x,y) -> after.applyFloat(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToChar.OfChar.AndBoolean andThenChar(PrimitiveFunction.ToChar<? super java.lang.Double> after) {return (x,y) -> after.applyChar(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToShort.OfChar.AndBoolean andThenShort(PrimitiveFunction.ToShort<? super java.lang.Double> after) {return (x,y) -> after.applyShort(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToByte.OfChar.AndBoolean andThenByte(PrimitiveFunction.ToByte<? super java.lang.Double> after) {return (x,y) -> after.applyByte(applyDouble(x,y));}/**
+		 * {@inheritDoc}
+		 * @param after {@inheritDoc}
+		 * @return {@inheritDoc}
+		 * @apiNote Although the ubiquitous/repetitive nature of the overriding of this method may seem redundant at first glance, it is
+		 * overridden to provide a specialised return value that fit the convention and style of this API. Hence each overriden layer provide
+		 * a more precise implementation for that nested sub-interface. 
+		 */
+				@Override default ToBoolean.OfChar.AndBoolean andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			}
+		}
+		/**
+		 * A {@code BiFunction} that expects a {@code short} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Short, Object)}
+		 */
 		@FunctionalInterface interface OfShort<AND> extends ToDouble<AND, java.lang.Short>{
+			/**
+			 * Applies the funtion to the {@code short} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Short, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
 			double applyDouble(short x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(short, Object)} consequentially casting
+			 * the argument.
+			 */
 			@Override default double applyDouble(java.lang.Short x, AND y) {return applyDouble((short) x, y);}
 
 			/**
@@ -4061,8 +5622,24 @@ import java.util.function.ToLongBiFunction;
 		 * a more precise implementation for that nested sub-interface. 
 		 */
 			@Override default ToBoolean.OfShort<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code double} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndDouble extends OfShort<java.lang.Double> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, double y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Double y) {return applyDouble(x, (double) y);}
 
 				/**
@@ -4142,8 +5719,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfShort.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code long} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndLong extends OfShort<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Long y) {return applyDouble(x, (long) y);}
 
 				/**
@@ -4223,8 +5816,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfShort.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code int} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndInt extends OfShort<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Integer y) {return applyDouble(x, (int) y);}
 
 				/**
@@ -4304,8 +5913,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfShort.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code float} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndFloat extends OfShort<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Float y) {return applyDouble(x, (float) y);}
 
 				/**
@@ -4385,8 +6010,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfShort.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code char} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndChar extends OfShort<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Character y) {return applyDouble(x, (char) y);}
 
 				/**
@@ -4466,8 +6107,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfShort.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code short} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndShort extends OfShort<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Short y) {return applyDouble(x, (short) y);}
 
 				/**
@@ -4547,8 +6204,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfShort.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code byte} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndByte extends OfShort<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
 
 				/**
@@ -4628,8 +6301,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfShort.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code short} and {@code boolean} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndBoolean extends OfShort<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will be implementing and
+				 * all others will call receive a boxed value instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(short x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(short x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
 
 				/**
@@ -4710,8 +6399,31 @@ import java.util.function.ToLongBiFunction;
 				@Override default ToBoolean.OfShort.AndBoolean andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
 		}
+		/**
+		 * A {@code BiFunction} that expects a {@code byte} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Byte, Object)}
+		 */
 		@FunctionalInterface interface OfByte<AND> extends ToDouble<AND, java.lang.Byte>{
+			/**
+			 * Applies the funtion to the {@code byte} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Byte, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
 			double applyDouble(byte x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(byte, Object)} consequentially casting
+			 * the argument.
+			 */
 			@Override default double applyDouble(java.lang.Byte x, AND y) {return applyDouble((byte) x, y);}
 
 			/**
@@ -4790,8 +6502,24 @@ import java.util.function.ToLongBiFunction;
 		 * a more precise implementation for that nested sub-interface. 
 		 */
 			@Override default ToBoolean.OfByte<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code double} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndDouble extends OfByte<java.lang.Double> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, double y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Double y) {return applyDouble(x, (double) y);}
 
 				/**
@@ -4871,8 +6599,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfByte.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code long} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndLong extends OfByte<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Long y) {return applyDouble(x, (long) y);}
 
 				/**
@@ -4952,8 +6696,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfByte.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code int} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndInt extends OfByte<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Integer y) {return applyDouble(x, (int) y);}
 
 				/**
@@ -5033,8 +6793,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfByte.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code float} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndFloat extends OfByte<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Float y) {return applyDouble(x, (float) y);}
 
 				/**
@@ -5114,8 +6890,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfByte.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code char} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndChar extends OfByte<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Character y) {return applyDouble(x, (char) y);}
 
 				/**
@@ -5195,8 +6987,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfByte.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code short} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndShort extends OfByte<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Short y) {return applyDouble(x, (short) y);}
 
 				/**
@@ -5276,8 +7084,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfByte.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code byte} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndByte extends OfByte<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
 
 				/**
@@ -5357,8 +7181,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfByte.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code byte} and {@code boolean} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndBoolean extends OfByte<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(byte x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(byte x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
 
 				/**
@@ -5439,8 +7279,31 @@ import java.util.function.ToLongBiFunction;
 				@Override default ToBoolean.OfByte.AndBoolean andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
 		}
+		/**
+		 * A {@code BiFunction} that expects a {@code boolean} and a generic-defined object as argument and
+		 * then returns a {@code double} as the result.
+		 * @param <AND> the type of object used as the second argument to {@link #applyDouble(java.lang.Boolean, Object)}
+		 */
 		@FunctionalInterface interface OfBoolean<AND> extends ToDouble<AND, java.lang.Boolean>{
+			/**
+			 * Applies the funtion to the {@code boolean} and given object arguments and return the {@code double}
+			 * result.
+			 * <p>
+			 * This is a specialised form of {@link #applyDouble(java.lang.Boolean, Object)} and is recommended
+			 * as this works directly with the primitive and is a first class implementation.
+			 * @param x the first argument
+			 * @param y the second argument
+			 * @return the result of applying both argument(s)
+			 */
 			double applyDouble(boolean x, AND y);
+			/**
+			 * Applies the function to the given arguments and returns the result.
+			 * @param x {@inheritDoc}
+			 * @param y {@inheritDoc}
+			 * @return {@inheritDoc}
+			 * @implNote the default implemntation calls {@link #applyDouble(boolean, Object)} consequentially casting
+			 * the argument.
+			 */
 			@Override default double applyDouble(java.lang.Boolean x, AND y) {return applyDouble((boolean) x, y);}
 
 			/**
@@ -5519,8 +7382,24 @@ import java.util.function.ToLongBiFunction;
 		 * a more precise implementation for that nested sub-interface. 
 		 */
 			@Override default ToBoolean.OfBoolean<AND> andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code double} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndDouble extends OfBoolean<java.lang.Double> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, double y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Double y) {return applyDouble(x, (double) y);}
 
 				/**
@@ -5600,8 +7479,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfBoolean.AndDouble andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code long} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndLong extends OfBoolean<java.lang.Long> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, long y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Long y) {return applyDouble(x, (long) y);}
 
 				/**
@@ -5681,8 +7576,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfBoolean.AndLong andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code int} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndInt extends OfBoolean<java.lang.Integer> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, int y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Integer y) {return applyDouble(x, (int) y);}
 
 				/**
@@ -5762,8 +7673,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfBoolean.AndInt andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code float} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndFloat extends OfBoolean<java.lang.Float> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, float y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Float y) {return applyDouble(x, (float) y);}
 
 				/**
@@ -5843,8 +7770,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfBoolean.AndFloat andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code char} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndChar extends OfBoolean<java.lang.Character> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, char y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Character y) {return applyDouble(x, (char) y);}
 
 				/**
@@ -5924,8 +7867,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfBoolean.AndChar andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code short} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndShort extends OfBoolean<java.lang.Short> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, short y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Short y) {return applyDouble(x, (short) y);}
 
 				/**
@@ -6005,8 +7964,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfBoolean.AndShort andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code byte} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndByte extends OfBoolean<java.lang.Byte> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, byte y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Byte y) {return applyDouble(x, (byte) y);}
 
 				/**
@@ -6086,8 +8061,24 @@ import java.util.function.ToLongBiFunction;
 		 */
 				@Override default ToBoolean.OfBoolean.AndByte andThenBoolean(PrimitiveFunction.ToBoolean<? super java.lang.Double> after) {return (x,y) -> after.applyBoolean(applyDouble(x,y));}
 			}
+			/**A {@code BiFunction} that is specialised to receive {@code boolean} and {@code boolean} arguments and return a {@code double} result. */
 			@FunctionalInterface interface AndBoolean extends OfBoolean<java.lang.Boolean> {
+				/**
+				 * Applies this function to the arguments. This is a specialised and first class implementation. First
+				 * class because when implementors implement this interface, this is the method they will implement
+				 * and all others will cast their arguments and return type instead.
+				 * @param x the first argument
+				 * @param y the second argument
+				 * @return a result
+				 */
 				double applyDouble(boolean x, boolean y);
+				/**
+				 * {@inheritDoc}
+				 * @param x {@inheritDoc}
+				 * @param y {@inheritDoc}
+				 * @return {@inheritDoc}
+				 * @implNote this is implemented by casting the more specialised form
+				 */
 				@Override default double applyDouble(boolean x, java.lang.Boolean y) {return applyDouble(x, (boolean) y);}
 
 				/**
