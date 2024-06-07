@@ -8183,8 +8183,8 @@ import java.util.function.ToLongBiFunction;
 	 * considered a primtive wrapper in this case.
 	 */
 	default ToDouble<AND, OF> andThenDouble(PrimitiveFunction.ToDouble<? super TO> after) throw ClassCastException {
-		return (x, y) -> {
-			TO to apply(x, y);
+		return (OF of, AND and) -> {
+			TO to apply(OF of, AND and);
 			if(to instanceof Double) return after.applyDouble((double)(Double) to);
 			else if(to instanceof Long) return after.applyDouble((double)(long)(Long) to);
 			else if(to instanceof Integer) return after.applyDouble((double)(int)(Integer) to);
