@@ -8182,7 +8182,20 @@ import java.util.function.ToLongBiFunction;
 	 * @throws ClassCastException if the return value of {@link #apply} is not a primtive wrapper. Note that {@code String} is not
 	 * considered a primtive wrapper in this case.
 	 */
-	default ToDouble<AND, OF> andThenDouble(PrimitiveFunction.ToDouble<? super TO> after) throws AbstractMethodError {throw new AbstractMethodError();}
+	default ToDouble<AND, OF> andThenDouble(PrimitiveFunction.ToDouble<? super TO> after) throw ClassCastException {
+		return (x, y) -> {
+			TO to apply(x, y);
+			if(to instanceof Double) return after.applyDouble((double)(Double) to);
+			else if(to instanceof Long) return after.applyDouble((double)(long)(Long) to);
+			else if(to instanceof Integer) return after.applyDouble((double)(int)(Integer) to);
+			else if(to instanceof Float) return after.applyDouble((double)(float)(Float) to);
+			else if(to instanceof Character) return after.applyDouble((double)(int)(char)(Character) to);
+			else if(to instanceof Short) return after.applyDouble((double)(short)(Short) to);
+			else if(to instanceof Byte) return after.applyDouble((double)(byte)(Byte) to);
+			else if(to instanceof Boolean) return after.applyDouble(((boolean)(Boolean) to) ? 1.0 : 0.0);
+			throw new ClassCastException("Unable to cast function result");
+		};
+	}
 	/**
 	 * Composes a {@code PrimitiveBiFunction} from {@code this} and the {@code after} argument. The default implementation calls
 	 * {@link #apply} and then examine it's result. When the result type matches {@link java.lang.Long}, then it is passed to
