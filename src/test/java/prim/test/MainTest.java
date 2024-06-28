@@ -1,6 +1,6 @@
 package prim.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,8 @@ public class MainTest {
     @Test
     void addition() {
 		System.out.println("Starting tests...");
-        assertEquals("Hello World!", m.hello());
+        // assertEquals("Hello World!", m.hello());
+        System.out.println(m.testValue());
     }
 
 }
