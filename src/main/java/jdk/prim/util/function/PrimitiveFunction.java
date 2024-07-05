@@ -51,7 +51,7 @@ import java.util.function.UnaryOperator;
  * which the interface specialises.
  * It also contains a suite of methods (which nested sub-interface override for
  * specialised implementations) that
- * define primitive alternatives for {@link #andThen(Function)}.
+ * define primitive alternatives for {@link #andThen(Function)} and {@link #compose(Function)}.
  * <p>
  * It uses the following convention: <code>To*</code> refers to the return type,
  * {@code Of*} refers to the first argument. When they are nested then the
