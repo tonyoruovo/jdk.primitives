@@ -19,6 +19,68 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 import java.util.function.UnaryOperator;
 
+/**
+ * <p>
+ * An interface that is generally an extension of the {@code Function}
+ * interface for primitive values. These include:
+ * <ol>
+ * <li>{@code double} extended as {@link ToDouble} the specialised function
+ * being {@link ToDouble#applyDouble}.</li>
+ * <li>{@code long} extended as {@link ToLong} the specialised function being
+ * {@link ToLong#applyLong}.</li>
+ * <li>{@code int} extended as {@link ToInt} the specialised function being
+ * {@link ToInt#applyInt}.</li>
+ * <li>{@code float} extended as {@link ToFloat} the specialised function being
+ * {@link ToFloat#applyFloat}.</li>
+ * <li>{@code char} extended as {@link ToChar} the specialised function being
+ * {@link ToChar#applyChar}.</li>
+ * <li>{@code short} extended as {@link ToShort} the specialised function being
+ * {@link ToShort#applyShort}.</li>
+ * <li>{@code byte} extended as {@link ToByte} the specialised function being
+ * {@link ToByte#applyByte}.</li>
+ * <li>{@code boolean} extended as {@link ToBoolean} the specialised function
+ * being {@link ToBoolean#applyBoolean}.</li>
+ * </ol>
+ * And additional interfaces (labeled as {@code OfXxx}) with their to cover for when the return
+ * type is not a primitive (such as a {@code StringBuilder}), but the
+ * argument is.
+ * <p>
+ * It contains (amongst other things) definitions for sub-interfaces that
+ * specialise the {@link #apply} as
+ * {@code applyXxx} function where {@code Xxx} is a suffix for that primitive in
+ * which the interface specialises.
+ * It also contains a suite of methods (which nested sub-interface override for
+ * specialised implementations) that
+ * define primitive alternatives for {@link #andThen(Function)}.
+ * <p>
+ * It uses the following convention: <code>To*</code> refers to the return type,
+ * {@code Of*} refers to the first argument. When they are nested then the
+ * convention remains mostly the same.
+ * <p>
+ * The point of this interface (and it's subsequent nested sub-interfaces) is to
+ * cover all use cases for {@code Function} with Java's primitives, while
+ * providing
+ * the opportunity for possible integration of with current JDK implementations
+ * such as:
+ * <ul>
+ * <li>{@link UnaryOperator}</li>
+ * <li>{@link DoubleUnaryOperator}</li>
+ * <li>{@link ToDoubleFunction}</li>
+ * <li>{@link LongToDoubleOperator}</li>
+ * <li>{@link IntToDoubleOperator}</li>
+ * <li>{@link LongUnaryOperator}</li>
+ * <li>{@link ToLongFunction}</li>
+ * <li>{@link DoubleToLongOperator}</li>
+ * <li>{@link IntToLongOperator}</li>
+ * <li>{@link IntUnaryOperator}</li>
+ * <li>{@link ToIntFunction}</li>
+ * <li>{@link DoubleToIntOperator}</li>
+ * <li>{@link LongToIntOperator}</li>
+ * </ul>
+ * 
+ * @param <TO> the return value of {@link #apply(Object)}
+ * @param <OF> the argument of {@link #apply(Object)}
+ */
 @FunctionalInterface
 public interface PrimitiveFunction<TO, OF> extends Function<OF, TO> {
 
