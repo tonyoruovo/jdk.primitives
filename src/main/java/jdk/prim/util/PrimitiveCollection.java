@@ -12,6 +12,7 @@ package jdk.prim.util;
 import java.util.Collection;
 
 import jdk.prim.PrimitiveIterable;
+import jdk.prim.util.function.PrimitiveConsumer;
 
 /*
  * Date created: 19 May 2024
@@ -29,7 +30,7 @@ import jdk.prim.PrimitiveIterable;
  * @author Oruovo Etineakpopha Anthony
  */
 public interface PrimitiveCollection<T, T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
-	interface OfDouble extends PrimitiveCollection<Double, jdk.prim.util.function.Double.Consumer>, PrimitiveIterable.OfDouble {
+	interface OfDouble extends PrimitiveCollection<Double, PrimitiveConsumer.OfDouble>, PrimitiveIterable.OfDouble {
 		boolean addDouble(double d);
 		boolean addAllDoubles(PrimitiveCollection.OfDouble data);
 		boolean containsDouble(double d);
