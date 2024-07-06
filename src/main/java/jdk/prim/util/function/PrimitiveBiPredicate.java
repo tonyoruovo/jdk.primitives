@@ -20,6 +20,9 @@ import java.util.function.BiPredicate;
  * in these interfaces. If an exception is thrown in any method, the behaviour of that method will
  * be similar to it's JDK equivalent.
  * 
+ * @param <OF> the first argument to {@link #test(Object, Object)}
+ * @param <AND> the second argument to {@link #test(Object, Object)}
+ * 
  * @see BiPredicate
  */
 @FunctionalInterface
