@@ -8,6 +8,8 @@ import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 
+import jdk.prim.util.function.PrimitiveConsumer;
+
 /**
  * 
  */
@@ -23,19 +25,19 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 			interface OfInt extends PrimitiveSpliterator<Integer, IntConsumer, Spliterator.OfInt>, Spliterator.OfInt {
 				PrimitiveSpliterator.OfInt trySplit();
 			}
-			interface OfFloat extends PrimitiveSpliterator<Float, jdk.prim.util.function.Float.Consumer, OfFloat> {
+			interface OfFloat extends PrimitiveSpliterator<Float, PrimitiveConsumer.OfFloat, OfFloat> {
 				OfFloat trySplit();
 			}
-			interface OfChar extends PrimitiveSpliterator<Character, jdk.prim.util.function.Char.Consumer, OfChar> {
+			interface OfChar extends PrimitiveSpliterator<Character, PrimitiveConsumer.OfChar, OfChar> {
 				OfChar trySplit();
 			}
-			interface OfShort extends PrimitiveSpliterator<Short, jdk.prim.util.function.Short.Consumer, OfShort> {
+			interface OfShort extends PrimitiveSpliterator<Short, PrimitiveConsumer.OfShort, OfShort> {
 				OfShort trySplit();
 			}
-			interface OfByte extends PrimitiveSpliterator<Byte, jdk.prim.util.function.Byte.Consumer, OfByte> {
+			interface OfByte extends PrimitiveSpliterator<Byte, PrimitiveConsumer.OfByte, OfByte> {
 				OfByte trySplit();
 			}
-			interface OfBoolean extends PrimitiveSpliterator<Boolean, jdk.prim.util.function.Boolean.Consumer, OfBoolean> {
+			interface OfBoolean extends PrimitiveSpliterator<Boolean, PrimitiveConsumer.OfBoolean, OfBoolean> {
 				OfBoolean trySplit();
 			}
 }

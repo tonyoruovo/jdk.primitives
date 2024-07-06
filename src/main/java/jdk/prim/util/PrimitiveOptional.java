@@ -7,7 +7,8 @@ import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 
-import jdk.prim.util.function.Double.Consumer;
+import jdk.prim.util.function.PrimitiveConsumer;
+import jdk.prim.util.function.PrimitiveSupplier;
 
 /**
  * An effort to support primitive collections and streams. Will be fleshed out later.
@@ -15,12 +16,12 @@ import jdk.prim.util.function.Double.Consumer;
  */
 public interface PrimitiveOptional<T_CONS, T_Stream> {
 	
-	interface OfDouble extends PrimitiveOptional<jdk.prim.util.function.Double.Consumer, DoubleStream> {
+	interface OfDouble extends PrimitiveOptional<PrimitiveConsumer.OfDouble, DoubleStream> {
 		double getDouble() throws NoSuchElementException;
 		default double orElse(double d) {
 			return isPresent() ? getDouble() : d;
 		}
-		default double orElseGet(jdk.prim.util.function.Double.Supplier supplier) {
+		default double orElseGet(PrimitiveSupplier.ToDouble supplier) {
 			return isPresent() ? getDouble() : supplier.getDouble();
 		}
 		default double orElseThrow() {
@@ -32,11 +33,11 @@ public interface PrimitiveOptional<T_CONS, T_Stream> {
 			throw exceptionFactory.get();
 		}
 		@Override
-		default void ifPresent(jdk.prim.util.function.Double.Consumer action) {
+		default void ifPresent(PrimitiveConsumer.OfDouble action) {
 			if(isPresent()) action.acceptDouble(getDouble());
 		}
 		@Override
-		default void ifPresentElse(Consumer ifAction, Runnable elseAction) {
+		default void ifPresentElse(PrimitiveConsumer.OfDouble ifAction, Runnable elseAction) {
 			if(isPresent()) ifAction.acceptDouble(getDouble());
 			else elseAction.run();			
 		}
