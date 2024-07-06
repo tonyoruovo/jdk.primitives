@@ -10,6 +10,8 @@ import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 
+import jdk.prim.util.function.PrimitiveConsumer;
+
 /**
  * An extension of {@link java.util.PrimitiveIterator} to allow for casting
  * in-between java's primitives.
@@ -28,7 +30,8 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * An Iterator specialized for {@code double} values.
 	 * <p>
 	 * Defines an interface for iterator specialized for {@code double} values. It
-	 * extends the {@link java.uti.PrimitiveIterator.OfDouble} interface and provides
+	 * extends the {@link java.uti.PrimitiveIterator.OfDouble} interface and
+	 * provides
 	 * additional methods specific to {@code double} values iteration.
 	 * 
 	 * @implNote The use of {@link #nextDouble()} is preferred over the use of
@@ -36,9 +39,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           and casting {@link #nextDouble()}.
 	 * @implNote Default implementation does not support modification such as
 	 *           {@link #remove()}
-	 */	
+	 */
 	interface OfDouble extends PrimitiveIterator<Double, DoubleConsumer>, java.util.PrimitiveIterator.OfDouble {
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -49,7 +52,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		default PrimitiveIterator.OfDouble toDouble() {
 			return this;
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -59,19 +62,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default PrimitiveIterator.OfLong toLong() {
 			return new PrimitiveIterator.OfLong() {
-				
+
 				@Override
 				public long nextLong() {
 					return (long) PrimitiveIterator.OfDouble.this.nextDouble();
 				}
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfDouble.this.hasNext();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -81,19 +84,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default PrimitiveIterator.OfInt toInt() {
 			return new PrimitiveIterator.OfInt() {
-				
+
 				@Override
 				public int nextInt() {
 					return (int) PrimitiveIterator.OfDouble.this.nextDouble();
 				}
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfDouble.this.hasNext();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -103,19 +106,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfFloat toFloat() {
 			return new OfFloat() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfDouble.this.hasNext();
 				}
-				
+
 				@Override
 				public float nextFloat() {
 					return (float) PrimitiveIterator.OfDouble.this.nextDouble();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -127,19 +130,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfChar toChar() {
 			return new OfChar() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfDouble.this.hasNext();
 				}
-				
+
 				@Override
 				public char nextChar() throws NoSuchElementException {
 					return (char) PrimitiveIterator.OfDouble.this.nextDouble();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -149,19 +152,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfShort toShort() {
 			return new OfShort() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfDouble.this.hasNext();
 				}
-				
+
 				@Override
 				public short nextShort() {
 					return (short) PrimitiveIterator.OfDouble.this.nextDouble();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -171,19 +174,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfByte toByte() {
 			return new OfByte() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfDouble.this.hasNext();
 				}
-				
+
 				@Override
 				public byte nextByte() {
 					return (byte) PrimitiveIterator.OfDouble.this.nextDouble();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -193,19 +196,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfBoolean toBoolean() {
 			return new OfBoolean() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfDouble.this.hasNext();
 				}
-				
+
 				@Override
 				public boolean nextBoolean() {
 					return PrimitiveIterator.OfDouble.this.nextDouble() != 0;
 				}
 			};
 		}
-		
+
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -216,13 +219,15 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		default Double next() throws NoSuchElementException {
 			return nextDouble();
 		}
-		
+
 		/**
 		 * {@inheritDoc}
 		 * 
 		 * @implSpec
-		 * <p>The default implementation behaves as if:
-		 * <pre>{@code
+		 *           <p>
+		 *           The default implementation behaves as if:
+		 * 
+		 *           <pre>{@code
 		 *     while (hasNext())
 		 *         action.accept(nextDouble());
 		 * }</pre>
@@ -246,9 +251,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           and casting {@link #nextLong()}.
 	 * @implNote Default implementation does not support modification such as
 	 *           {@link #remove()}
-	 */	
+	 */
 	interface OfLong extends PrimitiveIterator<Long, LongConsumer>, java.util.PrimitiveIterator.OfLong {
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -258,19 +263,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default PrimitiveIterator.OfDouble toDouble() {
 			return new PrimitiveIterator.OfDouble() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfLong.this.hasNext();
 				}
-				
+
 				@Override
 				public double nextDouble() {
 					return PrimitiveIterator.OfLong.this.nextLong();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -281,7 +286,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		default PrimitiveIterator.OfLong toLong() {
 			return this;
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -291,19 +296,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default PrimitiveIterator.OfInt toInt() {
 			return new PrimitiveIterator.OfInt() {
-				
+
 				@Override
 				public int nextInt() {
 					return (int) PrimitiveIterator.OfLong.this.nextLong();
 				}
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfLong.this.hasNext();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -313,19 +318,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfFloat toFloat() {
 			return new OfFloat() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfLong.this.hasNext();
 				}
-				
+
 				@Override
 				public float nextFloat() {
 					return PrimitiveIterator.OfLong.this.nextLong();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -337,19 +342,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfChar toChar() {
 			return new OfChar() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfLong.this.hasNext();
 				}
-				
+
 				@Override
 				public char nextChar() throws NoSuchElementException {
 					return (char) PrimitiveIterator.OfLong.this.nextLong();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -359,19 +364,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfShort toShort() {
 			return new OfShort() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfLong.this.hasNext();
 				}
-				
+
 				@Override
 				public short nextShort() {
 					return (short) PrimitiveIterator.OfLong.this.nextLong();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -381,19 +386,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfByte toByte() {
 			return new OfByte() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfLong.this.hasNext();
 				}
-				
+
 				@Override
 				public byte nextByte() {
 					return (byte) PrimitiveIterator.OfLong.this.nextLong();
 				}
 			};
 		}
-		
+
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
 		 */
@@ -403,19 +408,19 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfBoolean toBoolean() {
 			return new OfBoolean() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfLong.this.hasNext();
 				}
-				
+
 				@Override
 				public boolean nextBoolean() {
 					return PrimitiveIterator.OfLong.this.nextLong() != 0;
 				}
 			};
 		}
-		
+
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -427,21 +432,23 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 			return nextLong();
 		}
 
-        /**
-         * {@inheritDoc}
-         * 
-         * @implSpec
-         * <p>The default implementation behaves as if:
-         * <pre>{@code
-         *     while (hasNext())
-         *         action.accept(nextLong());
-         * }</pre>
-         */
-        default void forEachRemaining(LongConsumer action) {
-            Objects.requireNonNull(action);
-            while (hasNext())
-                action.accept(nextLong());
-        }
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @implSpec
+		 *           <p>
+		 *           The default implementation behaves as if:
+		 * 
+		 *           <pre>{@code
+		 *     while (hasNext())
+		 *         action.accept(nextLong());
+		 * }</pre>
+		 */
+		default void forEachRemaining(LongConsumer action) {
+			Objects.requireNonNull(action);
+			while (hasNext())
+				action.accept(nextLong());
+		}
 	}
 
 	/**
@@ -456,7 +463,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           and casting {@link #nextInt()}.
 	 * @implNote Default implementation does not support modification such as
 	 *           {@link #remove()}
-	 */	
+	 */
 	interface OfInt extends PrimitiveIterator<Integer, IntConsumer>, java.util.PrimitiveIterator.OfInt {
 
 		/*
@@ -547,12 +554,12 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default OfChar toChar() {
 			return new OfChar() {
-				
+
 				@Override
 				public boolean hasNext() {
 					return PrimitiveIterator.OfInt.this.hasNext();
 				}
-				
+
 				@Override
 				public char nextChar() throws NoSuchElementException {
 					return (char) PrimitiveIterator.OfInt.this.nextInt();
@@ -626,20 +633,23 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 			};
 		}
 
-        /**
-         * {@inheritDoc}
-         * @implSpec
-         * <p>The default implementation behaves as if:
-         * <pre>{@code
-         *     while (hasNext())
-         *         action.accept(nextInt());
-         * }</pre>
-         */
-        default void forEachRemaining(IntConsumer action) {
-            Objects.requireNonNull(action);
-            while (hasNext())
-                action.accept(nextInt());
-        }
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @implSpec
+		 *           <p>
+		 *           The default implementation behaves as if:
+		 * 
+		 *           <pre>{@code
+		 *     while (hasNext())
+		 *         action.accept(nextInt());
+		 * }</pre>
+		 */
+		default void forEachRemaining(IntConsumer action) {
+			Objects.requireNonNull(action);
+			while (hasNext())
+				action.accept(nextInt());
+		}
 
 		/**
 		 * {@inheritDoc}
@@ -667,7 +677,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfChar
-			extends PrimitiveIterator<Character, jdk.prim.util.function.Char.Consumer> {
+			extends PrimitiveIterator<Character, PrimitiveConsumer.OfChar> {
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -856,10 +866,10 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 *         action.accept(nextChar());
 		 * }</pre>
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Char.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfChar action) {
 			Objects.requireNonNull(action);
 			while (hasNext())
-				action.accept(nextChar());
+				action.acceptChar(nextChar());
 		}
 
 		/**
@@ -884,12 +894,12 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Character> action) {
-			if (action instanceof jdk.prim.util.function.Char.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Char.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfChar) {
+				forEachRemaining((PrimitiveConsumer.OfChar) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Char.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfChar) action::accept);
 		}
 	}
 
@@ -907,7 +917,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfFloat
-			extends PrimitiveIterator<Float, jdk.prim.util.function.Float.Consumer> {
+			extends PrimitiveIterator<Float, PrimitiveConsumer.OfFloat> {
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1096,10 +1106,10 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 *         action.accept(nextFloat());
 		 * }</pre>
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Float.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfFloat action) {
 			Objects.requireNonNull(action);
 			while (hasNext())
-				action.accept(nextFloat());
+				action.acceptFloat(nextFloat());
 		}
 
 		/**
@@ -1129,12 +1139,12 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Float> action) {
-			if (action instanceof jdk.prim.util.function.Float.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Float.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfFloat) {
+				forEachRemaining((PrimitiveConsumer.OfFloat) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Float.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfFloat) action::accept);
 		}
 
 	}
@@ -1153,7 +1163,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfShort
-			extends PrimitiveIterator<Short, jdk.prim.util.function.Short.Consumer> {
+			extends PrimitiveIterator<Short, PrimitiveConsumer.OfShort> {
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1342,10 +1352,10 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 *         action.accept(nextShort());
 		 * }</pre>
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Short.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfShort action) {
 			Objects.requireNonNull(action);
 			while (hasNext())
-				action.accept(nextShort());
+				action.acceptShort(nextShort());
 		}
 
 		/**
@@ -1375,12 +1385,12 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Short> action) {
-			if (action instanceof jdk.prim.util.function.Short.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Short.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfShort) {
+				forEachRemaining((PrimitiveConsumer.OfShort) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Short.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfShort) action::accept);
 		}
 
 	}
@@ -1399,7 +1409,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfByte
-			extends PrimitiveIterator<Byte, jdk.prim.util.function.Byte.Consumer> {
+			extends PrimitiveIterator<Byte, PrimitiveConsumer.OfByte> {
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1588,10 +1598,10 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 *         action.accept(nextByte());
 		 * }</pre>
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Byte.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfByte action) {
 			Objects.requireNonNull(action);
 			while (hasNext())
-				action.accept(nextByte());
+				action.acceptByte(nextByte());
 		}
 
 		/**
@@ -1621,12 +1631,12 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Byte> action) {
-			if (action instanceof jdk.prim.util.function.Byte.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Byte.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfByte) {
+				forEachRemaining((PrimitiveConsumer.OfByte) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Byte.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfByte) action::accept);
 		}
 
 	}
@@ -1645,7 +1655,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfBoolean
-			extends PrimitiveIterator<Boolean, jdk.prim.util.function.Boolean.Consumer> {
+			extends PrimitiveIterator<Boolean, PrimitiveConsumer.OfBoolean> {
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1834,10 +1844,10 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 *         action.accept(nextBoolean());
 		 * }</pre>
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Boolean.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfBoolean action) {
 			Objects.requireNonNull(action);
 			while (hasNext())
-				action.accept(nextBoolean());
+				action.acceptBoolean(nextBoolean());
 		}
 
 		/**
@@ -1867,12 +1877,12 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Boolean> action) {
-			if (action instanceof jdk.prim.util.function.Boolean.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Boolean.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfBoolean) {
+				forEachRemaining((PrimitiveConsumer.OfBoolean) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Boolean.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfBoolean) action::accept);
 		}
 
 	}

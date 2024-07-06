@@ -12,6 +12,7 @@ import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 
 import java.util.function.Consumer;
+import jdk.prim.util.function.PrimitiveConsumer;
 
 /**
  * {@code PrimitiveListIterator} is an interface that extends both
@@ -358,7 +359,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 * @implNote Default implementation does not support modification such as {@link #remove()}, {@link #add} and {@link #set}
 	 */
 	public static interface OfChar
-			extends PrimitiveListIterator<Character, jdk.prim.util.function.Char.Consumer> {
+			extends PrimitiveListIterator<Character, PrimitiveConsumer.OfChar> {
 
 		/**
 		 * Returns the next {@code char} element in the iteration.
@@ -406,7 +407,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 *
 		 * @param action the action to be performed for each element
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Char.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfChar action) {
 			Objects.requireNonNull(action);
 			while (hasNext()) {
 				action.accept(nextChar());
@@ -421,12 +422,12 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Character> action) {
-			if (action instanceof jdk.prim.util.function.Char.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Char.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfChar) {
+				forEachRemaining((PrimitiveConsumer.OfChar) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Char.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfChar) action::accept);
 		}
 
 	}
@@ -445,7 +446,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 * @implNote Default implementation does not support modification such as {@link #remove()}, {@link #add} and {@link #set}
 	 */
 	public static interface OfFloat
-			extends PrimitiveListIterator<Float, jdk.prim.util.function.Float.Consumer> {
+			extends PrimitiveListIterator<Float, PrimitiveConsumer.OfFloat> {
 
 		/**
 		 * Returns the next {@code float} element in the iteration.
@@ -493,7 +494,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 *
 		 * @param action the action to be performed for each element
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Float.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfFloat action) {
 			Objects.requireNonNull(action);
 			while (hasNext()) {
 				action.accept(nextFloat());
@@ -508,12 +509,12 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Float> action) {
-			if (action instanceof jdk.prim.util.function.Float.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Float.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfFloat) {
+				forEachRemaining((PrimitiveConsumer.OfFloat) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Float.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfFloat) action::accept);
 		}
 
 	}
@@ -532,7 +533,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 * @implNote Default implementation does not support modification such as {@link #remove()}, {@link #add} and {@link #set}
 	 */
 	public static interface OfShort
-			extends PrimitiveListIterator<Short, jdk.prim.util.function.Short.Consumer> {
+			extends PrimitiveListIterator<Short, PrimitiveConsumer.OfShort> {
 
 		/**
 		 * Returns the next {@code short} element in the iteration.
@@ -580,7 +581,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 *
 		 * @param action the action to be performed for each element
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Short.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfShort action) {
 			Objects.requireNonNull(action);
 			while (hasNext()) {
 				action.accept(nextShort());
@@ -595,12 +596,12 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Short> action) {
-			if (action instanceof jdk.prim.util.function.Short.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Short.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfShort) {
+				forEachRemaining((PrimitiveConsumer.OfShort) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Short.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfShort) action::accept);
 		}
 
 	}
@@ -618,7 +619,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 * @implNote Default implementation does not support modification such as {@link #remove()}, {@link #add} and {@link #set}
 	 */
 	public static interface OfByte
-			extends PrimitiveListIterator<Byte, jdk.prim.util.function.Byte.Consumer> {
+			extends PrimitiveListIterator<Byte, PrimitiveConsumer.OfByte> {
 
 		/**
 		 * Returns the next {@code byte} element in the iteration.
@@ -666,7 +667,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 *
 		 * @param action the action to be performed for each element
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Byte.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfByte action) {
 			Objects.requireNonNull(action);
 			while (hasNext()) {
 				action.accept(nextByte());
@@ -681,12 +682,12 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Byte> action) {
-			if (action instanceof jdk.prim.util.function.Byte.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Byte.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfByte) {
+				forEachRemaining((PrimitiveConsumer.OfByte) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Byte.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfByte) action::accept);
 		}
 
 	}
@@ -705,7 +706,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 * @implNote Default implementation does not support modification such as {@link #remove()}, {@link #add} and {@link #set}
 	 */
 	public static interface OfBoolean
-			extends PrimitiveListIterator<Boolean, jdk.prim.util.function.Boolean.Consumer> {
+			extends PrimitiveListIterator<Boolean, PrimitiveConsumer.OfBoolean> {
 
 		/**
 		 * Returns the next {@code boolean} element in the iteration.
@@ -753,7 +754,7 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 *
 		 * @param action the action to be performed for each element
 		 */
-		default void forEachRemaining(jdk.prim.util.function.Boolean.Consumer action) {
+		default void forEachRemaining(PrimitiveConsumer.OfBoolean action) {
 			Objects.requireNonNull(action);
 			while (hasNext()) {
 				action.accept(nextBoolean());
@@ -768,12 +769,12 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super Boolean> action) {
-			if (action instanceof jdk.prim.util.function.Boolean.Consumer) {
-				forEachRemaining((jdk.prim.util.function.Boolean.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfBoolean) {
+				forEachRemaining((PrimitiveConsumer.OfBoolean) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEachRemaining((jdk.prim.util.function.Boolean.Consumer) action::accept);
+			forEachRemaining((PrimitiveConsumer.OfBoolean) action::accept);
 		}
 
 	}
