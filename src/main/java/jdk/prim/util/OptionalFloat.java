@@ -6,6 +6,24 @@ import java.util.function.Supplier;
 import jdk.prim.util.function.PrimitiveConsumer;
 import jdk.prim.util.function.PrimitiveSupplier;
 
+/**
+ * A container object which may or may not contain a {@code float} value.
+ * If a value is present, {@code isPresent()} returns {@code true}. If no
+ * value is present, the object is considered <i>empty</i> and
+ * {@code isPresent()} returns {@code false}.
+ *
+ * <p>Additional methods that depend on the presence or absence of a contained
+ * value are provided, such as {@link #orElse(float) orElse()}
+ * (returns a default value if no value is present) and
+ * {@link #ifPresent(PrimitiveConsumer.OfFloat) ifPresent()} (performs an
+ * action if a value is present).
+ *
+ * @apiNote
+ * {@code OptionalFloat} is primarily intended for use as a method return type where
+ * there is a clear need to represent "no result." A variable whose type is
+ * {@code OptionalFloat} should never itself be {@code null}; it should always point
+ * to an {@code OptionalFloat} instance.
+ */
 public final class OptionalFloat {
     /**
      * Common instance for {@code empty()}.
