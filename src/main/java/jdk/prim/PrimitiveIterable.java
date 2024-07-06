@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 
 import jdk.prim.util.PrimitiveIterator;
 import jdk.prim.util.PrimitiveSpliterator;
+import jdk.prim.util.function.PrimitiveConsumer;
 
 /*
  * Date created: 19 May 2024
@@ -35,7 +36,7 @@ import jdk.prim.util.PrimitiveSpliterator;
 public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 	@FunctionalInterface
-	interface OfDouble extends PrimitiveIterable<Double, jdk.prim.util.function.Double.Consumer> {
+	interface OfDouble extends PrimitiveIterable<Double, PrimitiveConsumer.OfDouble> {
 
 		@Override
 		PrimitiveIterator.OfDouble iterator();
@@ -46,7 +47,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Double.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfDouble action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfDouble i = iterator();
 			while (i.hasNext()) {
@@ -56,17 +57,17 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Double> action) {
-			if (action instanceof jdk.prim.util.function.Double.Consumer) {
-				forEach((jdk.prim.util.function.Double.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfDouble) {
+				forEach((PrimitiveConsumer.OfDouble) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Double.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfDouble) action::accept);
 		}
 	}
 
 	@FunctionalInterface
-	interface OfLong extends PrimitiveIterable<Long, jdk.prim.util.function.Long.Consumer> {
+	interface OfLong extends PrimitiveIterable<Long, PrimitiveConsumer.OfLong> {
 
 		@Override
 		PrimitiveIterator.OfLong iterator();
@@ -77,7 +78,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Long.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfLong action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfLong i = iterator();
 			while (i.hasNext()) {
@@ -87,17 +88,17 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Long> action) {
-			if (action instanceof jdk.prim.util.function.Long.Consumer) {
-				forEach((jdk.prim.util.function.Long.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfLong) {
+				forEach((PrimitiveConsumer.OfLong) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Long.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfLong) action::accept);
 		}
 	}
 
 	@FunctionalInterface
-	interface OfInt extends PrimitiveIterable<Integer, jdk.prim.util.function.Int.Consumer> {
+	interface OfInt extends PrimitiveIterable<Integer, PrimitiveConsumer.OfInt> {
 
 		@Override
 		PrimitiveIterator.OfInt iterator();
@@ -108,7 +109,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Int.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfInt action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfInt i = iterator();
 			while (i.hasNext()) {
@@ -118,17 +119,17 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Integer> action) {
-			if (action instanceof jdk.prim.util.function.Int.Consumer) {
-				forEach((jdk.prim.util.function.Int.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfInt) {
+				forEach((PrimitiveConsumer.OfInt) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Int.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfInt) action::accept);
 		}
 	}
 
 	@FunctionalInterface
-	interface OfFloat extends PrimitiveIterable<Float, jdk.prim.util.function.Float.Consumer> {
+	interface OfFloat extends PrimitiveIterable<Float, PrimitiveConsumer.OfFloat> {
 
 		@Override
 		PrimitiveIterator.OfFloat iterator();
@@ -139,7 +140,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Float.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfFloat action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfFloat i = iterator();
 			while (i.hasNext()) {
@@ -149,17 +150,17 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Float> action) {
-			if (action instanceof jdk.prim.util.function.Float.Consumer) {
-				forEach((jdk.prim.util.function.Float.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfFloat) {
+				forEach((PrimitiveConsumer.OfFloat) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Float.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfFloat) action::accept);
 		}
 	}
 
 	@FunctionalInterface
-	interface OfChar extends PrimitiveIterable<Character, jdk.prim.util.function.Char.Consumer> {
+	interface OfChar extends PrimitiveIterable<Character, PrimitiveConsumer.OfChar> {
 
 		@Override
 		PrimitiveIterator.OfChar iterator();
@@ -170,7 +171,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Char.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfChar action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfChar i = iterator();
 			while (i.hasNext()) {
@@ -180,17 +181,17 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Character> action) {
-			if (action instanceof jdk.prim.util.function.Char.Consumer) {
-				forEach((jdk.prim.util.function.Char.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfChar) {
+				forEach((PrimitiveConsumer.OfChar) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Char.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfChar) action::accept);
 		}
 	}
 
 	@FunctionalInterface
-	interface OfShort extends PrimitiveIterable<Short, jdk.prim.util.function.Short.Consumer> {
+	interface OfShort extends PrimitiveIterable<Short, PrimitiveConsumer.OfShort> {
 
 		@Override
 		PrimitiveIterator.OfShort iterator();
@@ -201,7 +202,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Short.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfShort action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfShort i = iterator();
 			while (i.hasNext()) {
@@ -211,17 +212,17 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Short> action) {
-			if (action instanceof jdk.prim.util.function.Short.Consumer) {
-				forEach((jdk.prim.util.function.Short.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfShort) {
+				forEach((PrimitiveConsumer.OfShort) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Short.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfShort) action::accept);
 		}
 	}
 
 	@FunctionalInterface
-	interface OfByte extends PrimitiveIterable<Byte, jdk.prim.util.function.Byte.Consumer> {
+	interface OfByte extends PrimitiveIterable<Byte, PrimitiveConsumer.OfByte> {
 
 		@Override
 		PrimitiveIterator.OfByte iterator();
@@ -232,7 +233,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Byte.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfByte action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfByte i = iterator();
 			while (i.hasNext()) {
@@ -242,17 +243,17 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Byte> action) {
-			if (action instanceof jdk.prim.util.function.Byte.Consumer) {
-				forEach((jdk.prim.util.function.Byte.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfByte) {
+				forEach((PrimitiveConsumer.OfByte) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Byte.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfByte) action::accept);
 		}
 	}
 
 	@FunctionalInterface
-	interface OfBoolean extends PrimitiveIterable<Boolean, jdk.prim.util.function.Boolean.Consumer> {
+	interface OfBoolean extends PrimitiveIterable<Boolean, PrimitiveConsumer.OfBoolean> {
 
 		@Override
 		PrimitiveIterator.OfBoolean iterator();
@@ -263,7 +264,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 
 		@Override
-		default void forEach(jdk.prim.util.function.Boolean.Consumer action) {
+		default void forEach(PrimitiveConsumer.OfBoolean action) {
 			Objects.requireNonNull(action);
 			PrimitiveIterator.OfBoolean i = iterator();
 			while (i.hasNext()) {
@@ -273,12 +274,12 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
 		@Override
 		default void forEach(Consumer<? super Boolean> action) {
-			if (action instanceof jdk.prim.util.function.Boolean.Consumer) {
-				forEach((jdk.prim.util.function.Boolean.Consumer) action);
+			if (action instanceof PrimitiveConsumer.OfBoolean) {
+				forEach((PrimitiveConsumer.OfBoolean) action);
 				return;
 			}
 			Objects.requireNonNull(action);
-			forEach((jdk.prim.util.function.Boolean.Consumer) action::accept);
+			forEach((PrimitiveConsumer.OfBoolean) action::accept);
 		}
 	}
 
