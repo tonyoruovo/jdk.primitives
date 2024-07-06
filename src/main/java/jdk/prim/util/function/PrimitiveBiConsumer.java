@@ -12473,4 +12473,909 @@ public interface PrimitiveBiConsumer<OF, AND> extends BiConsumer<OF, AND> {
         }
 
     }
+
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code double}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, double)}
+     */
+    @FunctionalInterface
+    interface AndDouble<OF> extends PrimitiveBiConsumer<OF, java.lang.Double> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code double}
+         * @apiNote This is the {@code double} specialisation of
+         * {@link #accept(Object, java.lang.Double)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, double y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Double)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Double y) { accept(x, (double) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (long) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (int) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (float) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (char) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (short) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (byte) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code double} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndDouble<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y != 0); }; }
+    }
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code long}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, long)}
+     */
+    @FunctionalInterface
+    interface AndLong<OF> extends PrimitiveBiConsumer<OF, java.lang.Long> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code long}
+         * @apiNote This is the {@code long} specialisation of
+         * {@link #accept(Object, java.lang.Long)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, long y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Long)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Long y) { accept(x, (long) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (int) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (char) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (short) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (byte) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code long} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndLong<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y != 0); }; }
+    }
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code int}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, int)}
+     */
+    @FunctionalInterface
+    interface AndInt<OF> extends PrimitiveBiConsumer<OF, java.lang.Integer> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code int}
+         * @apiNote This is the {@code int} specialisation of
+         * {@link #accept(Object, java.lang.Integer)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, int y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Integer)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Integer y) { accept(x, (int) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (char) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (short) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (byte) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code int} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndInt<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y != 0); }; }
+    }
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code float}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, float)}
+     */
+    @FunctionalInterface
+    interface AndFloat<OF> extends PrimitiveBiConsumer<OF, java.lang.Float> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code float}
+         * @apiNote This is the {@code float} specialisation of
+         * {@link #accept(Object, java.lang.Float)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, float y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Float)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Float y) { accept(x, (float) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (long) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (int) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (char) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (short) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (byte) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code float} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndFloat<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y != 0); }; }
+    }
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code char}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, char)}
+     */
+    @FunctionalInterface
+    interface AndChar<OF> extends PrimitiveBiConsumer<OF, java.lang.Character> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code char}
+         * @apiNote This is the {@code char} specialisation of
+         * {@link #accept(Object, java.lang.Character)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, char y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Character)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Character y) { accept(x, (char) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (short) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (byte) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code char} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndChar<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y != 0); }; }
+    }
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code short}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, short)}
+     */
+    @FunctionalInterface
+    interface AndShort<OF> extends PrimitiveBiConsumer<OF, java.lang.Short> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code short}
+         * @apiNote This is the {@code short} specialisation of
+         * {@link #accept(Object, java.lang.Short)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, short y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Short)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Short y) { accept(x, (short) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (char) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (byte) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code short} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndShort<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y != 0); }; }
+    }
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code byte}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, byte)}
+     */
+    @FunctionalInterface
+    interface AndByte<OF> extends PrimitiveBiConsumer<OF, java.lang.Byte> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code byte}
+         * @apiNote This is the {@code byte} specialisation of
+         * {@link #accept(Object, java.lang.Byte)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, byte y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Byte)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Byte y) { accept(x, (byte) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (char) y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code byte} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndByte<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y != 0); }; }
+    }
+    /**
+     * A bi-consumer that requires a value of type {@code <OF>} and a {@code boolean}
+     * 
+     * @param <OF> the type of the first argument for {@link #accept(Object, boolean)}
+     */
+    @FunctionalInterface
+    interface AndBoolean<OF> extends PrimitiveBiConsumer<OF, java.lang.Boolean> {
+        /**
+         * Consumes the arguments with possible side effects
+         * @param x the first input
+         * @param y the second input that is also a {@code boolean}
+         * @apiNote This is the {@code boolean} specialisation of
+         * {@link #accept(Object, java.lang.Boolean)} hence it is recommended
+         * that this be called as opposed to the other.
+         */
+        void accept(OF x, boolean y);
+        /**
+         * {@inheritDoc}
+         * @param x {@inheritDoc}
+         * @param y {@inheritDoc}
+         * @implNote This calls {@link #accept(Object, java.lang.Boolean)} causing
+         * a primitive conversion to take place
+         */
+        @Override default void accept(OF x, java.lang.Boolean y) { accept(x, (boolean) y); }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code double}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenDouble(AndDouble<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y ? 1 : 0); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code long}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenLong(AndLong<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y ? 1 : 0); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code int}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenInt(AndInt<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y ? 1 : 0); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code float}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenFloat(AndFloat<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y ? 1 : 0); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code char}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenChar(AndChar<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (char) (y ? 1 : 0)); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code short}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenShort(AndShort<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (short) (y ? 1 : 0)); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code byte}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenByte(AndByte<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, (byte) (y ? 1 : 0)); }; }
+        /**
+         * Composes and returns a bi-consumer that performs, in sequence, this
+         * operation followed by the {@code after} operation.
+         * 
+         * @param after a consumer that requires a {@code <OF>} and a {@code boolean}
+         *              value
+         * @return a consumer that accepts a {@code <OF>} and a {@code boolean} value
+         * @apiNote This is part of a suite of methods that provide primitive support
+         *          for {@link #andThen(BiConsumer)}.
+         */
+        default AndBoolean<OF> andThenBoolean(AndBoolean<OF> other) { return (x, y) -> { accept(x, y); other.accept(x, y); }; }
+    }
 }
