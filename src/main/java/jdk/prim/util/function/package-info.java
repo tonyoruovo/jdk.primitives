@@ -51,9 +51,9 @@
  * 
  * <pre>
  * <code>
- * // Using PrimitiveBiFunction to add two integers
- * PrimitiveBiFunction.ToInt.OfInt.AndInt<Integer> addIntegers = Integer::max;
- * System.out.println(addIntegers.applyInt(5, 3)); // Output will be 5
+ * // Using PrimitiveBiFunction to find the max of two integers
+ * PrimitiveBiFunction.ToInt.OfInt.AndInt maxIntegers = Integer::max;
+ * System.out.println(maxIntegers.applyInt(5, 3)); // Output will be 5
  *
  * // Using PrimitiveFunction to compute the cosine of a double
  * PrimitiveFunction.ToDouble.OfDouble cosineFunction = Math::cos;
