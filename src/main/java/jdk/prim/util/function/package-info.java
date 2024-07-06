@@ -1,7 +1,7 @@
 /**
  * Provides enhanced functional interfaces for primitive and generic types.
  * <p>
- * The {@code mathaid.calculator.base.util.function} package extends the
+ * The {@code jdk.prim.util.function} package extends the
  * capabilities of the standard {@code java.util.function} package by offering
  * specialized functional interfaces that handle both primitive data types and
  * generic types. This package is designed to complement the existing Java
@@ -21,24 +21,20 @@
  * <p>
  * Description:
  * <ul>
- * <li>{@link mathaid.calculator.base.util.function.Int}: Specialized for
- * operations with the primitive type {@code int}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Long}: Specialized for
- * operations with the primitive type {@code long}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Double}: Specialized for
- * operations with the primitive type {@code double}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Float}: Specialized for
- * operations with the primitive type {@code float}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Char}: Specialized for
- * operations with the primitive type {@code char}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Short}: Specialized for
- * operations with the primitive type {@code short}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Byte}: Specialized for
- * operations with the primitive type {@code byte}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Boolean}: Specialized for
- * operations with the primitive type {@code boolean}.</li>
- * <li>{@link mathaid.calculator.base.util.function.Obj}: Provides interfaces
- * for operations involving generic types.</li>
+ * <li>{@link jdk.prim.util.function.PrimitiveBiFunction}: Specialized for
+ * bi-function operations with the primitive types.</li>
+ * <li>{@link jdk.prim.util.function.PrimitiveBiPredicate}: Specialized for
+ * bi-predicate operations with the primitive types.</li>
+ * <li>{@link jdk.prim.util.function.PrimitiveBiConsumer}: Specialized for
+ * bi-consumer operations with the primitive types.</li>
+ * <li>{@link jdk.prim.util.function.PrimitiveFunction}: Specialized for
+ * function operations with the primitive types.</li>
+ * <li>{@link jdk.prim.util.function.PrimitivePredicate}: Specialized for
+ * predicate operations with the primitive types.</li>
+ * <li>{@link jdk.prim.util.function.PrimitiveConsumer}: Specialized for
+ * consumer operations with the primitive types.</li>
+ * <li>{@link jdk.prim.util.function.PrimitiveSupplier}: Specialized for
+ * supplier operations with the primitive types.</li>
  * </ul>
  * <p>
  * Real-world scenarios:
@@ -55,16 +51,16 @@
  * 
  * <pre>
  * <code>
- * // Using Int.BiFunction to add two integers
- * Int.BiFunction.AndInt<Integer> addIntegers = (x, y) -> x + y;
- * System.out.println(addIntegers.applyInt(5, 3)); // Output will be 8
+ * // Using PrimitiveBiFunction to add two integers
+ * PrimitiveBiFunction.ToInt.OfInt.AndInt<Integer> addIntegers = Integer::max;
+ * System.out.println(addIntegers.applyInt(5, 3)); // Output will be 5
  *
- * // Using Double.Function to compute the cosine of a double
- * Double.Function.OfDouble cosineFunction = Math::cos;
+ * // Using PrimitiveFunction to compute the cosine of a double
+ * PrimitiveFunction.ToDouble.OfDouble cosineFunction = Math::cos;
  * System.out.println(cosineFunction.applyDouble(Math.PI)); // Output will be -1.0
  *
- * // Using Obj.BiFunction to merge two strings
- * Obj.BiFunction<String, String, String> concatenate = (s1, s2) -> s1 + s2;
+ * // Using PrimitiveBiFunction to merge two strings
+ * PrimitiveBiFunction<String, String, String> concatenate = (s1, s2) -> s1 + s2;
  * System.out.println(concatenate.apply("Hello, ", "world!")); // Output will be "Hello, world!"
  * </code>
  * </pre>
