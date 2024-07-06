@@ -14,6 +14,9 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+import jdk.prim.util.function.PrimitiveFunction;
+import jdk.prim.util.function.PrimitivePredicate;
+
 /**
  * This utility class provides various utility methods for working with
  * iterators, especially for handling primitive types efficiently. It contains
@@ -1339,8 +1342,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code double} values
 	 */
 	public static PrimitiveIterator.OfDouble d(double startInclusive,
-			jdk.prim.util.function.Double.Function.OfDouble operator,
-			jdk.prim.util.function.Double.Predicate end) {
+			PrimitiveFunction.ToDouble.OfDouble operator,
+			PrimitivePredicate.OfDouble end) {
 		return new PrimitiveIterator.OfDouble() {
 			double current = startInclusive;
 
@@ -1445,8 +1448,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code long} values
 	 */
 	public static PrimitiveIterator.OfLong l(long startInclusive,
-			jdk.prim.util.function.Long.Function.OfLong operator,
-			jdk.prim.util.function.Long.Predicate end) {
+			PrimitiveFunction.ToLong.OfLong operator,
+			PrimitivePredicate.OfLong end) {
 		return new PrimitiveIterator.OfLong() {
 			long current = startInclusive;
 
@@ -1554,8 +1557,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code int} values
 	 */
 	public static PrimitiveIterator.OfInt i(int startInclusive,
-			jdk.prim.util.function.Int.Function.OfInt operator,
-			jdk.prim.util.function.Int.Predicate end) {
+			PrimitiveFunction.ToInt.OfInt operator,
+			PrimitivePredicate.OfInt end) {
 		return new PrimitiveIterator.OfInt() {
 			int current = startInclusive;
 
@@ -1663,8 +1666,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code float} values
 	 */
 	public static PrimitiveIterator.OfFloat f(float startInclusive,
-			jdk.prim.util.function.Float.Function.OfFloat operator,
-			jdk.prim.util.function.Float.Predicate end) {
+			PrimitiveFunction.ToFloat.OfFloat operator,
+			PrimitivePredicate.OfFloat end) {
 		return new PrimitiveIterator.OfFloat() {
 			float current = startInclusive;
 
@@ -1730,8 +1733,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code short} values
 	 */
 	public static PrimitiveIterator.OfShort s(short startInclusive,
-			jdk.prim.util.function.Short.Function.OfShort operator,
-			jdk.prim.util.function.Short.Predicate end) {
+			PrimitiveFunction.ToShort.OfShort operator,
+			PrimitivePredicate.OfShort end) {
 		return new PrimitiveIterator.OfShort() {
 			short current = startInclusive;
 
@@ -1797,8 +1800,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code byte} values
 	 */
 	public static PrimitiveIterator.OfByte b(byte startInclusive,
-			jdk.prim.util.function.Byte.Function.OfByte operator,
-			jdk.prim.util.function.Byte.Predicate end) {
+			PrimitiveFunction.ToByte.OfByte operator,
+			PrimitivePredicate.OfByte end) {
 		return new PrimitiveIterator.OfByte() {
 			byte current = startInclusive;
 
@@ -1858,8 +1861,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code char} values
 	 */
 	public static PrimitiveIterator.OfChar c(char startInclusive,
-			jdk.prim.util.function.Char.Function.OfChar operator,
-			jdk.prim.util.function.Char.Predicate end) {
+			PrimitiveFunction.ToChar.OfChar operator,
+			PrimitivePredicate.OfChar end) {
 		return new PrimitiveIterator.OfChar() {
 			char current = startInclusive;
 
@@ -1897,8 +1900,8 @@ public final class Iterators {
 	 * @return a primitive iterator of {@code boolean} values
 	 */
 	public static PrimitiveIterator.OfBoolean b(boolean startInclusive,
-			jdk.prim.util.function.Boolean.Function.OfBoolean operator,
-			jdk.prim.util.function.Boolean.Predicate end) {
+			PrimitiveFunction.ToBoolean.OfBoolean operator,
+			PrimitivePredicate.OfBoolean end) {
 		return new PrimitiveIterator.OfBoolean() {
 			boolean current = startInclusive;
 
