@@ -9,7 +9,9 @@
  */
 package jdk.prim;
 
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Spliterator;
 import java.util.function.Consumer;
 
 import jdk.prim.util.PrimitiveIterator;
@@ -28,28 +30,164 @@ import jdk.prim.util.function.PrimitiveConsumer;
  * Enclosing Type: 
  */
 /**
- * An effort to support primitiveions and streams. Will be fleshed out
- * later.
+ * An effort to support primitiveions and streams.
+ * 
+ * @param <T>      the wrapper type for the primitive type being iterated.
+ * @param <T_CONS> the type of the {@link PrimitiveConsumer primitive consumer}
+ * @param <T_ITR>  the type of {@link PrimitiveIterator primitive iterator}
+ * @param <T_SPTR> the type of {@link PrimitiveSpliterator primitive
+ *                 spliterator}
  * 
  * @author Oruovo Etineakpopha Anthony
  */
 public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 
+	/**
+	 * An {@code Iterable} of {@code double} values
+	 */
 	@FunctionalInterface
 	interface OfDouble extends PrimitiveIterable<Double, PrimitiveConsumer.OfDouble> {
 
-		@Override
-		PrimitiveIterator.OfDouble iterator();
+		PrimitiveIterator.OfDouble iteratorDouble();
 
 		@Override
-		default PrimitiveSpliterator.OfDouble spliterator() {
+		default Iterator<java.lang.Double> iterator() {
+			return iteratorDouble();
+		}
+
+		default PrimitiveSpliterator.OfDouble spliteratorDouble() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Double> spliterator() {
+			return spliteratorDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return () -> iteratorDouble().toLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return () -> iteratorDouble().toInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return () -> iteratorDouble().toFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return () -> iteratorDouble().toChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return () -> iteratorDouble().toShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return () -> iteratorDouble().toByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return () -> iteratorDouble().toBoolean();
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfDouble action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfDouble i = iterator();
+			PrimitiveIterator.OfDouble i = iteratorDouble();
 			while (i.hasNext()) {
 				action.acceptDouble(i.nextDouble());
 			}
@@ -66,21 +204,152 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
+	/**
+	 * An {@code Iterable} of {@code long} values
+	 */
 	@FunctionalInterface
 	interface OfLong extends PrimitiveIterable<Long, PrimitiveConsumer.OfLong> {
 
-		@Override
-		PrimitiveIterator.OfLong iterator();
+		PrimitiveIterator.OfLong iteratorLong();
 
 		@Override
-		default PrimitiveSpliterator.OfLong spliterator() {
+		default Iterator<java.lang.Long> iterator() {
+			return iteratorLong();
+		}
+
+		default PrimitiveSpliterator.OfLong spliteratorLong() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Long> spliterator() {
+			return spliteratorLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return () -> iteratorLong().toDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return () -> iteratorLong().toInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return () -> iteratorLong().toFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return () -> iteratorLong().toChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return () -> iteratorLong().toShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return () -> iteratorLong().toByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return () -> iteratorLong().toBoolean();
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfLong action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfLong i = iterator();
+			PrimitiveIterator.OfLong i = iteratorLong();
 			while (i.hasNext()) {
 				action.acceptLong(i.nextLong());
 			}
@@ -97,21 +366,152 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
+	/**
+	 * An {@code Iterable} of {@code int} values
+	 */
 	@FunctionalInterface
 	interface OfInt extends PrimitiveIterable<Integer, PrimitiveConsumer.OfInt> {
 
-		@Override
-		PrimitiveIterator.OfInt iterator();
+		PrimitiveIterator.OfInt iteratorInt();
 
 		@Override
-		default PrimitiveSpliterator.OfInt spliterator() {
+		default Iterator<java.lang.Integer> iterator() {
+			return iteratorInt();
+		}
+
+		default PrimitiveSpliterator.OfInt spliteratorInt() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Integer> spliterator() {
+			return spliteratorInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return () -> iteratorInt().toDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return () -> iteratorInt().toLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return () -> iteratorInt().toFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return () -> iteratorInt().toChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return () -> iteratorInt().toShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return () -> iteratorInt().toByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return () -> iteratorInt().toBoolean();
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfInt action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfInt i = iterator();
+			PrimitiveIterator.OfInt i = iteratorInt();
 			while (i.hasNext()) {
 				action.acceptInt(i.nextInt());
 			}
@@ -128,21 +528,152 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
+	/**
+	 * An {@code Iterable} of {@code float} values
+	 */
 	@FunctionalInterface
 	interface OfFloat extends PrimitiveIterable<Float, PrimitiveConsumer.OfFloat> {
 
-		@Override
-		PrimitiveIterator.OfFloat iterator();
+		PrimitiveIterator.OfFloat iteratorFloat();
 
 		@Override
-		default jdk.prim.util.PrimitiveSpliterator.OfFloat spliterator() {
+		default Iterator<java.lang.Float> iterator() {
+			return iteratorFloat();
+		}
+
+		default PrimitiveSpliterator.OfFloat spliteratorFloat() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Float> spliterator() {
+			return spliteratorFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return () -> iteratorFloat().toDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return () -> iteratorFloat().toLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return () -> iteratorFloat().toInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return () -> iteratorFloat().toChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return () -> iteratorFloat().toShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return () -> iteratorFloat().toByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return () -> iteratorFloat().toBoolean();
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfFloat action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfFloat i = iterator();
+			PrimitiveIterator.OfFloat i = iteratorFloat();
 			while (i.hasNext()) {
 				action.acceptFloat(i.nextFloat());
 			}
@@ -159,21 +690,152 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
+	/**
+	 * An {@code Iterable} of {@code char} values
+	 */
 	@FunctionalInterface
 	interface OfChar extends PrimitiveIterable<Character, PrimitiveConsumer.OfChar> {
 
-		@Override
-		PrimitiveIterator.OfChar iterator();
+		PrimitiveIterator.OfChar iteratorChar();
 
 		@Override
-		default jdk.prim.util.PrimitiveSpliterator.OfChar spliterator() {
+		default Iterator<java.lang.Character> iterator() {
+			return iteratorChar();
+		}
+
+		default PrimitiveSpliterator.OfChar spliteratorChar() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Character> spliterator() {
+			return spliteratorChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return () -> iteratorChar().toDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return () -> iteratorChar().toLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return () -> iteratorChar().toInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return () -> iteratorChar().toFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return () -> iteratorChar().toShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return () -> iteratorChar().toByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return () -> iteratorChar().toBoolean();
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfChar action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfChar i = iterator();
+			PrimitiveIterator.OfChar i = iteratorChar();
 			while (i.hasNext()) {
 				action.acceptChar(i.nextChar());
 			}
@@ -190,21 +852,152 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
+	/**
+	 * An {@code Iterable} of {@code short} values
+	 */
 	@FunctionalInterface
 	interface OfShort extends PrimitiveIterable<Short, PrimitiveConsumer.OfShort> {
 
-		@Override
-		PrimitiveIterator.OfShort iterator();
+		PrimitiveIterator.OfShort iteratorShort();
 
 		@Override
-		default jdk.prim.util.PrimitiveSpliterator.OfShort spliterator() {
+		default Iterator<java.lang.Short> iterator() {
+			return iteratorShort();
+		}
+
+		default PrimitiveSpliterator.OfShort spliteratorShort() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Short> spliterator() {
+			return spliteratorShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return () -> iteratorShort().toDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return () -> iteratorShort().toLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return () -> iteratorShort().toInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return () -> iteratorShort().toFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return () -> iteratorShort().toChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return () -> iteratorShort().toByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return () -> iteratorShort().toBoolean();
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfShort action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfShort i = iterator();
+			PrimitiveIterator.OfShort i = iteratorShort();
 			while (i.hasNext()) {
 				action.acceptShort(i.nextShort());
 			}
@@ -221,21 +1014,152 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
+	/**
+	 * An {@code Iterable} of {@code byte} values
+	 */
 	@FunctionalInterface
 	interface OfByte extends PrimitiveIterable<Byte, PrimitiveConsumer.OfByte> {
 
-		@Override
-		PrimitiveIterator.OfByte iterator();
+		PrimitiveIterator.OfByte iteratorByte();
 
 		@Override
-		default jdk.prim.util.PrimitiveSpliterator.OfByte spliterator() {
+		default Iterator<java.lang.Byte> iterator() {
+			return iteratorByte();
+		}
+
+		default PrimitiveSpliterator.OfByte spliteratorByte() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Byte> spliterator() {
+			return spliteratorByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return () -> iteratorByte().toDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return () -> iteratorByte().toLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return () -> iteratorByte().toInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return () -> iteratorByte().toFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return () -> iteratorByte().toChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return () -> iteratorByte().toShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return () -> iteratorByte().toBoolean();
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfByte action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfByte i = iterator();
+			PrimitiveIterator.OfByte i = iteratorByte();
 			while (i.hasNext()) {
 				action.acceptByte(i.nextByte());
 			}
@@ -252,21 +1176,152 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
+	/**
+	 * An {@code Iterable} of {@code boolean} values
+	 */
 	@FunctionalInterface
 	interface OfBoolean extends PrimitiveIterable<Boolean, PrimitiveConsumer.OfBoolean> {
 
-		@Override
-		PrimitiveIterator.OfBoolean iterator();
+		PrimitiveIterator.OfBoolean iteratorBoolean();
 
 		@Override
-		default jdk.prim.util.PrimitiveSpliterator.OfBoolean spliterator() {
+		default Iterator<java.lang.Boolean> iterator() {
+			return iteratorBoolean();
+		}
+
+		default PrimitiveSpliterator.OfBoolean spliteratorBoolean() {
 			return null;
+		}
+
+		@Override
+		default Spliterator<java.lang.Boolean> spliterator() {
+			return spliteratorBoolean();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfDouble} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code double}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
+		 *         spliterator contained within will be one {@code double} elements.
+		 */
+		default OfDouble toDouble() {
+			return () -> iteratorBoolean().toDouble();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfLong} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code long}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
+		 *         spliterator contained within will be one {@code long} elements.
+		 */
+		default OfLong toLong() {
+			return () -> iteratorBoolean().toLong();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfInt} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code int}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
+		 *         spliterator contained within will be one {@code int} elements.
+		 */
+		default OfInt toInt() {
+			return () -> iteratorBoolean().toInt();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfFloat} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code float}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
+		 *         spliterator contained within will be one {@code float} elements.
+		 */
+		default OfFloat toFloat() {
+			return () -> iteratorBoolean().toFloat();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfChar} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code char}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
+		 *         spliterator contained within will be one {@code char} elements.
+		 */
+		default OfChar toChar() {
+			return () -> iteratorBoolean().toChar();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfShort} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code short}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
+		 *         spliterator contained within will be one {@code short} elements.
+		 */
+		default OfShort toShort() {
+			return () -> iteratorBoolean().toShort();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfByte} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code byte}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
+		 *         spliterator contained within will be one {@code byte} elements.
+		 */
+		default OfByte toByte() {
+			return () -> iteratorBoolean().toByte();
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 15:24:37
+		 */
+		/**
+		 * Casts this {@code Iterable} to {@link OfBoolean} where all calls to
+		 * {@link #iterator} and {@link #spliterator} will return their {@code boolean}
+		 * versions.
+		 * 
+		 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
+		 *         spliterator contained within will be one {@code boolean} elements.
+		 */
+		default OfBoolean toBoolean() {
+			return this;
 		}
 
 		@Override
 		default void forEach(PrimitiveConsumer.OfBoolean action) {
 			Objects.requireNonNull(action);
-			PrimitiveIterator.OfBoolean i = iterator();
+			PrimitiveIterator.OfBoolean i = iteratorBoolean();
 			while (i.hasNext()) {
 				action.acceptBoolean(i.nextBoolean());
 			}
@@ -283,31 +1338,12 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 		}
 	}
 
-	void forEach(T_CONS action);
-
-	/*
-	 * Date created: 27 May 2024 Time created: 11:21:12
-	 */
 	/**
-	 * Creates and returns a {@link PrimitiveIterator} of the specified type
+	 * The primitive variant of {@link #forEach(Consumer)}
 	 * 
-	 * @return a {@code PrimitiveIterator}
-	 * @see java.lang.Iterable#iterator()
+	 * @param action the action to be performed
 	 */
-	@Override
-	PrimitiveIterator<T, ?> iterator();
-
-	/*
-	 * Date created: 27 May 2024
-	 * Time created: 17:54:45
-	 */
-	/**
-	 * Returns a {@link PrimitiveSpliterator} view over this {@code Iterable}.
-	 * @return a {@code PrimitiveSpliterator}
-	 * @see java.lang.Iterable#spliterator()
-	 */
-	@Override
-	PrimitiveSpliterator<T, ?, ?> spliterator();
+	void forEach(T_CONS action);
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -320,9 +1356,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfDouble} whereby the iterator and
 	 *         spliterator contained within will be one {@code double} elements.
 	 */
-	default OfDouble toDouble() {
-		return () -> iterator().toDouble();
-	}
+	OfDouble toDouble();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -335,9 +1369,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfLong} whereby the iterator and
 	 *         spliterator contained within will be one {@code long} elements.
 	 */
-	default OfLong toLong() {
-		return () -> iterator().toLong();
-	}
+	OfLong toLong();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -350,9 +1382,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfInt} whereby the iterator and
 	 *         spliterator contained within will be one {@code int} elements.
 	 */
-	default OfInt toInt() {
-		return () -> iterator().toInt();
-	}
+	OfInt toInt();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -365,9 +1395,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfFloat} whereby the iterator and
 	 *         spliterator contained within will be one {@code float} elements.
 	 */
-	default OfFloat toFloat() {
-		return () -> iterator().toFloat();
-	}
+	OfFloat toFloat();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -380,9 +1408,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfChar} whereby the iterator and
 	 *         spliterator contained within will be one {@code char} elements.
 	 */
-	default OfChar toChar() {
-		return () -> iterator().toChar();
-	}
+	OfChar toChar();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -395,9 +1421,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfShort} whereby the iterator and
 	 *         spliterator contained within will be one {@code short} elements.
 	 */
-	default OfShort toShort() {
-		return () -> iterator().toShort();
-	}
+	OfShort toShort();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -410,9 +1434,7 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfByte} whereby the iterator and
 	 *         spliterator contained within will be one {@code byte} elements.
 	 */
-	default OfByte toByte() {
-		return () -> iterator().toByte();
-	}
+	OfByte toByte();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 15:24:37
@@ -425,8 +1447,6 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	 * @return {@link PrimitiveIterator.OfBoolean} whereby the iterator and
 	 *         spliterator contained within will be one {@code boolean} elements.
 	 */
-	default OfBoolean toBoolean() {
-		return () -> iterator().toBoolean();
-	}
+	OfBoolean toBoolean();
 
 }
