@@ -1,6 +1,8 @@
 package jdk.prim;
 
-import jdk.prim.util.function.PrimitiveBiFunction;
+
+import java.util.Iterator;
+import jdk.prim.util.PrimitiveIterators;
 
 /**
  * Hello world!
@@ -10,9 +12,11 @@ public class Main
 {
 	
 	public int testValue() {
-        PrimitiveBiFunction.ToChar.OfShort.AndByte f = (x, y) -> java.lang.Character.highSurrogate((x << 31) | y);
-        var g = f.andThenInt(x -> String.valueOf(x).codePointAt(0));
-		return g.applyInt((short) 0xffe3, (byte) 0xf5);
+        var a = new String[]{"david", "samson", "joshua", "moses"};
+        Iterator<String> itr = PrimitiveIterators.reverseItr(a);
+        int i = 0;
+        while(itr.hasNext()) { System.out.println(String.format("next: %1$s, length: %2$d, iteration: %3$d", itr.next(), a.length, i++)); if(i > 6) break; }
+        return a.length;
 	}
 	
     public static void main( String[] args )
