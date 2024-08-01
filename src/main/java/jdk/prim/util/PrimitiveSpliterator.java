@@ -13,7 +13,9 @@ import jdk.prim.PrimitiveComparator;
 import jdk.prim.util.function.PrimitiveConsumer;
 
 /**
+ * A spliterator of primitive elements
  * 
+ * @see Spliterator
  */
 public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.OfPrimitive<T, T_CONS, T_SPLITR>>
 		extends Spliterator.OfPrimitive<T, T_CONS, T_SPLITR> {
