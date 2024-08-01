@@ -106,6 +106,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	public static interface OfDouble extends PrimitiveListIterator<Double, DoubleConsumer> {
 
 		/**
+		 * The {@code double} specialization of {@link #set(Object)}
+		 * @param e the value to be set
+		 * @see ListIterator#set(Object)
+		 */
+		 default void setDouble(double e) { throw new UnsupportedOperationException(); }
+		@Override default void set(java.lang.Double e) { setDouble(e); }
+
+		/**
 		 * Returns the next {@code double} element in the iteration.
 		 *
 		 * @return the next {@code double} element
@@ -174,6 +182,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			forEachRemaining((DoubleConsumer) action::accept);
 		}
 
+		/**
+		 * The {@code double} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addDouble(double e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Double e) { addDouble(e); }
+
 	}
 
 	/**
@@ -189,6 +212,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 * @implNote Default implementation does not support modification such as {@link #remove()}, {@link #add} and {@link #set}
 	 */
 	public static interface OfLong extends PrimitiveListIterator<Long, LongConsumer> {
+
+		/**
+		 * The {@code long} specialization of {@link #set(Object)}
+		 * @param e the value to be set
+		 * @see ListIterator#set(Object)
+		 */
+		default void setLong(long e) { throw new UnsupportedOperationException(); }
+		@Override default void set(java.lang.Long e) { setLong(e); }
 
 		/**
 		 * Returns the next {@code long} element in the iteration.
@@ -259,6 +290,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			forEachRemaining((LongConsumer) action::accept);
 		}
 
+		/**
+		 * The {@code long} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addLong(long e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Long e) { addLong(e); }
+
 	}
 
 	/**
@@ -274,6 +320,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 * @implNote Default implementation does not support modification such as {@link #remove()}, {@link #add} and {@link #set}
 	 */
 	public static interface OfInt extends PrimitiveListIterator<Integer, IntConsumer> {
+
+		/**
+		 * The {@code int} specialization of {@link #set(Object)}
+		 * @param e the value to be set
+		 * @see ListIterator#set(Object)
+		 */
+		default void setInt(int e) { throw new UnsupportedOperationException(); }
+		@Override default void set(java.lang.Integer e) { setInt(e); }
 
 		/**
 		 * Returns the next {@code int} element in the iteration.
@@ -344,6 +398,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			forEachRemaining((IntConsumer) action::accept);
 		}
 
+		/**
+		 * The {@code int} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addInt(int e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Integer e) { addInt(e); }
+
 	}
 
 	/**
@@ -360,6 +429,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 */
 	public static interface OfChar
 			extends PrimitiveListIterator<Character, PrimitiveConsumer.OfChar> {
+
+				/**
+				 * The {@code char} specialization of {@link #set(Object)}
+				 * @param e the value to be set
+				 * @see ListIterator#set(Object)
+				 */
+				default void setChar(char e) { throw new UnsupportedOperationException(); }
+				@Override default void set(java.lang.Character e) { setChar(e); }
 
 		/**
 		 * Returns the next {@code char} element in the iteration.
@@ -430,6 +507,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			forEachRemaining((PrimitiveConsumer.OfChar) action::accept);
 		}
 
+		/**
+		 * The {@code char} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addChar(char e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Character e) { addChar(e); }
+
 	}
 
 	/**
@@ -447,6 +539,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 */
 	public static interface OfFloat
 			extends PrimitiveListIterator<Float, PrimitiveConsumer.OfFloat> {
+
+				/**
+				 * The {@code float} specialization of {@link #set(Object)}
+				 * @param e the value to be set
+				 * @see ListIterator#set(Object)
+				 */
+				default void setFloat(float e) { throw new UnsupportedOperationException(); }
+				@Override default void set(java.lang.Float e) { setFloat(e); }
 
 		/**
 		 * Returns the next {@code float} element in the iteration.
@@ -517,6 +617,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			forEachRemaining((PrimitiveConsumer.OfFloat) action::accept);
 		}
 
+		/**
+		 * The {@code float} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addFloat(float e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Float e) { addFloat(e); }
+
 	}
 
 	/**
@@ -534,6 +649,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 */
 	public static interface OfShort
 			extends PrimitiveListIterator<Short, PrimitiveConsumer.OfShort> {
+
+				/**
+				 * The {@code short} specialization of {@link #set(Object)}
+				 * @param e the value to be set
+				 * @see ListIterator#set(Object)
+				 */
+				default void setShort(short e) { throw new UnsupportedOperationException(); }
+				@Override default void set(java.lang.Short e) { setShort(e); }
 
 		/**
 		 * Returns the next {@code short} element in the iteration.
@@ -604,6 +727,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			forEachRemaining((PrimitiveConsumer.OfShort) action::accept);
 		}
 
+		/**
+		 * The {@code short} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addShort(short e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Short e) { addShort(e); }
+
 	}
 
 	/**
@@ -620,6 +758,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 */
 	public static interface OfByte
 			extends PrimitiveListIterator<Byte, PrimitiveConsumer.OfByte> {
+
+				/**
+				 * The {@code byte} specialization of {@link #set(Object)}
+				 * @param e the value to be set
+				 * @see ListIterator#set(Object)
+				 */
+				default void setByte(byte e) { throw new UnsupportedOperationException(); }
+				@Override default void set(java.lang.Byte e) { setByte(e); }
 
 		/**
 		 * Returns the next {@code byte} element in the iteration.
@@ -690,6 +836,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			forEachRemaining((PrimitiveConsumer.OfByte) action::accept);
 		}
 
+		/**
+		 * The {@code byte} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addByte(byte e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Byte e) { addByte(e); }
+
 	}
 
 	/**
@@ -707,6 +868,14 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 	 */
 	public static interface OfBoolean
 			extends PrimitiveListIterator<Boolean, PrimitiveConsumer.OfBoolean> {
+
+				/**
+				 * The {@code boolean} specialization of {@link #set(Object)}
+				 * @param e the value to be set
+				 * @see ListIterator#set(Object)
+				 */
+				default void setBoolean(boolean e) { throw new UnsupportedOperationException(); }
+				@Override default void set(java.lang.Boolean e) { setBoolean(e); }
 
 		/**
 		 * Returns the next {@code boolean} element in the iteration.
@@ -776,6 +945,21 @@ public interface PrimitiveListIterator<T, T_CONS> extends ListIterator<T>, Primi
 			Objects.requireNonNull(action);
 			forEachRemaining((PrimitiveConsumer.OfBoolean) action::accept);
 		}
+
+		/**
+		 * The {@code boolean} specialization for {@link #add}
+		 * @param e the value to be added
+		 * @implSpec the default implementation throws a {@code UnsupportedOperationException} when called
+		 * @throws UnsupportedOperationException as if the underlying collection ot iterable does
+		 * not support this operation
+		 */
+		default void addBoolean(boolean e) { throw new UnsupportedOperationException(); }
+
+		/**
+		 * {@inheritDoc}
+		 * @param e {@inheritDoc}
+		 */
+		@Override default void add(java.lang.Boolean e) { addBoolean(e); }
 
 	}
 
