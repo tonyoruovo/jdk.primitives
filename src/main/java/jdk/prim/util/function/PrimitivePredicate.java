@@ -226,6 +226,15 @@ public interface PrimitivePredicate<OF> extends Predicate<OF> {
      * A predicate that requires a {@code long} argument */}
     @FunctionalInterface
     interface OfLong extends PrimitivePredicate<java.lang.Long>, LongPredicate {
+        /**
+         * Tests the given {@code long} whether it doth match this predicate
+         * @param x the {@code long} value to be tested
+         * @return {@code true} if the provided {@code long} value
+         * matches this predicate. Otherwise returns {@code false}
+         * @apiSpec This is the primitive version of {@link #test(java.lang.Long)}
+         * and is recommended over that one as no primitive conversion takes
+         * place when calling this.
+         */
         boolean testLong(long x);
         /**
          * {@inheritDoc}
@@ -409,6 +418,15 @@ public interface PrimitivePredicate<OF> extends Predicate<OF> {
      * A predicate that requires a {@code int} argument */}
     @FunctionalInterface
     interface OfInt extends PrimitivePredicate<java.lang.Integer>, IntPredicate {
+        /**
+         * Tests the given {@code int} whether it doth match this predicate
+         * @param x the {@code int} value to be tested
+         * @return {@code true} if the provided {@code int} value
+         * matches this predicate. Otherwise returns {@code false}
+         * @apiSpec This is the primitive version of {@link #test(java.lang.Integer)}
+         * and is recommended over that one as no primitive conversion takes
+         * place when calling this.
+         */
         boolean testInt(int x);
         /**
          * {@inheritDoc}
@@ -592,6 +610,15 @@ public interface PrimitivePredicate<OF> extends Predicate<OF> {
      * A predicate that requires a {@code float} argument */}
     @FunctionalInterface
     interface OfFloat extends PrimitivePredicate<java.lang.Float> {
+        /**
+         * Tests the given {@code float} whether it doth match this predicate
+         * @param x the {@code float} value to be tested
+         * @return {@code true} if the provided {@code float} value
+         * matches this predicate. Otherwise returns {@code false}
+         * @apiSpec This is the primitive version of {@link #test(java.lang.Float)}
+         * and is recommended over that one as no primitive conversion takes
+         * place when calling this.
+         */
         boolean testFloat(float x);
         /**
          * Tests the given argument whether it doth match this predicate
@@ -765,6 +792,15 @@ public interface PrimitivePredicate<OF> extends Predicate<OF> {
      * A predicate that requires a {@code char} argument */}
     @FunctionalInterface
     interface OfChar extends PrimitivePredicate<java.lang.Character> {
+        /**
+         * Tests the given {@code char} whether it doth match this predicate
+         * @param x the {@code char} value to be tested
+         * @return {@code true} if the provided {@code char} value
+         * matches this predicate. Otherwise returns {@code false}
+         * @apiSpec This is the primitive version of {@link #test(java.lang.Character)}
+         * and is recommended over that one as no primitive conversion takes
+         * place when calling this.
+         */
         boolean testChar(char x);
         /**
          * Tests the given argument whether it doth match this predicate
@@ -938,6 +974,15 @@ public interface PrimitivePredicate<OF> extends Predicate<OF> {
      * A predicate that requires a {@code short} argument */}
     @FunctionalInterface
     interface OfShort extends PrimitivePredicate<java.lang.Short> {
+        /**
+         * Tests the given {@code short} whether it doth match this predicate
+         * @param x the {@code short} value to be tested
+         * @return {@code true} if the provided {@code short} value
+         * matches this predicate. Otherwise returns {@code false}
+         * @apiSpec This is the primitive version of {@link #test(java.lang.Short)}
+         * and is recommended over that one as no primitive conversion takes
+         * place when calling this.
+         */
         boolean testShort(short x);
         /**
          * Tests the given argument whether it doth match this predicate
@@ -1111,6 +1156,15 @@ public interface PrimitivePredicate<OF> extends Predicate<OF> {
      * A predicate that requires a {@code byte} argument */}
     @FunctionalInterface
     interface OfByte extends PrimitivePredicate<java.lang.Byte> {
+        /**
+         * Tests the given {@code byte} whether it doth match this predicate
+         * @param x the {@code byte} value to be tested
+         * @return {@code true} if the provided {@code byte} value
+         * matches this predicate. Otherwise returns {@code false}
+         * @apiSpec This is the primitive version of {@link #test(java.lang.Byte)}
+         * and is recommended over that one as no primitive conversion takes
+         * place when calling this.
+         */
         boolean testByte(byte x);
         /**
          * Tests the given argument whether it doth match this predicate
@@ -1284,6 +1338,15 @@ public interface PrimitivePredicate<OF> extends Predicate<OF> {
      * A predicate that requires a {@code boolean} argument */}
     @FunctionalInterface
     interface OfBoolean extends PrimitivePredicate<java.lang.Boolean> {
+        /**
+         * Tests the given {@code boolean} whether it doth match this predicate
+         * @param x the {@code boolean} value to be tested
+         * @return {@code true} if the provided {@code boolean} value
+         * matches this predicate. Otherwise returns {@code false}
+         * @apiSpec This is the primitive version of {@link #test(java.lang.Boolean)}
+         * and is recommended over that one as no primitive conversion takes
+         * place when calling this.
+         */
         boolean testBoolean(boolean x);
         /**
          * Tests the given argument whether it doth match this predicate
