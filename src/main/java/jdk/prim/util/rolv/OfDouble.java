@@ -1,13 +1,14 @@
 package jdk.prim.util.rolv;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Objects;
 import java.util.RandomAccess;
+import java.util.function.IntFunction;
 
+import jdk.prim.util.PrimitiveArrays;
 import jdk.prim.util.PrimitiveIterator;
-import jdk.prim.util.PrimitiveIterators;
 import jdk.prim.util.PrimitiveList;
 import jdk.prim.util.PrimitiveListIterator;
 
@@ -74,12 +75,22 @@ public class OfDouble implements PrimitiveList.OfDouble {
             it.setDouble(e);
         }
 
-        public void add(double e) {
+        public void addDouble(double e) {
             assessModability();
             it.addDouble(e);
             it.previousDouble();
         }
     
+    }
+
+    public static PrimitiveList.OfDouble of(PrimitiveList.OfDouble list, boolean modifiable) {
+        if (list instanceof jdk.prim.util.rolv.OfDouble rolv) {
+            return rolv.imp;
+        } else if (list instanceof RandomAccess) {
+            return new jdk.prim.util.rolv.OfDouble.Rand(list, modifiable);
+        } else {
+            return new jdk.prim.util.rolv.OfDouble(list, modifiable);
+        }
     }
 
     //implementation
@@ -96,6 +107,12 @@ public class OfDouble implements PrimitiveList.OfDouble {
         if(isMod) throw new UnsupportedOperationException();
     }
 
+    private void checkClosedRange(int index, int size) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
     @Override
     public void forEach(jdk.prim.util.function.PrimitiveConsumer.OfDouble action) {
         var it = iteratorDouble();
@@ -106,8 +123,7 @@ public class OfDouble implements PrimitiveList.OfDouble {
 
     @Override
     public int size() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'size'");
+        return imp.size();
     }
 
     @Override
@@ -117,8 +133,21 @@ public class OfDouble implements PrimitiveList.OfDouble {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+        T[] rev = PrimitiveArrays.reverse(imp.toArray(Arrays.copyOfRange(a, 0, 0)));
+        if (rev.length > a.length) {
+            return rev;
+        } else {
+            System.arraycopy(rev, 0, a, 0, rev.length);
+            if (a.length > rev.length) {
+                a[rev.length] = null;
+            }
+            return a;
+        }
+    }
+
+    @Override
+    public <T> T[] toArray(IntFunction<T[]> generator) {
+        return PrimitiveArrays.reverse(imp.toArray(generator));
     }
 
     @Override
@@ -137,20 +166,55 @@ public class OfDouble implements PrimitiveList.OfDouble {
 
     @Override
     public boolean addAll(int index, Collection<? extends java.lang.Double> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+        assessModability();
+        int size = imp.size();
+        checkClosedRange(index, size);
+        var adds = (java.lang.Double[]) c.toArray();
+        if (adds.length == 0) {
+            return false;
+        } else {
+            imp.addAll(size - index, Arrays.asList(PrimitiveArrays.reverse(adds)));
+            return true;
+        }
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
+        assessModability();
+        boolean modified = false;
+        var it = iteratorDouble();
+        while (it.hasNext()) {
+            if (c.contains(it.nextDouble())) {
+                it.remove();
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    @Override
+    public void replaceAllDouble(jdk.prim.util.function.PrimitiveFunction.ToDouble.OfDouble fn) {
+        imp.replaceAllDouble(fn);
+    }
+
+    @Override
+    public boolean removeIfDouble(jdk.prim.util.function.PrimitivePredicate.OfDouble filter) {
+        assessModability();
+        return imp.removeIfDouble(filter);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'retainAll'");
+        assessModability();
+        boolean modified = false;
+        var it = iteratorDouble();
+        while (it.hasNext()) {
+            if (!c.contains(it.nextDouble())) {
+                it.remove();
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
@@ -192,26 +256,41 @@ public class OfDouble implements PrimitiveList.OfDouble {
 
     @Override
     public boolean removeAllDouble(jdk.prim.util.PrimitiveCollection.OfDouble c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeAllDouble'");
+        assessModability();
+        boolean modified = false;
+        var it = iteratorDouble();
+        while (it.hasNext()) {
+            if (c.containsDouble(it.nextDouble())) {
+                it.remove();
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
     public boolean retainAllDouble(jdk.prim.util.PrimitiveCollection.OfDouble c) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'retainAllDouble'");
+        assessModability();
+        boolean modified = false;
+        var it = iteratorDouble();
+        while (it.hasNext()) {
+            if (!c.containsDouble(it.nextDouble())) {
+                it.remove();
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
     public jdk.prim.util.stream.PrimitiveStream.OfDouble streamDouble() {
-        // TODO Auto-generated method stub
+        // TODO Will be implemented when primitive streams and splitterator are implemented
         throw new UnsupportedOperationException("Unimplemented method 'streamDouble'");
     }
 
     @Override
     public double[] toArrayDouble() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArrayDouble'");
+        return PrimitiveArrays.reverse(imp.toArrayDouble());
     }
 
     @Override
@@ -221,74 +300,93 @@ public class OfDouble implements PrimitiveList.OfDouble {
 
     @Override
     public void addDouble(int index, double e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addDouble'");
+        assessModability();
+        int l = imp.size();
+        checkClosedRange(index, l);
+        imp.addDouble(l - index, e);
     }
 
     @Override
     public double getDouble(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDouble'");
+        int size = imp.size();
+        Objects.checkIndex(index, size);
+        return imp.getDouble(size - index - 1);
     }
 
     @Override
     public int indexOfDouble(double e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'indexOfDouble'");
+        int i = imp.lastIndexOfDouble(e);
+        return i == -1 ? -1 : imp.size() - i - 1;
     }
 
     @Override
     public int lastIndexOfDouble(double e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'lastIndexOfDouble'");
+        int i = imp.indexOfDouble(e);
+        return i == -1 ? -1 : imp.size() - i - 1;
     }
 
     @Override
     public jdk.prim.util.PrimitiveListIterator.OfDouble listIteratorDouble() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listIteratorDouble'");
+        return new DLIterator(size(), 0);
     }
 
     @Override
     public jdk.prim.util.PrimitiveListIterator.OfDouble listIteratorDouble(int from) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listIteratorDouble'");
+        int size = size();
+        checkClosedRange(from, size);
+        return new DLIterator(size, from);
     }
 
     @Override
     public double removeElementAtIndex(int i) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeElementAtIndex'");
+        assessModability();
+        int size = imp.size();
+        Objects.checkIndex(i, size);
+        return imp.removeElementAtIndex(size - i - 1);
     }
 
     @Override
     public boolean removeDouble(double e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeDouble'");
+        assessModability();
+        var it = iteratorDouble();
+        while (it.hasNext()) {
+            if (e == it.nextDouble()) {
+                it.remove();
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public double setDouble(int index, double e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDouble'");
+        assessModability();
+        int size = imp.size();
+        Objects.checkIndex(index, size);
+        return imp.setDouble(size - index - 1, e);
     }
 
     @Override
     public jdk.prim.util.PrimitiveList.OfDouble subListDouble(int from, int to) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'subListDouble'");
+        int size = imp.size();
+        Objects.checkFromToIndex(from, to, size);
+        return new jdk.prim.util.rolv.OfDouble(imp.subListDouble(size - to, size - from), isMod);
     }
 
     @Override
     public java.lang.Double[] toArray() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+        return PrimitiveArrays.reverse(imp.toArray());
     }
 
     @Override
     public boolean addAllDouble(int index, jdk.prim.util.PrimitiveCollection.OfDouble e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addAllDouble'");
+        assessModability();
+        int size = imp.size();
+        checkClosedRange(index, size);
+        var it = iteratorDouble();
+        if(!it.hasNext()) return false;
+        while(it.hasNext()) imp.addDouble(size - index, it.nextDouble());
+        return true;
     }
 
     @Override
@@ -319,8 +417,38 @@ public class OfDouble implements PrimitiveList.OfDouble {
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
-        return super.toString();
+        var it = iteratorDouble();
+        if (!it.hasNext())
+            return "[]";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (;;) {
+            double e = it.nextDouble();
+            sb.append(e);
+            if (!it.hasNext())
+                return sb.append(']').toString();
+            sb.append(',').append(' ');
+        }
+    }
+
+    @Override
+    public double[] toArrayDouble(double[] array) {
+        var rev = toArrayDouble();
+        if(array.length < rev.length) return rev;
+        System.arraycopy(rev, 0, array, 0, rev.length);
+        return array;
+    }
+
+    @Override
+    public double[] toArrayDouble(jdk.prim.util.function.PrimitiveFunction.OfInt<double[]> generator) {
+        return PrimitiveArrays.reverse(imp.toArrayDouble(generator));
+    }
+
+    @Override
+    public void sortDouble(jdk.prim.util.PrimitiveComparator.OfDouble c) {
+        assessModability();
+        jdk.prim.util.PrimitiveList.OfDouble.super.sortDouble(c.reversedDouble());
     }
     
 }
