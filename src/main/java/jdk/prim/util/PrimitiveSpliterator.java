@@ -9,7 +9,6 @@ import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 
-import jdk.prim.PrimitiveComparator;
 import jdk.prim.util.function.PrimitiveConsumer;
 
 /**
