@@ -41,7 +41,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code double} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default double getLastDouble() { return reversed().iteratorDouble().nextDouble(); }
+        default double getLastDouble() { return reversedDouble().iteratorDouble().nextDouble(); }
         @Override
         default java.lang.Double getLast() { return getLastDouble(); }
         /**
@@ -63,7 +63,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default double removeLastDouble() {
-            PrimitiveIterator.OfDouble it = reversed().iteratorDouble();
+            PrimitiveIterator.OfDouble it = reversedDouble().iteratorDouble();
             double e = it.nextDouble();
             it.remove();
             return e;
@@ -73,7 +73,9 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfDouble reversed();
+        PrimitiveSequencedCollection.OfDouble reversedDouble();
+        @Override
+        default SequencedCollection<java.lang.Double> reversed() { return reversedDouble(); }
     }
     /**
      * A {@link PrimitiveSequencedCollection} of {@code long} values.
@@ -104,7 +106,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code long} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default long getLastLong() { return reversed().iteratorLong().nextLong(); }
+        default long getLastLong() { return reversedLong().iteratorLong().nextLong(); }
         @Override
         default java.lang.Long getLast() { return getLastLong(); }
         /**
@@ -126,7 +128,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default long removeLastLong() {
-            PrimitiveIterator.OfLong it = reversed().iteratorLong();
+            PrimitiveIterator.OfLong it = reversedLong().iteratorLong();
             long e = it.nextLong();
             it.remove();
             return e;
@@ -136,7 +138,9 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfLong reversed();
+        PrimitiveSequencedCollection.OfLong reversedLong();
+        @Override
+        default SequencedCollection<java.lang.Long> reversed() { return reversedLong(); }
     }
     /**
      * A {@link PrimitiveSequencedCollection} of {@code int} values.
@@ -167,7 +171,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code int} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default int getLastInt() { return reversed().iteratorInt().nextInt(); }
+        default int getLastInt() { return reversedInt().iteratorInt().nextInt(); }
         @Override
         default java.lang.Integer getLast() { return getLastInt(); }
         /**
@@ -189,7 +193,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default int removeLastInt() {
-            PrimitiveIterator.OfInt it = reversed().iteratorInt();
+            PrimitiveIterator.OfInt it = reversedInt().iteratorInt();
             int e = it.nextInt();
             it.remove();
             return e;
@@ -199,7 +203,9 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfInt reversed();
+        PrimitiveSequencedCollection.OfInt reversedInt();
+        @Override
+        default SequencedCollection<java.lang.Integer> reversed() { return reversedInt(); }
     }
     /**
      * A {@link PrimitiveSequencedCollection} of {@code float} values.
@@ -230,7 +236,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code float} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default float getLastFloat() { return reversed().iteratorFloat().nextFloat(); }
+        default float getLastFloat() { return reversedFloat().iteratorFloat().nextFloat(); }
         @Override
         default java.lang.Float getLast() { return getLastFloat(); }
         /**
@@ -252,7 +258,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default float removeLastFloat() {
-            PrimitiveIterator.OfFloat it = reversed().iteratorFloat();
+            PrimitiveIterator.OfFloat it = reversedFloat().iteratorFloat();
             float e = it.nextFloat();
             it.remove();
             return e;
@@ -262,7 +268,9 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfFloat reversed();
+        PrimitiveSequencedCollection.OfFloat reversedFloat();
+        @Override
+        default SequencedCollection<java.lang.Float> reversed() { return reversedFloat(); }
     }
     /**
      * A {@link PrimitiveSequencedCollection} of {@code char} values.
@@ -293,7 +301,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code char} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default char getLastChar() { return reversed().iteratorChar().nextChar(); }
+        default char getLastChar() { return reversedChar().iteratorChar().nextChar(); }
         @Override
         default java.lang.Character getLast() { return getLastChar(); }
         /**
@@ -315,7 +323,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default char removeLastChar() {
-            PrimitiveIterator.OfChar it = reversed().iteratorChar();
+            PrimitiveIterator.OfChar it = reversedChar().iteratorChar();
             char e = it.nextChar();
             it.remove();
             return e;
@@ -325,7 +333,9 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfChar reversed();
+        PrimitiveSequencedCollection.OfChar reversedChar();
+        @Override
+        default SequencedCollection<java.lang.Character> reversed() { return reversedChar(); }
     }
     /**
      * A {@link PrimitiveSequencedCollection} of {@code short} values.
@@ -356,7 +366,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code short} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default short getLastShort() { return reversed().iteratorShort().nextShort(); }
+        default short getLastShort() { return reversedShort().iteratorShort().nextShort(); }
         @Override
         default java.lang.Short getLast() { return getLastShort(); }
         /**
@@ -378,7 +388,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default short removeLastShort() {
-            PrimitiveIterator.OfShort it = reversed().iteratorShort();
+            PrimitiveIterator.OfShort it = reversedShort().iteratorShort();
             short e = it.nextShort();
             it.remove();
             return e;
@@ -388,7 +398,9 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfShort reversed();
+        PrimitiveSequencedCollection.OfShort reversedShort();
+        @Override
+        default SequencedCollection<java.lang.Short> reversed() { return reversedShort(); }
     }
     /**
      * A {@link PrimitiveSequencedCollection} of {@code byte} values.
@@ -419,7 +431,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code byte} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default byte getLastByte() { return reversed().iteratorByte().nextByte(); }
+        default byte getLastByte() { return reversedByte().iteratorByte().nextByte(); }
         @Override
         default java.lang.Byte getLast() { return getLastByte(); }
         /**
@@ -441,7 +453,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default byte removeLastByte() {
-            PrimitiveIterator.OfByte it = reversed().iteratorByte();
+            PrimitiveIterator.OfByte it = reversedByte().iteratorByte();
             byte e = it.nextByte();
             it.remove();
             return e;
@@ -451,7 +463,9 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfByte reversed();
+        PrimitiveSequencedCollection.OfByte reversedByte();
+        @Override
+        default SequencedCollection<java.lang.Byte> reversed() { return reversedByte(); }
     }
     /**
      * A {@link PrimitiveSequencedCollection} of {@code boolean} values.
@@ -482,7 +496,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * The {@code boolean} specialization of {@link #getLast(Object)}
          * @return the element at the tail of this collection
          */
-        default boolean getLastBoolean() { return reversed().iteratorBoolean().nextBoolean(); }
+        default boolean getLastBoolean() { return reversedBoolean().iteratorBoolean().nextBoolean(); }
         @Override
         default java.lang.Boolean getLast() { return getLastBoolean(); }
         /**
@@ -504,7 +518,7 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the removed element
          */
         default boolean removeLastBoolean() {
-            PrimitiveIterator.OfBoolean it = reversed().iteratorBoolean();
+            PrimitiveIterator.OfBoolean it = reversedBoolean().iteratorBoolean();
             boolean e = it.nextBoolean();
             it.remove();
             return e;
@@ -514,6 +528,8 @@ T_CONS> extends SequencedCollection<T>, PrimitiveCollection<T, T_CONS> {
          * @return the reverse-order view of this collection
          * @see SequencedCollection#reversed()
          */
-        PrimitiveSequencedCollection.OfBoolean reversed();
+        PrimitiveSequencedCollection.OfBoolean reversedBoolean();
+        @Override
+        default SequencedCollection<java.lang.Boolean> reversed() { return reversedBoolean(); }
     }
 }
