@@ -172,11 +172,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code double} array
 		 */
 		double[] toArrayDouble();
+		double[] toArrayDouble(double[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Double[] toArray() { return PrimitiveArrays.map(toArrayDouble(), (jdk.prim.util.function.PrimitiveFunction.OfDouble<java.lang.Double>)e -> java.lang.Double.valueOf(e)); }
+		default double[] toArrayDouble(jdk.prim.util.function.PrimitiveFunction.OfInt<double[]> generator) {
+			return toArrayDouble(generator.apply(0));
+		}
 	}
 	/**
 	 * A collection containing only {@code long} elements
@@ -306,11 +310,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code long} array
 		 */
 		long[] toArrayLong();
+		long[] toArrayLong(long[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Long[] toArray() { return PrimitiveArrays.map(toArrayLong(), (jdk.prim.util.function.PrimitiveFunction.OfLong<java.lang.Long>)e -> java.lang.Long.valueOf(e)); }
+		default long[] toArrayLong(jdk.prim.util.function.PrimitiveFunction.OfInt<long[]> generator) {
+			return toArrayLong(generator.apply(0));
+		}
 	}
 	/**
 	 * A collection containing only {@code int} elements
@@ -440,11 +448,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code int} array
 		 */
 		int[] toArrayInt();
+		int[] toArrayInt(int[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Integer[] toArray() { return PrimitiveArrays.map(toArrayInt(), (jdk.prim.util.function.PrimitiveFunction.OfInt<java.lang.Integer>)e -> java.lang.Integer.valueOf(e)); }
+		default int[] toArrayInt(jdk.prim.util.function.PrimitiveFunction.OfInt<int[]> generator) {
+			return toArrayInt(generator.apply(0));
+		}
 	}
 	/**
 	 * A collection containing only {@code float} elements
@@ -574,11 +586,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code float} array
 		 */
 		float[] toArrayFloat();
+		float[] toArrayFloat(float[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Float[] toArray() { return PrimitiveArrays.map(toArrayFloat(), (jdk.prim.util.function.PrimitiveFunction.OfFloat<java.lang.Float>)e -> java.lang.Float.valueOf(e)); }
+		default float[] toArrayFloat(jdk.prim.util.function.PrimitiveFunction.OfInt<float[]> generator) {
+			return toArrayFloat(generator.apply(0));
+		}
 	}
 	/**
 	 * A collection containing only {@code char} elements
@@ -708,11 +724,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code char} array
 		 */
 		char[] toArrayChar();
+		char[] toArrayChar(char[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Character[] toArray() { return PrimitiveArrays.map(toArrayChar(), (jdk.prim.util.function.PrimitiveFunction.OfChar<java.lang.Character>)e -> java.lang.Character.valueOf(e)); }
+		default char[] toArrayChar(jdk.prim.util.function.PrimitiveFunction.OfInt<char[]> generator) {
+			return toArrayChar(generator.apply(0));
+		}
 	}
 	/**
 	 * A collection containing only {@code short} elements
@@ -842,11 +862,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code short} array
 		 */
 		short[] toArrayShort();
+		short[] toArrayShort(short[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Short[] toArray() { return PrimitiveArrays.map(toArrayShort(), (jdk.prim.util.function.PrimitiveFunction.OfShort<java.lang.Short>)e -> java.lang.Short.valueOf(e)); }
+		default short[] toArrayShort(jdk.prim.util.function.PrimitiveFunction.OfInt<short[]> generator) {
+			return toArrayShort(generator.apply(0));
+		}
 	}
 	/**
 	 * A collection containing only {@code byte} elements
@@ -976,11 +1000,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code byte} array
 		 */
 		byte[] toArrayByte();
+		byte[] toArrayByte(byte[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Byte[] toArray() { return PrimitiveArrays.map(toArrayByte(), (jdk.prim.util.function.PrimitiveFunction.OfByte<java.lang.Byte>)e -> java.lang.Byte.valueOf(e)); }
+		default byte[] toArrayByte(jdk.prim.util.function.PrimitiveFunction.OfInt<byte[]> generator) {
+			return toArrayByte(generator.apply(0));
+		}
 	}
 	/**
 	 * A collection containing only {@code boolean} elements
@@ -1110,11 +1138,15 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return a {@code boolean} array
 		 */
 		boolean[] toArrayBoolean();
+		boolean[] toArrayBoolean(boolean[] array);
 		/**
 		 * {@inheritDoc}
 		 * @return {@inheritDoc}
 		 */
 		default java.lang.Boolean[] toArray() { return PrimitiveArrays.map(toArrayBoolean(), (jdk.prim.util.function.PrimitiveFunction.OfBoolean<java.lang.Boolean>)e -> java.lang.Boolean.valueOf(e)); }
+		default boolean[] toArrayBoolean(jdk.prim.util.function.PrimitiveFunction.OfInt<boolean[]> generator) {
+			return toArrayBoolean(generator.apply(0));
+		}
 	}
 
 }
