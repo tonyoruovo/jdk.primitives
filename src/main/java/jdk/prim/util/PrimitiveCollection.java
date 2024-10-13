@@ -36,7 +36,6 @@ import jdk.prim.util.stream.PrimitiveStream;
  * 
  * @param <T> the type of the wrapper for the primitive elements in this collection
  * @param <T_CONS> the type of the consumer
- * @param <T_ITR> the type of iterator returned by {@link #iterator()}
  * @see Collection
  * @author Oruovo Etineakpopha Anthony
  */

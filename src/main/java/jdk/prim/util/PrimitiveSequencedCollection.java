@@ -6,6 +6,8 @@ import jdk.prim.util.function.PrimitiveConsumer;
 
 /**
  * A {@link SequencedCollection} for primitive elements
+ * @param <T> The type of primitive wrapper for this sequenced collection
+ * @param <T_CONS> the type of consumer for the generic {@link #forEach(Object) forEach}
  * 
  * @see SequencedCollection
  */

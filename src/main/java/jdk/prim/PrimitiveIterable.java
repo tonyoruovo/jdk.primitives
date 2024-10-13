@@ -48,6 +48,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfDouble extends PrimitiveIterable<Double, PrimitiveConsumer.OfDouble> {
 
+		/**
+		 * The {@code double} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code double} values
+		 */
 		PrimitiveIterator.OfDouble iteratorDouble();
 
 		@Override
@@ -55,6 +60,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorDouble();
 		}
 
+		/**
+		 * The {@code double} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code double} values
+		 */
 		default PrimitiveSpliterator.OfDouble spliteratorDouble() {
 			return null;
 		}
@@ -210,6 +220,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfLong extends PrimitiveIterable<Long, PrimitiveConsumer.OfLong> {
 
+		/**
+		 * The {@code long} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code long} values
+		 */
 		PrimitiveIterator.OfLong iteratorLong();
 
 		@Override
@@ -217,6 +232,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorLong();
 		}
 
+		/**
+		 * The {@code long} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code long} values
+		 */
 		default PrimitiveSpliterator.OfLong spliteratorLong() {
 			return null;
 		}
@@ -372,6 +392,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfInt extends PrimitiveIterable<Integer, PrimitiveConsumer.OfInt> {
 
+		/**
+		 * The {@code int} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code int} values
+		 */
 		PrimitiveIterator.OfInt iteratorInt();
 
 		@Override
@@ -379,6 +404,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorInt();
 		}
 
+		/**
+		 * The {@code int} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code int} values
+		 */
 		default PrimitiveSpliterator.OfInt spliteratorInt() {
 			return null;
 		}
@@ -534,6 +564,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfFloat extends PrimitiveIterable<Float, PrimitiveConsumer.OfFloat> {
 
+		/**
+		 * The {@code float} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code float} values
+		 */
 		PrimitiveIterator.OfFloat iteratorFloat();
 
 		@Override
@@ -541,6 +576,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorFloat();
 		}
 
+		/**
+		 * The {@code float} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code float} values
+		 */
 		default PrimitiveSpliterator.OfFloat spliteratorFloat() {
 			return null;
 		}
@@ -696,6 +736,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfChar extends PrimitiveIterable<Character, PrimitiveConsumer.OfChar> {
 
+		/**
+		 * The {@code char} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code char} values
+		 */
 		PrimitiveIterator.OfChar iteratorChar();
 
 		@Override
@@ -703,6 +748,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorChar();
 		}
 
+		/**
+		 * The {@code char} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code char} values
+		 */
 		default PrimitiveSpliterator.OfChar spliteratorChar() {
 			return null;
 		}
@@ -858,6 +908,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfShort extends PrimitiveIterable<Short, PrimitiveConsumer.OfShort> {
 
+		/**
+		 * The {@code short} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code short} values
+		 */
 		PrimitiveIterator.OfShort iteratorShort();
 
 		@Override
@@ -865,6 +920,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorShort();
 		}
 
+		/**
+		 * The {@code short} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code short} values
+		 */
 		default PrimitiveSpliterator.OfShort spliteratorShort() {
 			return null;
 		}
@@ -1020,6 +1080,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfByte extends PrimitiveIterable<Byte, PrimitiveConsumer.OfByte> {
 
+		/**
+		 * The {@code byte} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code byte} values
+		 */
 		PrimitiveIterator.OfByte iteratorByte();
 
 		@Override
@@ -1027,6 +1092,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorByte();
 		}
 
+		/**
+		 * The {@code byte} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code byte} values
+		 */
 		default PrimitiveSpliterator.OfByte spliteratorByte() {
 			return null;
 		}
@@ -1182,6 +1252,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 	@FunctionalInterface
 	interface OfBoolean extends PrimitiveIterable<Boolean, PrimitiveConsumer.OfBoolean> {
 
+		/**
+		 * The {@code boolean} specialisation of {@link #iterator}
+		 * 
+		 * @return a specialised iterator of {@code boolean} values
+		 */
 		PrimitiveIterator.OfBoolean iteratorBoolean();
 
 		@Override
@@ -1189,6 +1264,11 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T> {
 			return iteratorBoolean();
 		}
 
+		/**
+		 * The {@code boolean} specialisation of {@link #spliterator}
+		 * 
+		 * @return a specialised spliterator of {@code boolean} values
+		 */
 		default PrimitiveSpliterator.OfBoolean spliteratorBoolean() {
 			return null;
 		}
