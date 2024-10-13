@@ -1,0 +1,1 @@
+java -XX:+ShowCodeDetailsInExceptionMessages --module-path target\classes -m jdk.primitives/jdk.prim.Main
