@@ -1,4 +1,4 @@
-package jdk.prim.util.sort;
+package jdk.prim.util.sort.dualpivot;
 
 import jdk.prim.util.PrimitiveComparator;
 
@@ -30,7 +30,15 @@ interface Constants {
 
     int MAX_RECURSION_DEPTH = 64 * DELTA;
 
-    
+    public static int getDepth(int pll, int size) {
+        int depth = 0;
+
+        while ((pll >>= 3) > 0 && (size >>= 2) > 0) {
+            depth -= 2;
+        }
+        return depth;
+    }
+
     /**
      * Represents a function that accepts the array and sorts the specified range
      * of the array into ascending order.

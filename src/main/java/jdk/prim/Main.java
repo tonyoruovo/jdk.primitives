@@ -2,11 +2,14 @@ package jdk.prim;
 
 import java.util.Arrays;
 import java.util.SplittableRandom;
+import java.util.concurrent.ForkJoinPool;
 import java.util.random.RandomGenerator;
 
 import jdk.prim.util.PrimitiveArrays;
 import jdk.prim.util.PrimitiveComparator;
 import jdk.prim.util.sort.PrimitiveBasicQuickSort;
+import jdk.prim.util.sort.PrimitiveDualPivot;
+import jdk.prim.util.sort.PrimitiveNaiveQuickSort;
 
 /**
  * Hello world!
@@ -79,7 +82,7 @@ public class Main
 
     static {
         RandomGenerator random = new SplittableRandom();
-        LENGTH = random.nextInt(5, 12);
+        LENGTH = random.nextInt(0, 32);
         DOUBLE = new double[LENGTH];
         LONG = new long[LENGTH];
         INT = new int[LENGTH];
@@ -100,62 +103,14 @@ public class Main
         }
     }
 	
-    public static void main( String[] args )
-    {
-        var d = Arrays.toString(LONG);
+    public static void main( String[] args ) {
+        var d = Arrays.toString(BOOLEAN);
         System.err.println(d);
 
-        sort(LONG, Long::compare, null);
+        var sorted = new boolean[BOOLEAN.length];
+        PrimitiveDualPivot.ofBoolean(ForkJoinPool.getCommonPoolParallelism()).sort(BOOLEAN, sorted);
 
-        d = Arrays.toString(LONG);
+        d = Arrays.toString(sorted);
         System.err.println(d);
-    }
-
-    static void sort(long[] src, PrimitiveComparator.OfLong c, long[] dst){
-        if(dst == null) dst = src;
-        else if(dst.length != src.length) {
-            dst = new long[src.length];
-            System.arraycopy(src, 0, dst, 0, src.length);
-        }
-
-        applySort(dst, c, 0, dst.length - 1);
-    }
-
-    static void applySort(long[] a, PrimitiveComparator.OfLong c, int l, int h) {
-        if(l>=h) return;
-        int partionIndex = partition(a, c, l, h);
-
-        applySort(a, c, l, partionIndex - 1);
-        applySort(a, c, partionIndex + 1, h);
-    }
-
-    static int partition(long[] a, PrimitiveComparator.OfLong c, int l, int h) {
-        final int pivotIndex = (l + h) / 2;
-
-        int leftIndex = l;
-        int rightIndex = h;
-
-        while(true) {
-            /* 
-            scan from the left of pivot index until we find a
-            value >= pivot. WHen the scan gets to the pivot index,
-            then we must stop
-            */
-            while(c.compareLong(a[leftIndex], a[pivotIndex]) <= 0 && leftIndex < pivotIndex) {
-                leftIndex++;
-            }
-            //scan from the right of the pivot
-            while(c.compareLong(a[rightIndex], a[pivotIndex]) >= 0 && rightIndex > pivotIndex) {
-                rightIndex--;
-            }
-
-            if(c.compareLong(a[leftIndex], a[pivotIndex]) > 0 && c.compareLong(a[pivotIndex], a[rightIndex]) < 0) PrimitiveArrays.swap(a, leftIndex, rightIndex);
-            else if(c.compareLong(a[leftIndex], a[pivotIndex]) > 0) PrimitiveArrays.swap(a, leftIndex, pivotIndex);
-            else if(c.compareLong(a[rightIndex], a[pivotIndex]) < 0) PrimitiveArrays.swap(a, pivotIndex, rightIndex);
-            else break;
-        }
-
-
-        return pivotIndex;
     }
 }

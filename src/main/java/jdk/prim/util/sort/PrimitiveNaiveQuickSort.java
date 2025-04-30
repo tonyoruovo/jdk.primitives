@@ -15,7 +15,7 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code double} arrays using the quick sort method
      */
-    public static PrimitiveSorter.DoubleArraySorter ofDouble(boolean midPivot) {
+    public static PrimitiveSorter.OfDouble ofDouble(boolean midPivot) {
         return new OfDouble(midPivot);
     }
     /**
@@ -23,7 +23,7 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code long} arrays using the quick sort method
      */
-    public static PrimitiveSorter.LongArraySorter ofLong(boolean midPivot) {
+    public static PrimitiveSorter.OfLong ofLong(boolean midPivot) {
         return new OfLong(midPivot);
     }
     /**
@@ -31,7 +31,7 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code int} arrays using the quick sort method
      */
-    public static PrimitiveSorter.IntArraySorter ofInt(boolean midPivot) {
+    public static PrimitiveSorter.OfInt ofInt(boolean midPivot) {
         return new OfInt(midPivot);
     }
     /**
@@ -39,7 +39,7 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code float} arrays using the quick sort method
      */
-    public static PrimitiveSorter.FloatArraySorter ofFloat(boolean midPivot) {
+    public static PrimitiveSorter.OfFloat ofFloat(boolean midPivot) {
         return new OfFloat(midPivot);
     }
     /**
@@ -47,7 +47,7 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code char} arrays using the quick sort method
      */
-    public static PrimitiveSorter.CharArraySorter ofChar(boolean midPivot) {
+    public static PrimitiveSorter.OfChar ofChar(boolean midPivot) {
         return new OfChar(midPivot);
     }
     /**
@@ -55,7 +55,7 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code short} arrays using the quick sort method
      */
-    public static PrimitiveSorter.ShortArraySorter ofShort(boolean midPivot) {
+    public static PrimitiveSorter.OfShort ofShort(boolean midPivot) {
         return new OfShort(midPivot);
     }
     /**
@@ -63,7 +63,7 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code byte} arrays using the quick sort method
      */
-    public static PrimitiveSorter.ByteArraySorter ofByte(boolean midPivot) {
+    public static PrimitiveSorter.OfByte ofByte(boolean midPivot) {
         return new OfByte(midPivot);
     }
     /**
@@ -71,11 +71,11 @@ public final class PrimitiveNaiveQuickSort {
      * @param midPivot check for using the mid index as the the pivot index as opposed to the last value
      * @return a sorter of {@code boolean} arrays using the quick sort method
      */
-    public static PrimitiveSorter.BooleanArraySorter ofBoolean(boolean midPivot) {
+    public static PrimitiveSorter.OfBoolean ofBoolean(boolean midPivot) {
         return new OfBoolean(midPivot);
     }
 
-    private static class OfDouble implements PrimitiveSorter.DoubleArraySorter {
+    private static class OfDouble implements PrimitiveSorter.OfDouble {
         private final boolean optimize;
         OfDouble(boolean optimise) {
             this.optimize = optimise;
@@ -87,8 +87,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(double[] src, PrimitiveComparator.OfDouble comparator, double[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new double[src.length];
+            else {
+                if(dst.length != src.length) dst = new double[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -98,8 +98,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(double[] src, double[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new double[src.length];
+            else {
+                if(dst.length != src.length) dst = new double[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -206,7 +206,7 @@ public final class PrimitiveNaiveQuickSort {
             return next + 1;
         }
     }
-    private static class OfLong implements PrimitiveSorter.LongArraySorter {
+    private static class OfLong implements PrimitiveSorter.OfLong {
         private final boolean optimize;
         OfLong(boolean optimise) {
             this.optimize = optimise;
@@ -218,8 +218,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(long[] src, PrimitiveComparator.OfLong comparator, long[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new long[src.length];
+            else {
+                if(dst.length != src.length) dst = new long[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -229,8 +229,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(long[] src, long[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new long[src.length];
+            else {
+                if(dst.length != src.length) dst = new long[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -337,7 +337,7 @@ public final class PrimitiveNaiveQuickSort {
             return next + 1;
         }
     }
-    private static class OfInt implements PrimitiveSorter.IntArraySorter {
+    private static class OfInt implements PrimitiveSorter.OfInt {
         private final boolean optimize;
         OfInt(boolean optimise) {
             this.optimize = optimise;
@@ -349,8 +349,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(int[] src, PrimitiveComparator.OfInt comparator, int[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new int[src.length];
+            else {
+                if(dst.length != src.length) dst = new int[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -360,8 +360,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(int[] src, int[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new int[src.length];
+            else {
+                if(dst.length != src.length) dst = new int[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -468,7 +468,7 @@ public final class PrimitiveNaiveQuickSort {
             return next + 1;
         }
     }
-    private static class OfFloat implements PrimitiveSorter.FloatArraySorter {
+    private static class OfFloat implements PrimitiveSorter.OfFloat {
         private final boolean optimize;
         OfFloat(boolean optimise) {
             this.optimize = optimise;
@@ -480,8 +480,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(float[] src, PrimitiveComparator.OfFloat comparator, float[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new float[src.length];
+            else {
+                if(dst.length != src.length) dst = new float[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -491,8 +491,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(float[] src, float[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new float[src.length];
+            else {
+                if(dst.length != src.length) dst = new float[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -599,7 +599,7 @@ public final class PrimitiveNaiveQuickSort {
             return next + 1;
         }
     }
-    private static class OfChar implements PrimitiveSorter.CharArraySorter {
+    private static class OfChar implements PrimitiveSorter.OfChar {
         private final boolean optimize;
         OfChar(boolean optimise) {
             this.optimize = optimise;
@@ -611,8 +611,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(char[] src, PrimitiveComparator.OfChar comparator, char[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new char[src.length];
+            else {
+                if(dst.length != src.length) dst = new char[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -622,8 +622,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(char[] src, char[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new char[src.length];
+            else {
+                if(dst.length != src.length) dst = new char[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -730,7 +730,7 @@ public final class PrimitiveNaiveQuickSort {
             return next + 1;
         }
     }
-    private static class OfShort implements PrimitiveSorter.ShortArraySorter {
+    private static class OfShort implements PrimitiveSorter.OfShort {
         private final boolean optimize;
         OfShort(boolean optimise) {
             this.optimize = optimise;
@@ -742,8 +742,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(short[] src, PrimitiveComparator.OfShort comparator, short[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new short[src.length];
+            else {
+                if(dst.length != src.length) dst = new short[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -753,8 +753,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(short[] src, short[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new short[src.length];
+            else {
+                if(dst.length != src.length) dst = new short[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -861,7 +861,7 @@ public final class PrimitiveNaiveQuickSort {
             return next + 1;
         }
     }
-    private static class OfByte implements PrimitiveSorter.ByteArraySorter     {
+    private static class OfByte implements PrimitiveSorter.OfByte     {
         private final boolean optimize;
         OfByte(boolean optimise) {
             this.optimize = optimise;
@@ -873,8 +873,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(byte[] src, PrimitiveComparator.OfByte comparator, byte[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new byte[src.length];
+            else {
+                if(dst.length != src.length) dst = new byte[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -884,8 +884,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(byte[] src, byte[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new byte[src.length];
+            else {
+                if(dst.length != src.length) dst = new byte[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -992,7 +992,7 @@ public final class PrimitiveNaiveQuickSort {
             return next + 1;
         }
     }
-    private static class OfBoolean implements PrimitiveSorter.BooleanArraySorter     {
+    private static class OfBoolean implements PrimitiveSorter.OfBoolean     {
         private final boolean optimize;
         OfBoolean(boolean optimise) {
             this.optimize = optimise;
@@ -1004,8 +1004,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(boolean[] src, PrimitiveComparator.OfBoolean comparator, boolean[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new boolean[src.length];
+            else {
+                if(dst.length != src.length) dst = new boolean[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
@@ -1015,8 +1015,8 @@ public final class PrimitiveNaiveQuickSort {
         @Override
         public void sort(boolean[] src, boolean[] dst) {
             if(dst == null) dst = src;
-            else if(dst.length != src.length) {
-                dst = new boolean[src.length];
+            else {
+                if(dst.length != src.length) dst = new boolean[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 

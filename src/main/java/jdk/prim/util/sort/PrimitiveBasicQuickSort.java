@@ -13,16 +13,19 @@ import jdk.prim.util.PrimitiveComparator;
  * A class that contains primitive implementations of a very basic
  * multi-threaded quick sort algorithm. It's main purpose is to serve as a
  * fallback for code on environments where modern multi-threading isn't possible
+ * <p>
+ * This seems slower than {@link PrimitiveNaiveQuickSort} on multi-core processors
  */
 public final class PrimitiveBasicQuickSort {
     private PrimitiveBasicQuickSort() {
     }
 
-    private static void waitForThreads(List<Thread> threads) {
+    private static void waitForThreads(List<Thread> threads, Semaphore semaphore) {
         for (int i = 0; i < threads.size(); i++) {
             Thread thread = threads.get(i);
             try {
-                thread.join();
+                thread.join(1000);
+                semaphore.release();
             } catch(InterruptedException e) {
                 e.printStackTrace();
             } catch(ConcurrentModificationException e) {
@@ -55,44 +58,44 @@ public final class PrimitiveBasicQuickSort {
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code double} arrays using the quick sort method
      */
-    public static PrimitiveSorter.DoubleArraySorter ofDouble() { return new OfDouble(); }
+    public static PrimitiveSorter.OfDouble ofDouble() { return new OfDouble(); }
     /**
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code long} arrays using the quick sort method
      */
-    public static PrimitiveSorter.LongArraySorter ofLong() { return new OfLong(); }
+    public static PrimitiveSorter.OfLong ofLong() { return new OfLong(); }
     /**
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code int} arrays using the quick sort method
      */
-    public static PrimitiveSorter.IntArraySorter ofInt() { return new OfInt(); }
+    public static PrimitiveSorter.OfInt ofInt() { return new OfInt(); }
     /**
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code float} arrays using the quick sort method
      */
-    public static PrimitiveSorter.FloatArraySorter ofFloat() { return new OfFloat(); }
+    public static PrimitiveSorter.OfFloat ofFloat() { return new OfFloat(); }
     /**
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code char} arrays using the quick sort method
      */
-    public static PrimitiveSorter.CharArraySorter ofChar() { return new OfChar(); }
+    public static PrimitiveSorter.OfChar ofChar() { return new OfChar(); }
     /**
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code short} arrays using the quick sort method
      */
-    public static PrimitiveSorter.ShortArraySorter ofShort() { return new OfShort(); }
+    public static PrimitiveSorter.OfShort ofShort() { return new OfShort(); }
     /**
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code byte} arrays using the quick sort method
      */
-    public static PrimitiveSorter.ByteArraySorter ofByte() { return new OfByte(); }
+    public static PrimitiveSorter.OfByte ofByte() { return new OfByte(); }
     /**
      * Retrieves a basic quick sort implementation which has limited multi-threading support
      * @return a sorter of {@code boolean} arrays using the quick sort method
      */
-    public static PrimitiveSorter.BooleanArraySorter ofBoolean() { return new OfBoolean(); }
+    public static PrimitiveSorter.OfBoolean ofBoolean() { return new OfBoolean(); }
 
-    private static class OfDouble implements PrimitiveSorter.DoubleArraySorter {
+    private static class OfDouble implements PrimitiveSorter.OfDouble {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -114,38 +117,35 @@ public final class PrimitiveBasicQuickSort {
         public void sort(double[] src, PrimitiveComparator.OfDouble comparator, double[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new double[src.length];
+            else {
+                if (dst.length != src.length) dst = new double[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
-
-            waitForThreads(threads);
+            // System.out.println("Waiting for threads: ");
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(double[] src, double[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new double[src.length];
+            else {
+                if (dst.length != src.length) dst = new double[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 
-        // static int i = 0;
         private void applySort(double[] a, PrimitiveComparator.OfDouble c, int l, int h) {
             if (l >= h)
                 return;
-            // System.out.println("before partition:  - " + l + ", h - " + h + ", length - " + a.length);
             int p = partition(a, c, l, h);
-            // System.out.println("after partition: " +  + l + ", h - " + h + ", length - " + a.length + ", partition - " + p);
 
             runSortThread(() -> applySort(a, c, l, p - 1), threads, semaphore);
             runSortThread(() -> applySort(a, c, p + 1, h), threads, semaphore);
@@ -199,7 +199,7 @@ public final class PrimitiveBasicQuickSort {
         }
     }
 
-    private static class OfLong implements PrimitiveSorter.LongArraySorter {
+    private static class OfLong implements PrimitiveSorter.OfLong {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -221,28 +221,28 @@ public final class PrimitiveBasicQuickSort {
         public void sort(long[] src, PrimitiveComparator.OfLong comparator, long[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new long[src.length];
+            else {
+                if (dst.length != src.length) dst = new long[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(long[] src, long[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new long[src.length];
+            else {
+                if (dst.length != src.length) dst = new long[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 
@@ -303,7 +303,7 @@ public final class PrimitiveBasicQuickSort {
         }
     }
 
-    private static class OfInt implements PrimitiveSorter.IntArraySorter {
+    private static class OfInt implements PrimitiveSorter.OfInt {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -325,28 +325,28 @@ public final class PrimitiveBasicQuickSort {
         public void sort(int[] src, PrimitiveComparator.OfInt comparator, int[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new int[src.length];
+            else {
+                if (dst.length != src.length) dst = new int[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(int[] src, int[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new int[src.length];
+            else {
+                if (dst.length != src.length) dst = new int[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 
@@ -407,7 +407,7 @@ public final class PrimitiveBasicQuickSort {
         }
     }
 
-    private static class OfFloat implements PrimitiveSorter.FloatArraySorter {
+    private static class OfFloat implements PrimitiveSorter.OfFloat {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -429,28 +429,28 @@ public final class PrimitiveBasicQuickSort {
         public void sort(float[] src, PrimitiveComparator.OfFloat comparator, float[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new float[src.length];
+            else {
+                if (dst.length != src.length) dst = new float[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(float[] src, float[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new float[src.length];
+            else {
+                if (dst.length != src.length) dst = new float[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 
@@ -511,7 +511,7 @@ public final class PrimitiveBasicQuickSort {
         }
     }
 
-    private static class OfChar implements PrimitiveSorter.CharArraySorter {
+    private static class OfChar implements PrimitiveSorter.OfChar {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -533,28 +533,28 @@ public final class PrimitiveBasicQuickSort {
         public void sort(char[] src, PrimitiveComparator.OfChar comparator, char[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new char[src.length];
+            else {
+                if (dst.length != src.length) dst = new char[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(char[] src, char[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new char[src.length];
+            else {
+                if (dst.length != src.length) dst = new char[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 
@@ -615,7 +615,7 @@ public final class PrimitiveBasicQuickSort {
         }
     }
 
-    private static class OfShort implements PrimitiveSorter.ShortArraySorter {
+    private static class OfShort implements PrimitiveSorter.OfShort {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -637,28 +637,28 @@ public final class PrimitiveBasicQuickSort {
         public void sort(short[] src, PrimitiveComparator.OfShort comparator, short[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new short[src.length];
+            else {
+                if (dst.length != src.length) dst = new short[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(short[] src, short[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new short[src.length];
+            else {
+                if (dst.length != src.length) dst = new short[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
             
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 
@@ -719,7 +719,7 @@ public final class PrimitiveBasicQuickSort {
         }
     }
 
-    private static class OfByte implements PrimitiveSorter.ByteArraySorter {
+    private static class OfByte implements PrimitiveSorter.OfByte {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -741,28 +741,28 @@ public final class PrimitiveBasicQuickSort {
         public void sort(byte[] src, PrimitiveComparator.OfByte comparator, byte[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new byte[src.length];
+            else {
+                if (dst.length != src.length) dst = new byte[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(byte[] src, byte[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new byte[src.length];
+            else {
+                if (dst.length != src.length) dst = new byte[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 
@@ -823,7 +823,7 @@ public final class PrimitiveBasicQuickSort {
         }
     }
 
-    private static class OfBoolean implements PrimitiveSorter.BooleanArraySorter {
+    private static class OfBoolean implements PrimitiveSorter.OfBoolean {
         private final List<Thread> threads;
         private final Semaphore semaphore;
 
@@ -845,28 +845,28 @@ public final class PrimitiveBasicQuickSort {
         public void sort(boolean[] src, PrimitiveComparator.OfBoolean comparator, boolean[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new boolean[src.length];
+            else {
+                if (dst.length != src.length) dst = new boolean[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, comparator, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
         }
 
         @Override
         public void sort(boolean[] src, boolean[] dst) {
             if (dst == null)
                 dst = src;
-            else if (dst.length != src.length) {
-                dst = new boolean[src.length];
+            else {
+                if (dst.length != src.length) dst = new boolean[src.length];
                 System.arraycopy(src, 0, dst, 0, src.length);
             }
 
             applySort(dst, 0, dst.length - 1);
 
-            waitForThreads(threads);
+            waitForThreads(threads, semaphore);
 
         }
 

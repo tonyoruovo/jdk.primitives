@@ -1,16 +1,18 @@
-package jdk.prim.util.sort;
+package jdk.prim.util.sort.dualpivot;
 
-import static jdk.prim.util.sort.Constants.DELTA;
-import static jdk.prim.util.sort.Constants.MAX_INSERTION_SORT_SIZE;
-import static jdk.prim.util.sort.Constants.MAX_MIXED_INSERTION_SORT_SIZE;
-import static jdk.prim.util.sort.Constants.MAX_RECURSION_DEPTH;
-import static jdk.prim.util.sort.Constants.MAX_RUN_CAPACITY;
-import static jdk.prim.util.sort.Constants.MIN_FIRST_RUNS_FACTOR;
-import static jdk.prim.util.sort.Constants.MIN_FIRST_RUN_SIZE;
-import static jdk.prim.util.sort.Constants.MIN_PARALLEL_MERGE_PARTS_SIZE;
-import static jdk.prim.util.sort.Constants.MIN_PARALLEL_SORT_SIZE;
-import static jdk.prim.util.sort.Constants.MIN_RUN_COUNT;
-import static jdk.prim.util.sort.Constants.MIN_TRY_MERGE_SIZE;
+import static jdk.prim.util.sort.dualpivot.Constants.DELTA;
+import static jdk.prim.util.sort.dualpivot.Constants.MAX_INSERTION_SORT_SIZE;
+import static jdk.prim.util.sort.dualpivot.Constants.MAX_MIXED_INSERTION_SORT_SIZE;
+import static jdk.prim.util.sort.dualpivot.Constants.MAX_RECURSION_DEPTH;
+import static jdk.prim.util.sort.dualpivot.Constants.MAX_RUN_CAPACITY;
+import static jdk.prim.util.sort.dualpivot.Constants.MIN_FIRST_RUNS_FACTOR;
+import static jdk.prim.util.sort.dualpivot.Constants.MIN_FIRST_RUN_SIZE;
+import static jdk.prim.util.sort.dualpivot.Constants.MIN_PARALLEL_MERGE_PARTS_SIZE;
+import static jdk.prim.util.sort.dualpivot.Constants.MIN_PARALLEL_SORT_SIZE;
+import static jdk.prim.util.sort.dualpivot.Constants.MIN_RUN_COUNT;
+import static jdk.prim.util.sort.dualpivot.Constants.MIN_TRY_MERGE_SIZE;
+import static jdk.prim.util.sort.dualpivot.Constants.getDepth;
+import static jdk.prim.util.sort.dualpivot.Constants.partition;
 
 import java.util.Arrays;
 import java.util.concurrent.CountedCompleter;
@@ -18,20 +20,14 @@ import java.util.concurrent.RecursiveTask;
 
 import jdk.prim.util.PrimitiveComparator;
 
-public final class OfDouble {
+/**
+ * An {@code int} implementation of {@link java.util.DualPivotQuicksort}
+ */
+public final class OfInt {
 
-    private OfDouble() {}
+    private OfInt() {}
 
-    private static int getDepth(int pll, int size) {
-        int depth = 0;
-
-        while ((pll >>= 3) > 0 && (size >>= 2) > 0) {
-            depth -= 2;
-        }
-        return depth;
-    }
-
-    static void sort(double[] a, PrimitiveComparator.OfDouble comparator, int parallelism, int low, int high) {
+    public static void sort(int[] a, PrimitiveComparator.OfInt comparator, int parallelism, int low, int high) {
 
         /*
          * Sort everything except NaNs,
@@ -41,7 +37,7 @@ public final class OfDouble {
 
         if (parallelism > 1 && size > MIN_PARALLEL_SORT_SIZE) {
             int depth = getDepth(parallelism, size >> 12);
-            double[] b = depth == 0 ? null : new double[size];
+            int[] b = depth == 0 ? null : new int[size];
             new Sorter(null, a, b, low, size, low, depth, comparator).invoke();
         } else {
             sort(null, a, comparator, 0, low, high);
@@ -49,14 +45,14 @@ public final class OfDouble {
 
     }
 
-    static void sort(Sorter sorter, double[] a, PrimitiveComparator.OfDouble comparator, int bits, int low, int high) {
+    private static void sort(Sorter sorter, int[] a, PrimitiveComparator.OfInt comparator, int bits, int low, int high) {
         while (true) {
             int end = high - 1, size = high - low;
             /*
              * Run mixed insertion sort on small non-leftmost parts.
              */
             if (size < MAX_MIXED_INSERTION_SORT_SIZE + bits && (bits & 1) > 0) {
-                Constants.sort(a, low, high, comparator, OfDouble::mixedInsertionSort);
+                Constants.sort(a, low, high, comparator, OfInt::mixedInsertionSort);
                 return;
             }
 
@@ -64,7 +60,7 @@ public final class OfDouble {
              * Invoke insertion sort on small leftmost part.
              */
             if (size < MAX_INSERTION_SORT_SIZE) {
-                Constants.sort(a, low, high, comparator, OfDouble::insertionSort);
+                Constants.sort(a, low, high, comparator, OfInt::insertionSort);
                 return;
             }
 
@@ -73,7 +69,7 @@ public final class OfDouble {
              * parts are nearly sorted and then merge runs.
              */
             if ((bits == 0 || size > MIN_TRY_MERGE_SIZE && (bits & 1) > 0)
-                    && tryMergeRuns(sorter, a, low, size)) {
+                    && tryMergeRuns(sorter, a, comparator, low, size)) {
                 return;
             }
 
@@ -82,7 +78,7 @@ public final class OfDouble {
              * time is becoming quadratic.
              */
             if ((bits += DELTA) > MAX_RECURSION_DEPTH) {
-                heapSort(a, low, high);
+                heapSort(a, low, high, comparator);
                 return;
             }
 
@@ -103,7 +99,7 @@ public final class OfDouble {
             int e3 = (e1 + e5) >>> 1;
             int e2 = (e1 + e3) >>> 1;
             int e4 = (e3 + e5) >>> 1;
-            double a3 = a[e3];
+            int a3 = a[e3];
 
             /*
              * Sort these elements in place by the combination
@@ -117,20 +113,20 @@ public final class OfDouble {
              *                  |     |
              *    1 ------------o-----o------------
              */
-            if (a[e5] < a[e2]) { double t = a[e5]; a[e5] = a[e2]; a[e2] = t; }
-            if (a[e4] < a[e1]) { double t = a[e4]; a[e4] = a[e1]; a[e1] = t; }
-            if (a[e5] < a[e4]) { double t = a[e5]; a[e5] = a[e4]; a[e4] = t; }
-            if (a[e2] < a[e1]) { double t = a[e2]; a[e2] = a[e1]; a[e1] = t; }
-            if (a[e4] < a[e2]) { double t = a[e4]; a[e4] = a[e2]; a[e2] = t; }
+            if (comparator.compareInt(a[e5], a[e2]) < 0) { int t = a[e5]; a[e5] = a[e2]; a[e2] = t; }
+            if (comparator.compareInt(a[e4], a[e1]) < 0) { int t = a[e4]; a[e4] = a[e1]; a[e1] = t; }
+            if (comparator.compareInt(a[e5], a[e4]) < 0) { int t = a[e5]; a[e5] = a[e4]; a[e4] = t; }
+            if (comparator.compareInt(a[e2], a[e1]) < 0) { int t = a[e2]; a[e2] = a[e1]; a[e1] = t; }
+            if (comparator.compareInt(a[e4], a[e2]) < 0) { int t = a[e4]; a[e4] = a[e2]; a[e2] = t; }
 
-            if (a3 < a[e2]) {
-                if (a3 < a[e1]) {
+            if (comparator.compareInt(a3, a[e2]) < 0) {
+                if (comparator.compareInt(a3, a[e1]) < 0) {
                     a[e3] = a[e2]; a[e2] = a[e1]; a[e1] = a3;
                 } else {
                     a[e3] = a[e2]; a[e2] = a3;
                 }
-            } else if (a3 > a[e4]) {
-                if (a3 > a[e5]) {
+            } else if (comparator.compareInt(a3, a[e4]) > 0) {
+                if (comparator.compareInt(a3, a[e5]) > 0) {
                     a[e3] = a[e4]; a[e4] = a[e5]; a[e5] = a3;
                 } else {
                     a[e3] = a[e4]; a[e4] = a3;
@@ -144,14 +140,14 @@ public final class OfDouble {
             /*
              * Partitioning with 2 pivots in case of different elements.
              */
-            if (a[e1] < a[e2] && a[e2] < a[e3] && a[e3] < a[e4] && a[e4] < a[e5]) {
+            if (comparator.compareInt(a[e1], a[e2]) < 0 && comparator.compareInt(a[e2], a[e3]) < 0 && comparator.compareInt(a[e3], a[e4]) < 0 && comparator.compareInt(a[e4], a[e5]) < 0) {
 
                 /*
                 * Use the first and fifth of the five sorted elements as
                 * the pivots. These values are inexpensive approximation
                 * of tertiles. Note, that pivot1 < pivot2.
                 */
-                int[] pivotIndices = Constants.partition(a, low, high, e1, e5, comparator, OfDouble::partitionDualPivot);
+                int[] pivotIndices = partition(a, low, high, e1, e5, comparator, OfInt::partitionDualPivot);
                 lower = pivotIndices[0];
                 upper = pivotIndices[1];
                 /*
@@ -172,7 +168,7 @@ public final class OfDouble {
                  * Use the third of the five sorted elements as the pivot.
                  * This value is inexpensive approximation of the median.
                  */
-                int[] pivotIndices = Constants.partition(a, low, high, e3, e3, comparator, OfDouble::partitionSinglePivot);
+                int[] pivotIndices = partition(a, low, high, e3, e3, comparator, OfInt::partitionSinglePivot);
                 lower = pivotIndices[0];
                 upper = pivotIndices[1];
 
@@ -202,15 +198,15 @@ public final class OfDouble {
      *
      */
     @SuppressWarnings("unused")
-    private static int[] partitionDualPivot(double[] a, int low, int high, int pivotIndex1, int pivotIndex2, PrimitiveComparator.OfDouble comparator) {
+    private static int[] partitionDualPivot(int[] a, int low, int high, int pivotIndex1, int pivotIndex2, PrimitiveComparator.OfInt comparator) {
         int end = high - 1;
         int lower = low;
         int upper = end;
 
         int e1 = pivotIndex1;
         int e5 = pivotIndex2;
-        double pivot1 = a[e1];
-        double pivot2 = a[e5];
+        int pivot1 = a[e1];
+        int pivot2 = a[e5];
 
         /*
         * The first and the last elements to be sorted are moved
@@ -225,8 +221,8 @@ public final class OfDouble {
         /*
         * Skip elements, which are less or greater than the pivots.
         */
-        while (a[++lower] < pivot1);
-        while (a[--upper] > pivot2);
+        while (comparator.compareInt(a[++lower], pivot1) < 0);
+        while (comparator.compareInt(a[--upper], pivot2) > 0);
 
         /*
          * Backward 3-interval partitioning
@@ -248,12 +244,12 @@ public final class OfDouble {
          * Pointer k is the last index of ?-part
          */
         for (int unused = --lower, k = ++upper; --k > lower; ) {
-            double ak = a[k];
+            int ak = a[k];
 
-            if (ak < pivot1) { // Move a[k] to the left side
+            if (comparator.compareInt(ak, pivot1) < 0) { // Move a[k] to the left side
                 while (lower < k) {
-                    if (a[++lower] >= pivot1) {
-                        if (a[lower] > pivot2) {
+                    if (comparator.compareInt(a[++lower], pivot1) >= 0) {
+                        if (comparator.compareInt(a[lower], pivot2) > 0) {
                             a[k] = a[--upper];
                             a[upper] = a[lower];
                         } else {
@@ -263,7 +259,7 @@ public final class OfDouble {
                         break;
                     }
                 }
-            } else if (ak > pivot2) { // Move a[k] to the right side
+            } else if (comparator.compareInt(ak, pivot2) > 0) { // Move a[k] to the right side
                 a[k] = a[--upper];
                 a[upper] = ak;
             }
@@ -287,14 +283,14 @@ public final class OfDouble {
      * @param pivotIndex1 the index of pivot1, the first pivot
      * @param pivotIndex2 the index of pivot2, the second pivot
      */
-    private static int[] partitionSinglePivot(double[] a, int low, int high, int pivotIndex1, int pivotIndex2, PrimitiveComparator.OfDouble comparator) {
+    private static int[] partitionSinglePivot(int[] a, int low, int high, int pivotIndex1, int pivotIndex2, PrimitiveComparator.OfInt comparator) {
 
         int end = high - 1;
         int lower = low;
         int upper = end;
 
         int e3 = pivotIndex1;
-        double pivot = a[e3];
+        int pivot = a[e3];
 
         /*
         * The first element to be sorted is moved to the
@@ -325,15 +321,15 @@ public final class OfDouble {
          * Pointer k is the last index of ?-part
          */
         for (int k = ++upper; --k > lower; ) {
-            double ak = a[k];
+            int ak = a[k];
 
-            if (ak != pivot) {
+            if (comparator.compareInt(ak, pivot) != 0) {
                 a[k] = pivot;
 
-                if (ak < pivot) { // Move a[k] to the left side
-                    while (a[++lower] < pivot);
+                if (comparator.compareInt(ak, pivot) < 0) { // Move a[k] to the left side
+                    while (comparator.compareInt(a[++lower], pivot) < 0);
 
-                    if (a[lower] > pivot) {
+                    if (comparator.compareInt(a[lower], pivot) > 0) {
                         a[--upper] = a[lower];
                     }
                     a[lower] = ak;
@@ -366,7 +362,7 @@ public final class OfDouble {
      * @param low the index of the first element, inclusive, to be sorted
      * @param high the index of the last element, exclusive, to be sorted
      */
-    private static void mixedInsertionSort(double[] a, int low, int high, PrimitiveComparator.OfDouble comparator) {
+    private static void mixedInsertionSort(int[] a, int low, int high, PrimitiveComparator.OfInt comparator) {
         int size = high - low;
         int end = high - 3 * ((size >> 5) << 3);
         if (end == high) {
@@ -375,9 +371,9 @@ public final class OfDouble {
              * Invoke simple insertion sort on tiny array.
              */
             for (int i; ++low < end; ) {
-                double ai = a[i = low];
+                int ai = a[i = low];
 
-                while (comparator.compareDouble(ai, a[--i]) < 0) {
+                while (comparator.compareInt(ai, a[--i]) < 0) {
                     a[i + 1] = a[i];
                 }
                 a[i + 1] = ai;
@@ -393,29 +389,29 @@ public final class OfDouble {
              * proper area for such elements). It avoids expensive
              * movements of these elements through the whole array.
              */
-            double pin = a[end];
+            int pin = a[end];
 
             for (int i, p = high; ++low < end; ) {
-                double ai = a[i = low];
+                int ai = a[i = low];
 
-                if (comparator.compareDouble(ai, a[i - 1]) < 0) { // Small element
+                if (comparator.compareInt(ai, a[i - 1]) < 0) { // Small element
 
                     /*
                      * Insert small element into sorted part.
                      */
                     a[i] = a[--i];
 
-                    while (comparator.compareDouble(ai, a[--i]) < 0) {
+                    while (comparator.compareInt(ai, a[--i]) < 0) {
                         a[i + 1] = a[i];
                     }
                     a[i + 1] = ai;
 
-                } else if (p > i && comparator.compareDouble(ai, pin) > 0) { // Large element
+                } else if (p > i && comparator.compareInt(ai, pin) > 0) { // Large element
 
                     /*
                      * Find element smaller than pin.
                      */
-                    while (comparator.compareDouble(a[--p], pin) > 0);
+                    while (comparator.compareInt(a[--p], pin) > 0);
 
                     /*
                      * Swap it with large element.
@@ -428,7 +424,7 @@ public final class OfDouble {
                     /*
                      * Insert small element into sorted part.
                      */
-                    while (ai < a[--i]) {
+                    while (comparator.compareInt(ai, a[--i]) < 0) {
                         a[i + 1] = a[i];
                     }
                     a[i + 1] = ai;
@@ -439,33 +435,33 @@ public final class OfDouble {
              * Continue with pair insertion sort on remain part.
              */
             for (int i; low < high; ++low) {
-                double a1 = a[i = low], a2 = a[++low];
+                int a1 = a[i = low], a2 = a[++low];
 
                 /*
                  * Insert two elements per iteration: at first, insert the
                  * larger element and then insert the smaller element, but
                  * from the position where the larger element was inserted.
                  */
-                if (a1 > a2) {
+                if (comparator.compareInt(a1, a2) > 0) {
 
-                    while (a1 < a[--i]) {
+                    while (comparator.compareInt(a1, a[--i]) < 0) {
                         a[i + 2] = a[i];
                     }
                     a[++i + 1] = a1;
 
-                    while (a2 < a[--i]) {
+                    while (comparator.compareInt(a2, a[--i]) < 0) {
                         a[i + 1] = a[i];
                     }
                     a[i + 1] = a2;
 
-                } else if (a1 < a[i - 1]) {
+                } else if (comparator.compareInt(a1, a[i - 1]) < 0) {
 
-                    while (a2 < a[--i]) {
+                    while (comparator.compareInt(a2, a[--i]) < 0) {
                         a[i + 2] = a[i];
                     }
                     a[++i + 1] = a2;
 
-                    while (a1 < a[--i]) {
+                    while (comparator.compareInt(a1, a[--i]) < 0) {
                         a[i + 1] = a[i];
                     }
                     a[i + 1] = a1;
@@ -481,12 +477,12 @@ public final class OfDouble {
      * @param low the index of the first element, inclusive, to be sorted
      * @param high the index of the last element, exclusive, to be sorted
      */
-    private static void insertionSort(double[] a, int low, int high, PrimitiveComparator.OfDouble comparator) {
+    private static void insertionSort(int[] a, int low, int high, PrimitiveComparator.OfInt comparator) {
         for (int i, k = low; ++k < high; ) {
-            double ai = a[i = k];
+            int ai = a[i = k];
 
-            if (ai < a[i - 1]) {
-                while (--i >= low && ai < a[i]) {
+            if (comparator.compareInt(ai, a[i - 1]) < 0) {
+                while (--i >= low && comparator.compareInt(ai, a[i]) < 0) {
                     a[i + 1] = a[i];
                 }
                 a[i + 1] = ai;
@@ -501,13 +497,13 @@ public final class OfDouble {
      * @param low the index of the first element, inclusive, to be sorted
      * @param high the index of the last element, exclusive, to be sorted
      */
-    private static void heapSort(double[] a, int low, int high) {
+    private static void heapSort(int[] a, int low, int high, PrimitiveComparator.OfInt comparator) {
         for (int k = (low + high) >>> 1; k > low; ) {
-            pushDown(a, --k, a[k], low, high);
+            pushDown(a, --k, a[k], low, high, comparator);
         }
         while (--high > low) {
-            double max = a[low];
-            pushDown(a, low, a[high], low, high);
+            int max = a[low];
+            pushDown(a, low, a[high], low, high, comparator);
             a[high] = max;
         }
     }
@@ -521,17 +517,17 @@ public final class OfDouble {
      * @param low the index of the first element, inclusive, to be sorted
      * @param high the index of the last element, exclusive, to be sorted
      */
-    private static void pushDown(double[] a, int p, double value, int low, int high) {
+    private static void pushDown(int[] a, int p, int value, int low, int high, PrimitiveComparator.OfInt comparator) {
         for (int k ;; a[p] = a[p = k]) {
             k = (p << 1) - low + 2; // Index of the right child
 
             if (k > high) {
                 break;
             }
-            if (k == high || a[k] < a[k - 1]) {
+            if (k == high || comparator.compareInt(a[k], a[k - 1]) < 0) {
                 --k;
             }
-            if (a[k] <= value) {
+            if (comparator.compareInt(a[k], value) <= 0) {
                 break;
             }
         }
@@ -547,7 +543,7 @@ public final class OfDouble {
      * @param size the array size
      * @return true if finally sorted, false otherwise
      */
-    private static boolean tryMergeRuns(Sorter sorter, double[] a, int low, int size) {
+    private static boolean tryMergeRuns(Sorter sorter, int[] a, PrimitiveComparator.OfInt comparator, int low, int size) {
 
         /*
          * The run array is constructed only if initial runs are
@@ -566,22 +562,22 @@ public final class OfDouble {
             /*
              * Find the end index of the current run.
              */
-            if (a[k - 1] < a[k]) {
+            if (comparator.compareInt(a[k - 1], a[k]) < 0) {
 
                 // Identify ascending sequence
-                while (++k < high && a[k - 1] <= a[k]);
+                while (++k < high && comparator.compareInt(a[k - 1], a[k]) <= 0);
 
-            } else if (a[k - 1] > a[k]) {
+            } else if (comparator.compareInt(a[k - 1], a[k]) > 0) {
 
                 // Identify descending sequence
-                while (++k < high && a[k - 1] >= a[k]);
+                while (++k < high && comparator.compareInt(a[k - 1], a[k]) >= 0);
 
                 // Reverse into ascending order
-                for (int i = last - 1, j = k; ++i < --j && a[i] > a[j]; ) {
-                    double ai = a[i]; a[i] = a[j]; a[j] = ai;
+                for (int i = last - 1, j = k; ++i < --j && comparator.compareInt(a[i], a[j]) > 0; ) {
+                    int ai = a[i]; a[i] = a[j]; a[j] = ai;
                 }
             } else { // Identify constant sequence
-                for (double ak = a[k]; ++k < high && ak == a[k]; );
+                for (int ak = a[k]; ++k < high && comparator.compareInt(ak, a[k]) == 0; );
 
                 if (k < high) {
                     continue;
@@ -613,7 +609,7 @@ public final class OfDouble {
                 run = new int[((size >> 10) | 0x7F) & 0x3FF];
                 run[0] = low;
 
-            } else if (a[last - 1] > a[last]) {
+            } else if (comparator.compareInt(a[last - 1], a[last]) > 0) {
 
                 if (count > (k - low) >> MIN_FIRST_RUNS_FACTOR) {
 
@@ -647,14 +643,14 @@ public final class OfDouble {
          * Merge runs of highly structured array.
          */
         if (count > 1) {
-            double[] b; int offset = low;
+            int[] b; int offset = low;
 
-            if (sorter == null || (b = (double[]) sorter.b) == null) {
-                b = new double[size];
+            if (sorter == null || (b = sorter.b) == null) {
+                b = new int[size];
             } else {
                 offset = sorter.offset;
             }
-            mergeRuns(a, b, offset, 1, sorter != null, run, 0, count);
+            mergeRuns(a, b, comparator, offset, 1, sorter != null, run, 0, count);
         }
         return true;
     }
@@ -672,7 +668,7 @@ public final class OfDouble {
      * @param hi the start index of the last run, inclusive
      * @return the destination where runs are merged
      */
-    private static double[] mergeRuns(double[] a, double[] b, int offset,
+    private static int[] mergeRuns(int[] a, int[] b, PrimitiveComparator.OfInt comparator, int offset,
             int aim, boolean parallel, int[] run, int lo, int hi) {
 
         if (hi - lo == 1) {
@@ -694,18 +690,18 @@ public final class OfDouble {
         /*
          * Merge the left and right parts.
          */
-        double[] a1, a2;
+        int[] a1, a2;
 
         if (parallel && hi - lo > MIN_RUN_COUNT) {
-            RunMerger merger = new RunMerger(a, b, offset, 0, run, mi, hi).forkMe();
-            a1 = mergeRuns(a, b, offset, -aim, true, run, lo, mi);
-            a2 = (double[]) merger.getDestination();
+            RunMerger merger = new RunMerger(a, b, comparator, offset, 0, run, mi, hi).forkMe();
+            a1 = mergeRuns(a, b, comparator, offset, -aim, true, run, lo, mi);
+            a2 = merger.getDestination();
         } else {
-            a1 = mergeRuns(a, b, offset, -aim, false, run, lo, mi);
-            a2 = mergeRuns(a, b, offset,    0, false, run, mi, hi);
+            a1 = mergeRuns(a, b, comparator, offset, -aim, false, run, lo, mi);
+            a2 = mergeRuns(a, b, comparator, offset,    0, false, run, mi, hi);
         }
 
-        double[] dst = a1 == a ? b : a;
+        int[] dst = a1 == a ? b : a;
 
         int k   = a1 == a ? run[lo] - offset : run[lo];
         int lo1 = a1 == b ? run[lo] - offset : run[lo];
@@ -714,9 +710,9 @@ public final class OfDouble {
         int hi2 = a2 == b ? run[hi] - offset : run[hi];
 
         if (parallel) {
-            new Merger(null, dst, k, a1, lo1, hi1, a2, lo2, hi2).invoke();
+            new Merger(null, dst, k, a1, lo1, hi1, a2, lo2, hi2, comparator).invoke();
         } else {
-            mergeParts(null, dst, k, a1, lo1, hi1, a2, lo2, hi2);
+            mergeParts(null, dst, k, a1, lo1, hi1, a2, lo2, hi2, comparator);
         }
         return dst;
     }
@@ -734,8 +730,8 @@ public final class OfDouble {
      * @param lo2 the start index of the second part, inclusive
      * @param hi2 the end index of the second part, exclusive
      */
-    private static void mergeParts(Merger merger, double[] dst, int k,
-            double[] a1, int lo1, int hi1, double[] a2, int lo2, int hi2) {
+    private static void mergeParts(Merger merger, int[] dst, int k,
+            int[] a1, int lo1, int hi1, int[] a2, int lo2, int hi2, PrimitiveComparator.OfInt comparator) {
 
         if (merger != null && a1 == a2) {
 
@@ -760,7 +756,7 @@ public final class OfDouble {
                  * Find the median of the larger part.
                  */
                 int mi1 = (lo1 + hi1) >>> 1;
-                double key = a1[mi1];
+                int key = a1[mi1];
                 int mi2 = hi2;
 
                 /*
@@ -769,7 +765,7 @@ public final class OfDouble {
                 for (int loo = lo2; loo < mi2; ) {
                     int t = (loo + mi2) >>> 1;
 
-                    if (key > a2[t]) {
+                    if (comparator.compareInt(key, a2[t]) > 0) {
                         loo = t + 1;
                     } else {
                         mi2 = t;
@@ -795,7 +791,7 @@ public final class OfDouble {
          * Merge small parts sequentially.
          */
         while (lo1 < hi1 && lo2 < hi2) {
-            dst[k++] = a1[lo1] < a2[lo2] ? a1[lo1++] : a2[lo2++];
+            dst[k++] = comparator.compareInt(a1[lo1], a2[lo2]) < 0 ? a1[lo1++] : a2[lo2++];
         }
         if (dst != a1 || k < lo1) {
             while (lo1 < hi1) {
@@ -814,12 +810,12 @@ public final class OfDouble {
      */
     private static final class Sorter extends CountedCompleter<Void> {
         private static final long serialVersionUID = 20180818L;
-        private final double[] a, b;
+        private final int[] a, b;
         private final int low, size, offset, depth;
-        private final PrimitiveComparator.OfDouble comp;
+        private final PrimitiveComparator.OfInt comp;
 
         private Sorter(CountedCompleter<?> parent,
-                double[] a, double[] b, int low, int size, int offset, int depth, PrimitiveComparator.OfDouble comp) {
+                int[] a, int[] b, int low, int size, int offset, int depth, PrimitiveComparator.OfInt comp) {
             super(parent);
             this.a = a;
             this.b = b;
@@ -857,14 +853,15 @@ public final class OfDouble {
                     src ? mi - offset : mi,
                     b,
                     src ? mi - offset : mi,
-                    src ? low + size - offset : low + size
+                    src ? low + size - offset : low + size,
+                    comp
                 ).invoke();
             }
         }
 
         private void forkSorter(int depth, int low, int high) {
             addToPendingCount(1);
-            double[] a = this.a; // Use local variable for performance
+            int[] a = this.a; // Use local variable for performance
             new Sorter(this, a, b, low, high - low, offset, depth, comp).fork();
         }
     }
@@ -874,11 +871,12 @@ public final class OfDouble {
      */
     private static final class Merger extends CountedCompleter<Void> {
         private static final long serialVersionUID = 20180818L;
-        private final double[] dst, a1, a2;
+        private final int[] dst, a1, a2;
         private final int k, lo1, hi1, lo2, hi2;
+        private final PrimitiveComparator.OfInt comparator;
 
-        private Merger(CountedCompleter<?> parent, double[] dst, int k,
-                double[] a1, int lo1, int hi1, double[] a2, int lo2, int hi2) {
+        private Merger(CountedCompleter<?> parent, int[] dst, int k,
+                int[] a1, int lo1, int hi1, int[] a2, int lo2, int hi2, PrimitiveComparator.OfInt comparator) {
             super(parent);
             this.dst = dst;
             this.k = k;
@@ -888,32 +886,34 @@ public final class OfDouble {
             this.a2 = a2;
             this.lo2 = lo2;
             this.hi2 = hi2;
+            this.comparator = comparator;
         }
 
         @Override
         public final void compute() {
-            mergeParts(this, (double[]) dst, k,
-                (double[]) a1, lo1, hi1, (double[]) a2, lo2, hi2);
+            mergeParts(this, dst, k,
+                a1, lo1, hi1, a2, lo2, hi2, comparator);
             propagateCompletion();
         }
 
-        private void forkMerger(double[] dst, int k,
-                double[] a1, int lo1, int hi1, double[] a2, int lo2, int hi2) {
+        private void forkMerger(int[] dst, int k,
+                int[] a1, int lo1, int hi1, int[] a2, int lo2, int hi2) {
             addToPendingCount(1);
-            new Merger(this, dst, k, a1, lo1, hi1, a2, lo2, hi2).fork();
+            new Merger(this, dst, k, a1, lo1, hi1, a2, lo2, hi2, comparator).fork();
         }
     }
 
     /**
      * This class implements parallel merging of runs.
      */
-    private static final class RunMerger extends RecursiveTask<double[]> {
+    private static final class RunMerger extends RecursiveTask<int[]> {
         private static final long serialVersionUID = 20180818L;
-        private final double[] a, b;
+        private final int[] a, b;
+        private final PrimitiveComparator.OfInt comparator;
         private final int[] run;
         private final int offset, aim, lo, hi;
 
-        private RunMerger(double[] a, double[] b, int offset,
+        private RunMerger(int[] a, int[] b, PrimitiveComparator.OfInt comparator, int offset,
                 int aim, int[] run, int lo, int hi) {
             this.a = a;
             this.b = b;
@@ -922,11 +922,12 @@ public final class OfDouble {
             this.run = run;
             this.lo = lo;
             this.hi = hi;
+            this.comparator = comparator;
         }
 
         @Override
-        protected final double[] compute() {
-            return mergeRuns(a, b, offset, aim, true, run, lo, hi);
+        protected final int[] compute() {
+            return mergeRuns(a, b, comparator, offset, aim, true, run, lo, hi);
         }
 
         private RunMerger forkMe() {
@@ -934,7 +935,7 @@ public final class OfDouble {
             return this;
         }
 
-        private double[] getDestination() {
+        private int[] getDestination() {
             join();
             return getRawResult();
         }

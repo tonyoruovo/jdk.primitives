@@ -22,8 +22,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 	/**
 	 * A spliterator for {@code double} values
 	 */
-	interface OfDouble
-			extends PrimitiveSpliterator<Double, DoubleConsumer, Spliterator.OfDouble>, Spliterator.OfDouble {
+	interface OfDouble extends PrimitiveSpliterator<Double, DoubleConsumer, Spliterator.OfDouble>, Spliterator.OfDouble {
 		/**
 		 * {@inheritDoc}
 		 * 

@@ -7,10 +7,10 @@ import jdk.prim.util.PrimitiveComparator;
 /**
  * A base interface for all objects that sorts a primitive array/collection.
  * <p>
- * They provide a mutative sort operation and a non mutative sort opration
+ * They provide a mutable and immutable sort operations
  * 
  * @param <A> the type of the array (or iterable/collection) to be sorted
- * @param <C> the type of primitive comparator
+ * @param <C> the type of primitive comparator that compare 2 primitives of the same type
  */
 public interface PrimitiveSorter<A, C extends PrimitiveComparator<?>> {
 
@@ -53,50 +53,49 @@ public interface PrimitiveSorter<A, C extends PrimitiveComparator<?>> {
     /**
      * A {@link PrimitiveSorter} that sorts {@code double} arrays
      */
-    interface DoubleArraySorter extends PrimitiveSorter<double[], PrimitiveComparator.OfDouble> {
+    interface OfDouble extends PrimitiveSorter<double[], PrimitiveComparator.OfDouble> {
     }
 
     /**
      * A {@link PrimitiveSorter} that sorts {@code long} arrays
      */
-    interface LongArraySorter extends PrimitiveSorter<long[], PrimitiveComparator.OfLong> {
+    interface OfLong extends PrimitiveSorter<long[], PrimitiveComparator.OfLong> {
     }
 
     /**
      * A {@link PrimitiveSorter} that sorts {@code int} arrays
      */
-    interface IntArraySorter extends PrimitiveSorter<int[], PrimitiveComparator.OfInt> {
+    interface OfInt extends PrimitiveSorter<int[], PrimitiveComparator.OfInt> {
     }
 
     /**
      * A {@link PrimitiveSorter} that sorts {@code float} arrays
      */
-    interface FloatArraySorter extends PrimitiveSorter<float[], PrimitiveComparator.OfFloat> {
+    interface OfFloat extends PrimitiveSorter<float[], PrimitiveComparator.OfFloat> {
     }
 
     /**
      * A {@link PrimitiveSorter} that sorts {@code char} arrays
      */
-    interface CharArraySorter extends PrimitiveSorter<char[], PrimitiveComparator.OfChar> {
+    interface OfChar extends PrimitiveSorter<char[], PrimitiveComparator.OfChar> {
     }
 
     /**
      * A {@link PrimitiveSorter} that sorts {@code short} arrays
      */
-    interface ShortArraySorter extends PrimitiveSorter<short[], PrimitiveComparator.OfShort> {
+    interface OfShort extends PrimitiveSorter<short[], PrimitiveComparator.OfShort> {
     }
 
     /**
      * A {@link PrimitiveSorter} that sorts {@code byte} arrays
      */
-    interface ByteArraySorter extends PrimitiveSorter<byte[], PrimitiveComparator.OfByte> {
+    interface OfByte extends PrimitiveSorter<byte[], PrimitiveComparator.OfByte> {
     }
 
     /**
      * A {@link PrimitiveSorter} that sorts {@code boolean} arrays
      */
-    interface BooleanArraySorter extends PrimitiveSorter<boolean[], PrimitiveComparator.OfBoolean> {
-
+    interface OfBoolean extends PrimitiveSorter<boolean[], PrimitiveComparator.OfBoolean> {
     }
 
     /**
@@ -117,8 +116,8 @@ public interface PrimitiveSorter<A, C extends PrimitiveComparator<?>> {
      * The recommended implementation is:
      * <ul>
      * <li>If {@code dst} is {@code null}, then {@code src} will be mutated making
-     * this operation mutative, else, this operation is immutable and the result can
-     * be retrived at {@code dst}</li>
+     * this operation mutable, else, this operation is immutable and the result can
+     * be retrieved at {@code dst}</li>
      * <li>If {@code dst} is not {@code null} and the length of {@code dst} is not
      * equal to the length of {@code src}, then {@code dst} is adjusted accordingly
      * so as to be equal in size/length to {@code src}</li>
@@ -151,12 +150,11 @@ public interface PrimitiveSorter<A, C extends PrimitiveComparator<?>> {
      * <ul>
      * <li>If {@code dst} is {@code null}, then {@code src} will be mutated making
      * this operation mutative, else, this operation is immutable and the result can
-     * be retrived at {@code dst}</li>
+     * be retrieved at {@code dst}</li>
      * <li>If {@code dst} is not {@code null} and the length of {@code dst} is not
      * equal to the length of {@code src}, then {@code dst} is adjusted accordingly
      * so as to be equal in size/length to {@code src}</li>
      * </ul>
-     * an immutable operation
      * 
      * @param src the value to be sorted
      * @param dst the array in which to store the final results. If this is

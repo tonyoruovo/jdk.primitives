@@ -1,6 +1,7 @@
 package jdk.prim.util;
 
 import java.util.Objects;
+import java.util.concurrent.ForkJoinPool;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -4796,179 +4797,179 @@ public final class PrimitiveArrays {
     }
 
     public static void sort(double[] array, PrimitiveComparator.OfDouble comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofDouble().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(double[] array, int from, int to, PrimitiveComparator.OfDouble comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofDouble().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(double[] array, PrimitiveComparator.OfDouble comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofDouble().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(double[] array, int from, int to, PrimitiveComparator.OfDouble comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofDouble().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
     public static void sort(long[] array, PrimitiveComparator.OfLong comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofLong().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofLong(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(long[] array, int from, int to, PrimitiveComparator.OfLong comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofLong().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofLong(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(long[] array, PrimitiveComparator.OfLong comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofLong().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofLong(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(long[] array, int from, int to, PrimitiveComparator.OfLong comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofLong().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofLong(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
     public static void sort(int[] array, PrimitiveComparator.OfInt comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofInt().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofInt(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(int[] array, int from, int to, PrimitiveComparator.OfInt comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofInt().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofInt(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(int[] array, PrimitiveComparator.OfInt comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofInt().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofInt(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(int[] array, int from, int to, PrimitiveComparator.OfInt comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofInt().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofInt(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
     public static void sort(float[] array, PrimitiveComparator.OfFloat comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofFloat().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(float[] array, int from, int to, PrimitiveComparator.OfFloat comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofFloat().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(float[] array, PrimitiveComparator.OfFloat comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofFloat().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(float[] array, int from, int to, PrimitiveComparator.OfFloat comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofFloat().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
     public static void sort(char[] array, PrimitiveComparator.OfChar comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofChar().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofChar(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(char[] array, int from, int to, PrimitiveComparator.OfChar comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofChar().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofChar(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(char[] array, PrimitiveComparator.OfChar comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofChar().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofChar(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(char[] array, int from, int to, PrimitiveComparator.OfChar comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofChar().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofChar(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
     public static void sort(short[] array, PrimitiveComparator.OfShort comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofShort().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofShort(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(short[] array, int from, int to, PrimitiveComparator.OfShort comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofShort().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofShort(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(short[] array, PrimitiveComparator.OfShort comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofShort().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofShort(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(short[] array, int from, int to, PrimitiveComparator.OfShort comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofShort().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofShort(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
     public static void sort(byte[] array, PrimitiveComparator.OfByte comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofByte().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofByte(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(byte[] array, int from, int to, PrimitiveComparator.OfByte comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofByte().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofByte(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(byte[] array, PrimitiveComparator.OfByte comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofByte().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofByte(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(byte[] array, int from, int to, PrimitiveComparator.OfByte comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofByte().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofByte(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
     public static void sort(boolean[] array, PrimitiveComparator.OfBoolean comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofBoolean().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofBoolean(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfBoolean.sort(array, 0, 0, array.length, comparator);
     }
     public static void sort(boolean[] array, int from, int to, PrimitiveComparator.OfBoolean comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofBoolean().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofBoolean(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfBoolean.sort(array, 0, from, to, comparator);
     }
     public static void parallelSort(boolean[] array, PrimitiveComparator.OfBoolean comparator) {
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofBoolean().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofBoolean(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfBoolean.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
     public static void parallelSort(boolean[] array, int from, int to, PrimitiveComparator.OfBoolean comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
         System.arraycopy(array, from, array, 0, to - from);
-        jdk.prim.util.sort.PrimitiveBasicQuickSort.ofBoolean().sort(array, comparator, null);
+        jdk.prim.util.sort.PrimitiveDualPivot.ofBoolean(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfBoolean.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
 

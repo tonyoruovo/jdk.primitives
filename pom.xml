@@ -33,6 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -41,9 +42,9 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -124,7 +125,7 @@
 			<email>tonyoruovo@gmail.com</email>
 			<name>Oruovo E. Anthony</name>
 			<organization>mathaid</organization>
-			<organizationUrl></organizationUrl>
+			<organizationUrl>https://github.com/tonyoruovo</organizationUrl>
 			<properties>
 				<mathaid.dev.1.github>https://github.com/tonyoruovo</mathaid.dev.1.github>
 			</properties>

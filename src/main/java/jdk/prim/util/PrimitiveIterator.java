@@ -10,7 +10,9 @@ import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 
+import jdk.prim.BoxedPrimitive;
 import jdk.prim.util.function.PrimitiveConsumer;
+import jdk.prim.util.function.PrimitiveFunction;
 
 /**
  * An extension of {@link java.util.PrimitiveIterator} to allow for casting
@@ -24,13 +26,13 @@ import jdk.prim.util.function.PrimitiveConsumer;
  *                 {@code T}, such as {@link java.util.function.IntConsumer} for
  *                 {@code Integer}.
  */
-public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterator<T, T_CONS> {
+public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterator<T, T_CONS>, BoxedPrimitive<java.util.PrimitiveIterator<T, T_CONS>, T> {
 
 	/**
 	 * An Iterator specialized for {@code double} values.
 	 * <p>
 	 * Defines an interface for iterator specialized for {@code double} values. It
-	 * extends the {@link java.uti.PrimitiveIterator.OfDouble} interface and
+	 * extends the {@link jdk.prim.util.PrimitiveIterator.OfDouble} interface and
 	 * provides
 	 * additional methods specific to {@code double} values iteration.
 	 * 
@@ -41,6 +43,280 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfDouble extends PrimitiveIterator<Double, DoubleConsumer>, java.util.PrimitiveIterator.OfDouble {
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Double Double} objects where each element is a boxed {@code double} value.
+		 * 
+		 * @return an iterator of boxed {@code Double}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Double, DoubleConsumer> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Double>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToDouble.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfDouble) f = (PrimitiveFunction.ToDouble.OfDouble) mapper;
+			else f = x -> mapper.applyDouble(x);
+			PrimitiveIterator.OfDouble thisIt = this;
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(thisIt.nextDouble());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Double>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToLong.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfDouble) f = (PrimitiveFunction.ToLong.OfDouble) mapper;
+			else f = x -> mapper.applyLong(x);
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfDouble.this.hasNext(); }
+				@Override public long nextLong() { return f.applyLong(PrimitiveIterator.OfDouble.this.nextDouble());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Double>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToInt.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfDouble) f = (PrimitiveFunction.ToInt.OfDouble) mapper;
+			else f = x -> mapper.applyInt(x);
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfDouble.this.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(PrimitiveIterator.OfDouble.this.nextDouble());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Double>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToFloat.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfDouble) f = (PrimitiveFunction.ToFloat.OfDouble) mapper;
+			else f = x -> mapper.applyFloat(x);
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfDouble.this.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(PrimitiveIterator.OfDouble.this.nextDouble());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Double>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToChar.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfDouble) f = (PrimitiveFunction.ToChar.OfDouble) mapper;
+			else f = x -> mapper.applyChar(x);
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfDouble.this.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(PrimitiveIterator.OfDouble.this.nextDouble());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Double>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToShort.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfDouble) f = (PrimitiveFunction.ToShort.OfDouble) mapper;
+			else f = x -> mapper.applyShort(x);
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfDouble.this.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(PrimitiveIterator.OfDouble.this.nextDouble());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Double>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToByte.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfDouble) f = (PrimitiveFunction.ToByte.OfDouble) mapper;
+			else f = x -> mapper.applyByte(x);
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfDouble.this.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(PrimitiveIterator.OfDouble.this.nextDouble());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextDouble()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.t
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Double}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfDouble}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfDouble
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Double>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToBoolean.OfDouble f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfDouble) f = (PrimitiveFunction.ToBoolean.OfDouble) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfDouble.this.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(PrimitiveIterator.OfDouble.this.nextDouble());}
+			};
+		}
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -237,13 +513,17 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 			while (hasNext())
 				action.accept(nextDouble());
 		}
+		default void forEachRemaining(PrimitiveConsumer.OfDouble action) {
+			Objects.requireNonNull(action);
+			while(hasNext()) action.acceptDouble(nextDouble());
+		}
 	}
 
 	/**
 	 * An Iterator specialized for {@code long} values.
 	 * <p>
 	 * Defines an interface for iterator specialized for {@code long} values. It
-	 * extends the {@link java.uti.PrimitiveIterator.OfLong} interface and provides
+	 * extends the {@link jdk.prim.util.PrimitiveIterator.OfLong} interface and provides
 	 * additional methods specific to {@code long} values iteration.
 	 * 
 	 * @implNote The use of {@link #nextLong()} is preferred over the use of
@@ -253,6 +533,272 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfLong extends PrimitiveIterator<Long, LongConsumer>, java.util.PrimitiveIterator.OfLong {
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Long Double} objects where each element is a boxed {@code long} value.
+		 * 
+		 * @return an iterator of boxed {@code Long}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Long, LongConsumer> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Long>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			PrimitiveFunction.ToDouble.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfLong) f = (PrimitiveFunction.ToDouble.OfLong) mapper;
+			else f = x -> mapper.applyDouble(x);
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfLong.this.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(PrimitiveIterator.OfLong.this.nextLong());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Long>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			PrimitiveFunction.ToLong.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfLong) f = (PrimitiveFunction.ToLong.OfLong) mapper;
+			else f = x -> mapper.applyLong(x);
+			PrimitiveIterator.OfLong thisIt = this;
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public long nextLong() { return f.applyLong(thisIt.nextLong());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Long>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			PrimitiveFunction.ToInt.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfLong) f = (PrimitiveFunction.ToInt.OfLong) mapper;
+			else f = x -> mapper.applyInt(x);
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfLong.this.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(PrimitiveIterator.OfLong.this.nextLong());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Long>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			PrimitiveFunction.ToFloat.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfLong) f = (PrimitiveFunction.ToFloat.OfLong) mapper;
+			else f = x -> mapper.applyFloat(x);
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfLong.this.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(PrimitiveIterator.OfLong.this.nextLong());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Long>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			PrimitiveFunction.ToChar.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfLong) f = (PrimitiveFunction.ToChar.OfLong) mapper;
+			else f = x -> mapper.applyChar(x);
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfLong.this.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(PrimitiveIterator.OfLong.this.nextLong());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Long>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			PrimitiveFunction.ToShort.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfLong) f = (PrimitiveFunction.ToShort.OfLong) mapper;
+			else f = x -> mapper.applyShort(x);
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfLong.this.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(PrimitiveIterator.OfLong.this.nextLong());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Long>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			PrimitiveFunction.ToByte.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfLong) f = (PrimitiveFunction.ToByte.OfLong) mapper;
+			else f = x -> mapper.applyByte(x);
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfLong.this.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(PrimitiveIterator.OfLong.this.nextLong());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextLong()} will
+		 * be used as the argument to the given mapper.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Long}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfLong}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfLong
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Long>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			PrimitiveFunction.ToBoolean.OfLong f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfLong) f = (PrimitiveFunction.ToBoolean.OfLong) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfLong.this.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(PrimitiveIterator.OfLong.this.nextLong());}
+			};
+		}
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -449,13 +995,17 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 			while (hasNext())
 				action.accept(nextLong());
 		}
+		default void forEachRemaining(PrimitiveConsumer.OfLong action) {
+			Objects.requireNonNull(action);
+			while(hasNext()) action.acceptLong(nextLong());
+		}
 	}
 
 	/**
 	 * An Iterator specialized for {@code int} values.
 	 * <p>
 	 * Defines an interface for iterator specialized for {@code int} values. It
-	 * extends the {@link java.uti.PrimitiveIterator.OfInt} interface and provides
+	 * extends the {@link jdk.prim.util.PrimitiveIterator.OfInt} interface and provides
 	 * additional methods specific to {@code int} values iteration.
 	 * 
 	 * @implNote The use of {@link #nextInt()} is preferred over the use of
@@ -465,6 +1015,272 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *           {@link #remove()}
 	 */
 	interface OfInt extends PrimitiveIterator<Integer, IntConsumer>, java.util.PrimitiveIterator.OfInt {
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Integer Double} objects where each element is a boxed {@code int} value.
+		 * 
+		 * @return an iterator of boxed {@code Integer}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Integer, IntConsumer> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfDouble#nextDouble()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Integer>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			PrimitiveFunction.ToDouble.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfInt) f = (PrimitiveFunction.ToDouble.OfInt) mapper;
+			else f = x -> mapper.applyDouble(x);
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfInt.this.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(PrimitiveIterator.OfInt.this.nextInt());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfLong#nextLong()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Integer>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			PrimitiveFunction.ToLong.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfInt) f = (PrimitiveFunction.ToLong.OfInt) mapper;
+			else f = x -> mapper.applyLong(x);
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return  PrimitiveIterator.OfInt.this.hasNext(); }
+				@Override public long nextLong() { return f.applyLong( PrimitiveIterator.OfInt.this.nextInt());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfInt#nextInt()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Integer>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			PrimitiveFunction.ToInt.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfInt) f = (PrimitiveFunction.ToInt.OfInt) mapper;
+			else f = x -> mapper.applyInt(x);
+			PrimitiveIterator.OfInt thisIt = this;
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(thisIt.nextInt());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfFloat#nextFloat()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Integer>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			PrimitiveFunction.ToFloat.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfInt) f = (PrimitiveFunction.ToFloat.OfInt) mapper;
+			else f = x -> mapper.applyFloat(x);
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfInt.this.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(PrimitiveIterator.OfInt.this.nextInt());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfChar#nextChar()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Integer>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			PrimitiveFunction.ToChar.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfInt) f = (PrimitiveFunction.ToChar.OfInt) mapper;
+			else f = x -> mapper.applyChar(x);
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfInt.this.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(PrimitiveIterator.OfInt.this.nextInt());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfShort#nextShort()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Integer>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			PrimitiveFunction.ToShort.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfInt) f = (PrimitiveFunction.ToShort.OfInt) mapper;
+			else f = x -> mapper.applyShort(x);
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfInt.this.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(PrimitiveIterator.OfInt.this.nextInt());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfByte#nextByte()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Integer>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			PrimitiveFunction.ToByte.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfInt) f = (PrimitiveFunction.ToByte.OfInt) mapper;
+			else f = x -> mapper.applyByte(x);
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfInt.this.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(PrimitiveIterator.OfInt.this.nextInt());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextInt()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfBoolean#nextBoolean()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Integer}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfInt}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfInt
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Integer>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			PrimitiveFunction.ToBoolean.OfInt f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfInt) f = (PrimitiveFunction.ToBoolean.OfInt) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfInt.this.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(PrimitiveIterator.OfInt.this.nextInt());}
+			};
+		}
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -650,6 +1466,10 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 			while (hasNext())
 				action.accept(nextInt());
 		}
+		default void forEachRemaining(PrimitiveConsumer.OfInt action) {
+			Objects.requireNonNull(action);
+			while(hasNext()) action.acceptInt(nextInt());
+		}
 
 		/**
 		 * {@inheritDoc}
@@ -660,246 +1480,6 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		@Override
 		default Integer next() throws NoSuchElementException {
 			return nextInt();
-		}
-	}
-
-	/**
-	 * An Iterator specialized for {@code char} values.
-	 * <p>
-	 * Defines an interface for iterator specialized for {@code char} values. It
-	 * extends the PrimitiveIterator interface for characters and provides
-	 * additional methods specific to character iteration.
-	 * 
-	 * @implNote The use of {@link #nextChar()} is preferred over the use of
-	 *           {@link #next()} because {@link #next()} is implemented by calling
-	 *           and casting {@link #nextChar()}.
-	 * @implNote Default implementation does not support modification such as
-	 *           {@link #remove()}
-	 */
-	interface OfChar
-			extends PrimitiveIterator<Character, PrimitiveConsumer.OfChar> {
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		default PrimitiveIterator.OfDouble toDouble() {
-			return new PrimitiveIterator.OfDouble() {
-
-				@Override
-				public boolean hasNext() {
-					return OfChar.this.hasNext();
-				}
-
-				@Override
-				public double nextDouble() {
-					return OfChar.this.nextChar();
-				}
-			};
-		}
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		default PrimitiveIterator.OfLong toLong() {
-			return new PrimitiveIterator.OfLong() {
-
-				@Override
-				public boolean hasNext() {
-					return OfChar.this.hasNext();
-				}
-
-				@Override
-				public long nextLong() {
-					return OfChar.this.nextChar();
-				}
-			};
-		}
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		default PrimitiveIterator.OfInt toInt() {
-			return new PrimitiveIterator.OfInt() {
-
-				@Override
-				public boolean hasNext() {
-					return OfChar.this.hasNext();
-				}
-
-				@Override
-				public int nextInt() {
-					return OfChar.this.nextChar();
-				}
-			};
-		}
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		default OfFloat toFloat() {
-			return new OfFloat() {
-
-				@Override
-				public boolean hasNext() {
-					return OfChar.this.hasNext();
-				}
-
-				@Override
-				public float nextFloat() {
-					return OfChar.this.nextChar();
-				}
-			};
-		}
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 * 
-		 * @implNote returns {@code this}
-		 */
-		@Override
-		default OfChar toChar() {
-			return this;
-		}
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		default OfShort toShort() {
-			return new OfShort() {
-
-				@Override
-				public boolean hasNext() {
-					return OfChar.this.hasNext();
-				}
-
-				@Override
-				public short nextShort() {
-					return (short) OfChar.this.nextChar();
-				}
-			};
-		}
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		default OfByte toByte() {
-			return new OfByte() {
-
-				@Override
-				public boolean hasNext() {
-					return OfChar.this.hasNext();
-				}
-
-				@Override
-				public byte nextByte() {
-					return (byte) OfChar.this.nextChar();
-				}
-			};
-		}
-
-		/*
-		 * Date created: 27 May 2024 Time created: 13:36:33
-		 */
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		default OfBoolean toBoolean() {
-			return new OfBoolean() {
-
-				@Override
-				public boolean hasNext() {
-					return OfChar.this.hasNext();
-				}
-
-				@Override
-				public boolean nextBoolean() {
-					return OfChar.this.nextChar() != '\u0000';
-				}
-			};
-		}
-
-		/**
-		 * Returns the next {@code char} element in the iteration.
-		 *
-		 * @return the next {@code char} element in the iteration
-		 * @throws NoSuchElementException if the iteration has no more elements
-		 */
-		char nextChar() throws NoSuchElementException;
-
-		/**
-		 * {@inheritDoc}
-		 * 
-		 * @implSpec
-		 *           <p>
-		 *           The default implementation behaves as if:
-		 * 
-		 *           <pre>{@code
-		 *     while (hasNext())
-		 *         action.accept(nextChar());
-		 * }</pre>
-		 */
-		default void forEachRemaining(PrimitiveConsumer.OfChar action) {
-			Objects.requireNonNull(action);
-			while (hasNext())
-				action.acceptChar(nextChar());
-		}
-
-		/**
-		 * {@inheritDoc}
-		 * 
-		 * @implSpec The default implementation boxes the result of calling
-		 *           {@link #nextChar()}, and returns that boxed result.
-		 */
-		@Override
-		default Character next() throws NoSuchElementException {
-			return nextChar();
-		}
-
-		/**
-		 * {@inheritDoc}
-		 * 
-		 * @implSpec If the action is an instance of {@code CharConsumer} then it is
-		 *           cast to {@code CharConsumer} and passed to
-		 *           {@link #forEachRemaining}; otherwise the action is adapted to an
-		 *           instance of {@code CharConsumer}, by boxing the argument of
-		 *           {@code CharConsumer}, and then passed to {@link #forEachRemaining}.
-		 */
-		@Override
-		default void forEachRemaining(Consumer<? super Character> action) {
-			if (action instanceof PrimitiveConsumer.OfChar) {
-				forEachRemaining((PrimitiveConsumer.OfChar) action);
-				return;
-			}
-			Objects.requireNonNull(action);
-			forEachRemaining((PrimitiveConsumer.OfChar) action::accept);
 		}
 	}
 
@@ -916,8 +1496,274 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * @implNote Default implementation does not support modification such as
 	 *           {@link #remove()}
 	 */
-	interface OfFloat
-			extends PrimitiveIterator<Float, PrimitiveConsumer.OfFloat> {
+	interface OfFloat extends PrimitiveIterator<Float, PrimitiveConsumer.OfFloat> {
+		
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Float Double} objects where each element is a boxed {@code float} value.
+		 * 
+		 * @return an iterator of boxed {@code Float}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Float, PrimitiveConsumer.OfFloat> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfDouble#nextDouble()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Float>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			PrimitiveFunction.ToDouble.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfFloat) f = (PrimitiveFunction.ToDouble.OfFloat) mapper;
+			else f = x -> mapper.applyDouble(x);
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfFloat.this.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(PrimitiveIterator.OfFloat.this.nextFloat()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfLong#nextLong()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Float>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			PrimitiveFunction.ToLong.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfFloat) f = (PrimitiveFunction.ToLong.OfFloat) mapper;
+			else f = x -> mapper.applyLong(x);
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return  PrimitiveIterator.OfFloat.this.hasNext(); }
+				@Override public long nextLong() { return f.applyLong( PrimitiveIterator.OfFloat.this.nextFloat()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfInt#nextInt()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Float>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			PrimitiveFunction.ToInt.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfFloat) f = (PrimitiveFunction.ToInt.OfFloat) mapper;
+			else f = x -> mapper.applyInt(x);
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfFloat.this.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(PrimitiveIterator.OfFloat.this.nextFloat()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfFloat#nextFloat()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Float>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			PrimitiveFunction.ToFloat.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfFloat) f = (PrimitiveFunction.ToFloat.OfFloat) mapper;
+			else f = x -> mapper.applyFloat(x);
+			PrimitiveIterator.OfFloat thisIt = this;
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(thisIt.nextFloat()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfChar#nextChar()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Float>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			PrimitiveFunction.ToChar.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfFloat) f = (PrimitiveFunction.ToChar.OfFloat) mapper;
+			else f = x -> mapper.applyChar(x);
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfFloat.this.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(PrimitiveIterator.OfFloat.this.nextFloat()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfShort#nextShort()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Float>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			PrimitiveFunction.ToShort.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfFloat) f = (PrimitiveFunction.ToShort.OfFloat) mapper;
+			else f = x -> mapper.applyShort(x);
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfFloat.this.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(PrimitiveIterator.OfFloat.this.nextFloat()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfByte#nextByte()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Float>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			PrimitiveFunction.ToByte.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfFloat) f = (PrimitiveFunction.ToByte.OfFloat) mapper;
+			else f = x -> mapper.applyByte(x);
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfFloat.this.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(PrimitiveIterator.OfFloat.this.nextFloat()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextFloat()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfBoolean#nextBoolean()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Float}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfFloat}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfFloat
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Float>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			PrimitiveFunction.ToBoolean.OfFloat f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfFloat) f = (PrimitiveFunction.ToBoolean.OfFloat) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfFloat.this.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(PrimitiveIterator.OfFloat.this.nextFloat()); }
+			};
+		}
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1150,6 +1996,519 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	}
 
 	/**
+	 * An Iterator specialized for {@code char} values.
+	 * <p>
+	 * Defines an interface for iterator specialized for {@code char} values. It
+	 * extends the PrimitiveIterator interface for characters and provides
+	 * additional methods specific to character iteration.
+	 * 
+	 * @implNote The use of {@link #nextChar()} is preferred over the use of
+	 *           {@link #next()} because {@link #next()} is implemented by calling
+	 *           and casting {@link #nextChar()}.
+	 * @implNote Default implementation does not support modification such as
+	 *           {@link #remove()}
+	 */
+	interface OfChar extends PrimitiveIterator<Character, PrimitiveConsumer.OfChar> {
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Character Double} objects where each element is a boxed {@code char} value.
+		 * 
+		 * @return an iterator of boxed {@code Character}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Character, PrimitiveConsumer.OfChar> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfDouble#nextDouble()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Character>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToDouble.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfChar) f = (PrimitiveFunction.ToDouble.OfChar) mapper;
+			else f = x -> mapper.applyDouble(x);
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfChar.this.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(PrimitiveIterator.OfChar.this.nextChar());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfLong#nextLong()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Character>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToLong.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfChar) f = (PrimitiveFunction.ToLong.OfChar) mapper;
+			else f = x -> mapper.applyLong(x);
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return  PrimitiveIterator.OfChar.this.hasNext(); }
+				@Override public long nextLong() { return f.applyLong( PrimitiveIterator.OfChar.this.nextChar());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfInt#nextInt()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Character>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToInt.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfChar) f = (PrimitiveFunction.ToInt.OfChar) mapper;
+			else f = x -> mapper.applyInt(x);
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfChar.this.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(PrimitiveIterator.OfChar.this.nextChar());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfFloat#nextFloat()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Character>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToFloat.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfChar) f = (PrimitiveFunction.ToFloat.OfChar) mapper;
+			else f = x -> mapper.applyFloat(x);
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfChar.this.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(PrimitiveIterator.OfChar.this.nextChar());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfChar#nextChar()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Character>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToChar.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfChar) f = (PrimitiveFunction.ToChar.OfChar) mapper;
+			else f = x -> mapper.applyChar(x);
+			PrimitiveIterator.OfChar thisIt = this;
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(thisIt.nextChar());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfShort#nextShort()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Character>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToShort.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfChar) f = (PrimitiveFunction.ToShort.OfChar) mapper;
+			else f = x -> mapper.applyShort(x);
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfChar.this.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(PrimitiveIterator.OfChar.this.nextChar());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfByte#nextByte()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Character>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToByte.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfChar) f = (PrimitiveFunction.ToByte.OfChar) mapper;
+			else f = x -> mapper.applyByte(x);
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfChar.this.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(PrimitiveIterator.OfChar.this.nextChar());}
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextChar()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfBoolean#nextBoolean()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Character}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfChar}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfChar
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Character>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToBoolean.OfChar f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfChar) f = (PrimitiveFunction.ToBoolean.OfChar) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfChar.this.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(PrimitiveIterator.OfChar.this.nextChar());}
+			};
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		default PrimitiveIterator.OfDouble toDouble() {
+			return new PrimitiveIterator.OfDouble() {
+
+				@Override
+				public boolean hasNext() {
+					return OfChar.this.hasNext();
+				}
+
+				@Override
+				public double nextDouble() {
+					return OfChar.this.nextChar();
+				}
+			};
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		default PrimitiveIterator.OfLong toLong() {
+			return new PrimitiveIterator.OfLong() {
+
+				@Override
+				public boolean hasNext() {
+					return OfChar.this.hasNext();
+				}
+
+				@Override
+				public long nextLong() {
+					return OfChar.this.nextChar();
+				}
+			};
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		default PrimitiveIterator.OfInt toInt() {
+			return new PrimitiveIterator.OfInt() {
+
+				@Override
+				public boolean hasNext() {
+					return OfChar.this.hasNext();
+				}
+
+				@Override
+				public int nextInt() {
+					return OfChar.this.nextChar();
+				}
+			};
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		default OfFloat toFloat() {
+			return new OfFloat() {
+
+				@Override
+				public boolean hasNext() {
+					return OfChar.this.hasNext();
+				}
+
+				@Override
+				public float nextFloat() {
+					return OfChar.this.nextChar();
+				}
+			};
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @implNote returns {@code this}
+		 */
+		@Override
+		default OfChar toChar() {
+			return this;
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		default OfShort toShort() {
+			return new OfShort() {
+
+				@Override
+				public boolean hasNext() {
+					return OfChar.this.hasNext();
+				}
+
+				@Override
+				public short nextShort() {
+					return (short) OfChar.this.nextChar();
+				}
+			};
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		default OfByte toByte() {
+			return new OfByte() {
+
+				@Override
+				public boolean hasNext() {
+					return OfChar.this.hasNext();
+				}
+
+				@Override
+				public byte nextByte() {
+					return (byte) OfChar.this.nextChar();
+				}
+			};
+		}
+
+		/*
+		 * Date created: 27 May 2024 Time created: 13:36:33
+		 */
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		default OfBoolean toBoolean() {
+			return new OfBoolean() {
+
+				@Override
+				public boolean hasNext() {
+					return OfChar.this.hasNext();
+				}
+
+				@Override
+				public boolean nextBoolean() {
+					return OfChar.this.nextChar() != '\u0000';
+				}
+			};
+		}
+
+		/**
+		 * Returns the next {@code char} element in the iteration.
+		 *
+		 * @return the next {@code char} element in the iteration
+		 * @throws NoSuchElementException if the iteration has no more elements
+		 */
+		char nextChar() throws NoSuchElementException;
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @implSpec
+		 *           <p>
+		 *           The default implementation behaves as if:
+		 * 
+		 *           <pre>{@code
+		 *     while (hasNext())
+		 *         action.accept(nextChar());
+		 * }</pre>
+		 */
+		default void forEachRemaining(PrimitiveConsumer.OfChar action) {
+			Objects.requireNonNull(action);
+			while (hasNext())
+				action.acceptChar(nextChar());
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @implSpec The default implementation boxes the result of calling
+		 *           {@link #nextChar()}, and returns that boxed result.
+		 */
+		@Override
+		default Character next() throws NoSuchElementException {
+			return nextChar();
+		}
+
+		/**
+		 * {@inheritDoc}
+		 * 
+		 * @implSpec If the action is an instance of {@code CharConsumer} then it is
+		 *           cast to {@code CharConsumer} and passed to
+		 *           {@link #forEachRemaining}; otherwise the action is adapted to an
+		 *           instance of {@code CharConsumer}, by boxing the argument of
+		 *           {@code CharConsumer}, and then passed to {@link #forEachRemaining}.
+		 */
+		@Override
+		default void forEachRemaining(Consumer<? super Character> action) {
+			if (action instanceof PrimitiveConsumer.OfChar) {
+				forEachRemaining((PrimitiveConsumer.OfChar) action);
+				return;
+			}
+			Objects.requireNonNull(action);
+			forEachRemaining((PrimitiveConsumer.OfChar) action::accept);
+		}
+	}
+
+	/**
 	 * An Iterator specialized for {@code short} values.
 	 * <p>
 	 * Defines an interface for iterator specialized for {@code short} values. It
@@ -1162,8 +2521,281 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * @implNote Default implementation does not support modification such as
 	 *           {@link #remove()}
 	 */
-	interface OfShort
-			extends PrimitiveIterator<Short, PrimitiveConsumer.OfShort> {
+	interface OfShort extends PrimitiveIterator<Short, PrimitiveConsumer.OfShort> {
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Short Double} objects where each element is a boxed {@code short} value.
+		 * 
+		 * @return an iterator of boxed {@code Short}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Short, PrimitiveConsumer.OfShort> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfDouble#nextDouble()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Short>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToDouble.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfShort) f = (PrimitiveFunction.ToDouble.OfShort) mapper;
+			else f = x -> mapper.applyDouble(x);
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfShort.this.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(PrimitiveIterator.OfShort.this.nextShort()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfLong#nextLong()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Short>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToLong.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfShort) f = (PrimitiveFunction.ToLong.OfShort) mapper;
+			else f = x -> mapper.applyLong(x);
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return  PrimitiveIterator.OfShort.this.hasNext(); }
+				@Override public long nextLong() { return f.applyLong( PrimitiveIterator.OfShort.this.nextShort()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfInt#nextInt()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Short>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToInt.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfShort) f = (PrimitiveFunction.ToInt.OfShort) mapper;
+			else f = x -> mapper.applyInt(x);
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfShort.this.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(PrimitiveIterator.OfShort.this.nextShort()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfFloat#nextFloat()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Short>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToFloat.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfShort) f = (PrimitiveFunction.ToFloat.OfShort) mapper;
+			else f = x -> mapper.applyFloat(x);
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfShort.this.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(PrimitiveIterator.OfShort.this.nextShort()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfChar#nextChar()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Short>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToChar.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfShort) f = (PrimitiveFunction.ToChar.OfShort) mapper;
+			else f = x -> mapper.applyChar(x);
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfShort.this.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(PrimitiveIterator.OfShort.this.nextShort()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfShort#nextShort()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Short>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToShort.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfShort) f = (PrimitiveFunction.ToShort.OfShort) mapper;
+			else f = x -> mapper.applyShort(x);
+			PrimitiveIterator.OfShort thisIt = this;
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(thisIt.nextShort()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfByte#nextByte()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Short>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToByte.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfShort) f = (PrimitiveFunction.ToByte.OfShort) mapper;
+			else f = x -> mapper.applyByte(x);
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfShort.this.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(PrimitiveIterator.OfShort.this.nextShort()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextShort()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfBoolean#nextBoolean()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Short}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfShort}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfShort
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Short>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			if(mapper == null) throw new NullPointerException();
+			PrimitiveFunction.ToBoolean.OfShort f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfShort) f = (PrimitiveFunction.ToBoolean.OfShort) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfShort.this.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(PrimitiveIterator.OfShort.this.nextShort()); }
+			};
+		}
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1408,8 +3040,273 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * @implNote Default implementation does not support modification such as
 	 *           {@link #remove()}
 	 */
-	interface OfByte
-			extends PrimitiveIterator<Byte, PrimitiveConsumer.OfByte> {
+	interface OfByte extends PrimitiveIterator<Byte, PrimitiveConsumer.OfByte> {
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Byte Double} objects where each element is a boxed {@code byte} value.
+		 * 
+		 * @return an iterator of boxed {@code Byte}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Byte, PrimitiveConsumer.OfByte> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfDouble#nextDouble()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Byte>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			PrimitiveFunction.ToDouble.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfByte) f = (PrimitiveFunction.ToDouble.OfByte) mapper;
+			else f = x -> mapper.applyDouble(x);
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfByte.this.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(PrimitiveIterator.OfByte.this.nextByte()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfLong#nextLong()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Byte>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			PrimitiveFunction.ToLong.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfByte) f = (PrimitiveFunction.ToLong.OfByte) mapper;
+			else f = x -> mapper.applyLong(x);
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return  PrimitiveIterator.OfByte.this.hasNext(); }
+				@Override public long nextLong() { return f.applyLong( PrimitiveIterator.OfByte.this.nextByte()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfInt#nextInt()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Byte>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			PrimitiveFunction.ToInt.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfByte) f = (PrimitiveFunction.ToInt.OfByte) mapper;
+			else f = x -> mapper.applyInt(x);
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfByte.this.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(PrimitiveIterator.OfByte.this.nextByte()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfFloat#nextFloat()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Byte>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			PrimitiveFunction.ToFloat.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfByte) f = (PrimitiveFunction.ToFloat.OfByte) mapper;
+			else f = x -> mapper.applyFloat(x);
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfByte.this.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(PrimitiveIterator.OfByte.this.nextByte()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfChar#nextChar()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Byte>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			PrimitiveFunction.ToChar.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfByte) f = (PrimitiveFunction.ToChar.OfByte) mapper;
+			else f = x -> mapper.applyChar(x);
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfByte.this.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(PrimitiveIterator.OfByte.this.nextByte()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfShort#nextShort()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Byte>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			PrimitiveFunction.ToShort.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfByte) f = (PrimitiveFunction.ToShort.OfByte) mapper;
+			else f = x -> mapper.applyShort(x);
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfByte.this.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(PrimitiveIterator.OfByte.this.nextByte()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfByte#nextByte()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Byte>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			PrimitiveFunction.ToByte.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfByte) f = (PrimitiveFunction.ToByte.OfByte) mapper;
+			else f = x -> mapper.applyByte(x);
+			PrimitiveIterator.OfByte thisIt = this;
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(thisIt.nextByte()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextByte()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfBoolean#nextBoolean()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Byte}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfByte}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfByte
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Byte>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			PrimitiveFunction.ToBoolean.OfByte f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfByte) f = (PrimitiveFunction.ToBoolean.OfByte) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfByte.this.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(PrimitiveIterator.OfByte.this.nextByte()); }
+			};
+		}
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1654,8 +3551,273 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * @implNote Default implementation does not support modification such as
 	 *           {@link #remove()}
 	 */
-	interface OfBoolean
-			extends PrimitiveIterator<Boolean, PrimitiveConsumer.OfBoolean> {
+	interface OfBoolean extends PrimitiveIterator<Boolean, PrimitiveConsumer.OfBoolean> {
+
+		/**
+		 * Creates and returns a boxed an iterator of {@link java.lang.Boolean Double} objects where each element is a boxed {@code boolean} value.
+		 * 
+		 * @return an iterator of boxed {@code Boolean}
+		 */
+		@Override
+		default java.util.PrimitiveIterator<Boolean, PrimitiveConsumer.OfBoolean> boxed() { return this; }
+
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfDouble#nextDouble()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code double} values
+		 * are returned through a new {@link PrimitiveIterator.OfDouble} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code double} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfDouble} instance that provides the mapped {@code double} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToDouble.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToDouble
+		* @see PrimitiveFunction.ToDouble.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Boolean>> PrimitiveIterator.OfDouble mapToDouble(M mapper) {
+			PrimitiveFunction.ToDouble.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToDouble.OfBoolean) f = (PrimitiveFunction.ToDouble.OfBoolean) mapper;
+			else f = x -> mapper.applyDouble(x);
+			return new PrimitiveIterator.OfDouble() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfBoolean.this.hasNext(); }
+				@Override public double nextDouble() { return f.applyDouble(PrimitiveIterator.OfBoolean.this.nextBoolean()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfLong#nextLong()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code long} values
+		 * are returned through a new {@link PrimitiveIterator.OfLong} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code long} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfLong} instance that provides the mapped {@code long} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToLong.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToLong
+		* @see PrimitiveFunction.ToLong.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Boolean>> PrimitiveIterator.OfLong mapToLong(M mapper) {
+			PrimitiveFunction.ToLong.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToLong.OfBoolean) f = (PrimitiveFunction.ToLong.OfBoolean) mapper;
+			else f = x -> mapper.applyLong(x);
+			return new PrimitiveIterator.OfLong() {
+				@Override public boolean hasNext() { return  PrimitiveIterator.OfBoolean.this.hasNext(); }
+				@Override public long nextLong() { return f.applyLong( PrimitiveIterator.OfBoolean.this.nextBoolean()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfInt#nextInt()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code int} values
+		 * are returned through a new {@link PrimitiveIterator.OfInt} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code int} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfInt} instance that provides the mapped {@code int} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToInt.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToInt
+		* @see PrimitiveFunction.ToInt.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Boolean>> PrimitiveIterator.OfInt mapToInt(M mapper) {
+			PrimitiveFunction.ToInt.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToInt.OfBoolean) f = (PrimitiveFunction.ToInt.OfBoolean) mapper;
+			else f = x -> mapper.applyInt(x);
+			return new PrimitiveIterator.OfInt() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfBoolean.this.hasNext(); }
+				@Override public int nextInt() { return f.applyInt(PrimitiveIterator.OfBoolean.this.nextBoolean()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfFloat#nextFloat()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code float} values
+		 * are returned through a new {@link PrimitiveIterator.OfFloat} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code float} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfFloat} instance that provides the mapped {@code float} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToFloat.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToFloat
+		* @see PrimitiveFunction.ToFloat.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Boolean>> PrimitiveIterator.OfFloat mapToFloat(M mapper) {
+			PrimitiveFunction.ToFloat.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToFloat.OfBoolean) f = (PrimitiveFunction.ToFloat.OfBoolean) mapper;
+			else f = x -> mapper.applyFloat(x);
+			return new PrimitiveIterator.OfFloat() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfBoolean.this.hasNext(); }
+				@Override public float nextFloat() { return f.applyFloat(PrimitiveIterator.OfBoolean.this.nextBoolean()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfChar#nextChar()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code char} values
+		 * are returned through a new {@link PrimitiveIterator.OfChar} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code char} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfChar} instance that provides the mapped {@code char} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToChar.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToChar
+		* @see PrimitiveFunction.ToChar.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Boolean>> PrimitiveIterator.OfChar mapToChar(M mapper) {
+			PrimitiveFunction.ToChar.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToChar.OfBoolean) f = (PrimitiveFunction.ToChar.OfBoolean) mapper;
+			else f = x -> mapper.applyChar(x);
+			return new PrimitiveIterator.OfChar() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfBoolean.this.hasNext(); }
+				@Override public char nextChar() { return f.applyChar(PrimitiveIterator.OfBoolean.this.nextBoolean()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfShort#nextShort()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code short} values
+		 * are returned through a new {@link PrimitiveIterator.OfShort} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code short} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfShort} instance that provides the mapped {@code short} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToShort.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToShort
+		* @see PrimitiveFunction.ToShort.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Boolean>> PrimitiveIterator.OfShort mapToShort(M mapper) {
+			PrimitiveFunction.ToShort.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToShort.OfBoolean) f = (PrimitiveFunction.ToShort.OfBoolean) mapper;
+			else f = x -> mapper.applyShort(x);
+			return new PrimitiveIterator.OfShort() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfBoolean.this.hasNext(); }
+				@Override public short nextShort() { return f.applyShort(PrimitiveIterator.OfBoolean.this.nextBoolean()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfByte#nextByte()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code byte} values
+		 * are returned through a new {@link PrimitiveIterator.OfByte} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code byte} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfByte} instance that provides the mapped {@code byte} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToByte.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToByte
+		* @see PrimitiveFunction.ToByte.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Boolean>> PrimitiveIterator.OfByte mapToByte(M mapper) {
+			PrimitiveFunction.ToByte.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToByte.OfBoolean) f = (PrimitiveFunction.ToByte.OfBoolean) mapper;
+			else f = x -> mapper.applyByte(x);
+			return new PrimitiveIterator.OfByte() {
+				@Override public boolean hasNext() { return PrimitiveIterator.OfBoolean.this.hasNext(); }
+				@Override public byte nextByte() { return f.applyByte(PrimitiveIterator.OfBoolean.this.nextBoolean()); }
+			};
+		}
+		/**
+		 * Composes a new iterator from {@code this} where all subsequent values retrieved via {@link #nextBoolean()} will
+		 * be used as the argument to the given mapper whenever {@link PrimitiveIterator.OfBoolean#nextBoolean()} is called.
+		 * <p>
+		 * The mapper function is applied to each element of the iterator, and the resulting {@code boolean} values
+		 * are returned through a new {@link PrimitiveIterator.OfBoolean} instance. The original iterator remains
+		 * unmodified. This new iterator contains all the state of the previous one, this means that if this
+		 * iterator was exhausted, the composed one will etc.
+		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean}
+		*            and accept elements of type {@code Boolean}.
+		* @param mapper the function to apply to each element of this iterator to produce a {@code boolean} value.
+		*               Must not be {@code null}.
+		* @return a new {@link PrimitiveIterator.OfBoolean} instance that provides the mapped {@code boolean} values.
+		 * @throws NullPointerException if the provided {@code mapper} is {@code null}.
+		* @implSpec The default implementation checks if the provided mapper is an instance of
+		*           {@link PrimitiveFunction.ToBoolean.OfBoolean}. If so, it is cast directly; otherwise, a lambda
+		*           is used to adapt the mapper.
+		* @implNote The returned iterator is backed by this iterator, meaning that changes to this iterator
+		*           (e.g., advancing its position) will affect the returned iterator and vice versa.
+		* @see PrimitiveFunction.ToBoolean
+		* @see PrimitiveFunction.ToBoolean.OfBoolean
+		 */
+		@Override
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Boolean>> PrimitiveIterator.OfBoolean mapToBoolean(M mapper) {
+			PrimitiveFunction.ToBoolean.OfBoolean f;
+			if(mapper instanceof PrimitiveFunction.ToBoolean.OfBoolean) f = (PrimitiveFunction.ToBoolean.OfBoolean) mapper;
+			else f = x -> mapper.applyBoolean(x);
+			PrimitiveIterator.OfBoolean thisIt = this;
+			return new PrimitiveIterator.OfBoolean() {
+				@Override public boolean hasNext() { return thisIt.hasNext(); }
+				@Override public boolean nextBoolean() { return f.applyBoolean(thisIt.nextBoolean()); }
+			};
+		}
 
 		/*
 		 * Date created: 27 May 2024 Time created: 13:36:33
@@ -1887,6 +4049,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 
 	}
 
+	@Override
+	java.util.PrimitiveIterator<T, T_CONS> boxed();
+
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
 	 */
@@ -1900,7 +4065,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfDouble toDouble();
+	PrimitiveIterator<Double, DoubleConsumer> toDouble();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
@@ -1915,7 +4080,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfLong toLong();
+	PrimitiveIterator<Long, LongConsumer> toLong();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
@@ -1930,7 +4095,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfInt toInt();
+	PrimitiveIterator<Integer, IntConsumer> toInt();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
@@ -1945,7 +4110,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfFloat toFloat();
+	PrimitiveIterator<Float, PrimitiveConsumer.OfFloat> toFloat();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
@@ -1959,7 +4124,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfChar toChar();
+	PrimitiveIterator<Character, PrimitiveConsumer.OfChar> toChar();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
@@ -1974,7 +4139,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfShort toShort();
+	PrimitiveIterator<Short, PrimitiveConsumer.OfShort> toShort();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
@@ -1989,7 +4154,7 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfByte toByte();
+	PrimitiveIterator<Byte, PrimitiveConsumer.OfByte> toByte();
 
 	/*
 	 * Date created: 27 May 2024 Time created: 14:07:48
@@ -2004,5 +4169,5 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 *          any changes to the returned iterator affects {@code this} and
 	 *          vice-versa.
 	 */
-	OfBoolean toBoolean();
+	PrimitiveIterator<Boolean, PrimitiveConsumer.OfBoolean> toBoolean();
 }
