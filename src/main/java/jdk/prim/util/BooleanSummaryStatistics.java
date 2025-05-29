@@ -12,8 +12,8 @@ import java.util.BitSet;
 public class BooleanSummaryStatistics implements jdk.prim.util.function.PrimitiveConsumer.OfBoolean {
     private long count;
     private final BitSet sum;
-    private boolean min = Boolean.TRUE;
-    private boolean max = Boolean.FALSE;
+    private boolean min = Boolean.FALSE;
+    private boolean max = Boolean.TRUE;
 
     /**
      * Constructs an empty instance with zero count,
@@ -96,20 +96,20 @@ public class BooleanSummaryStatistics implements jdk.prim.util.function.Primitiv
     }
 
     /**
-     * Returns the minimum value recorded, or {@code Boolean.TRUE} if no
+     * Returns the minimum value recorded, or {@link Boolean#FALSE} if no
      * values have been recorded.
      *
-     * @return the minimum value, or {@code Boolean.TRUE} if none
+     * @return the minimum value, or {@link Boolean#FALSE} if none
      */
     public final boolean getMin() {
         return min;
     }
 
     /**
-     * Returns the maximum value recorded, or {@code Boolean.FALSE} if no
+     * Returns the maximum value recorded, or {@code Boolean#TRUE} if no
      * values have been recorded.
      *
-     * @return the maximum value, or {@code Boolean.FALSE} if none
+     * @return the maximum value, or {@code Boolean#TRUE} if none
      */
     public final boolean getMax() {
         return max;

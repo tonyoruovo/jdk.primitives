@@ -1,0 +1,1948 @@
+-----------------------------------------------------------------
+<!-- #region 8 primitives per 8 members per type (interface/class) -->
+-----------------------------------------------------------------
+Double => 1.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+Double => 2.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+Double => 3.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+Double => 4.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+Double => 5.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+Double => 6.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+Double => 7.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+Double => 8.
+Long =>
+Int =>
+Float =>
+Char =>
+Short =>
+Byte =>
+Boolean =>
+
+<!-- #endregion -->
+
+-----------------------------------------------------------------
+<!-- #region 1 primitive per 8 members per type (interface/class) -->
+-----------------------------------------------------------------
+
+Double -> 1.
+Double ->
+Double ->
+Double ->
+Double ->
+Double ->
+Double ->
+Double ->
+
+Long -> 2.
+Long ->
+Long ->
+Long ->
+Long ->
+Long ->
+Long ->
+Long ->
+
+Int -> 3.
+Int ->
+Int ->
+Int ->
+Int ->
+Int ->
+Int ->
+Int ->
+
+Float -> 4.
+Float ->
+Float ->
+Float ->
+Float ->
+Float ->
+Float ->
+Float ->
+
+Char -> 5.
+Char ->
+Char ->
+Char ->
+Char ->
+Char ->
+Char ->
+Char ->
+
+Short -> 6.
+Short ->
+Short ->
+Short ->
+Short ->
+Short ->
+Short ->
+Short ->
+
+Byte -> 7.
+Byte ->
+Byte ->
+Byte ->
+Byte ->
+Byte ->
+Byte ->
+Byte ->
+
+Boolean -> 8.
+Boolean ->
+Boolean ->
+Boolean ->
+Boolean ->
+Boolean ->
+Boolean ->
+Boolean ->
+
+<!-- #endregion -->
+
+-----------------------------------------------------------------
+<!-- #region 8 primitives per 8 members per 8 types (interface/class). Usually used to reference the primitive of a member in relation to the owner in relation to the supertypes -->
+-----------------------------------------------------------------
+
+1 --------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+2 -----------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+3 -----------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+4 -----------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+5 -----------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+6 -----------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+7 -----------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+8 -----------
+
+Double ~> 1.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 2.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 3.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 4.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 5.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 6.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 7.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+Double ~> 8.
+Long ~>
+Int ~>
+Float ~>
+Char ~>
+Short ~>
+Byte ~>
+Boolean ~>
+
+<!-- #endregion -->
+
+-----------------------------------------------------------------
+<!-- #region 1 primitive per 8 members per 8 types (interface/class). Usually used to reference the primitive of a member in relation to the owner in relation -->
+-----------------------------------------------------------------
+
+1 --------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+2 -----------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+3 -----------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+4 -----------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+5 -----------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+6 -----------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+7 -----------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+8 -----------
+
+Double _> 1.
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+Double _>
+
+Long _> 2.
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+Long _>
+
+Int _> 3.
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+Int _>
+
+Float _> 4.
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+Float _>
+
+Char _> 5.
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+Char _>
+
+Short _> 6.
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+Short _>
+
+Byte _> 7.
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+Byte _>
+
+Boolean _> 8.
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+Boolean _>
+
+<!-- #endregion -->
+
+-----------------------------------------------------------------
+<!-- #region 1 primitive per 8 types (interface/class). Usually used to reference the primitive of a member -->
+-----------------------------------------------------------------
+
+1 --------
+
+Double >>> 1.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+Double >>> 2.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+Double >>> 3.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+Double >>> 4.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+Double >>> 5.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+Double >>> 6.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+Double >>> 7.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+Double >>> 8.
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+Double >>>
+
+2 -----------
+
+Long >>> 1.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+Long >>> 2.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+Long >>> 3.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+Long >>> 4.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+Long >>> 5.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+Long >>> 6.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+Long >>> 7.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+Long >>> 8.
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+Long >>>
+
+3 -----------
+
+Int >>> 1.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+Int >>> 2.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+Int >>> 3.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+Int >>> 4.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+Int >>> 5.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+Int >>> 6.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+Int >>> 7.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+Int >>> 8.
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+Int >>>
+
+4 -----------
+
+Float >>> 1.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+Float >>> 2.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+Float >>> 3.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+Float >>> 4.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+Float >>> 5.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+Float >>> 6.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+Float >>> 7.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+Float >>> 8.
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+Float >>>
+
+5 -----------
+
+Char >>> 1.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+Char >>> 2.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+Char >>> 3.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+Char >>> 4.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+Char >>> 5.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+Char >>> 6.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+Char >>> 7.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+Char >>> 8.
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+Char >>>
+
+6 -----------
+
+Short >>> 1.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+Short >>> 2.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+Short >>> 3.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+Short >>> 4.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+Short >>> 5.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+Short >>> 6.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+Short >>> 7.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+Short >>> 8.
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+Short >>>
+
+7 -----------
+
+Byte >>> 1.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+Byte >>> 2.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+Byte >>> 3.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+Byte >>> 4.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+Byte >>> 5.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+Byte >>> 6.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+Byte >>> 7.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+Byte >>> 8.
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+Byte >>>
+
+8 -----------
+
+Boolean >>> 1.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+Boolean >>> 2.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+Boolean >>> 3.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+Boolean >>> 4.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+Boolean >>> 5.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+Boolean >>> 6.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+Boolean >>> 7.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+Boolean >>> 8.
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+Boolean >>>
+
+<!-- #endregion -->

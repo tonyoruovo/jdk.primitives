@@ -84,8 +84,9 @@ module jdk.primitives {
     exports jdk.prim;
     exports jdk.prim.util;
     exports jdk.prim.util.concurrent;
-    exports jdk.prim.util.stream;
     exports jdk.prim.util.function;
+    exports jdk.prim.util.map;
+    exports jdk.prim.util.stream;
     requires jdk.unsupported;// Used by the jdk.prim.util.dpqs package
     requires java.logging;//Only used by the test enviroment
 }

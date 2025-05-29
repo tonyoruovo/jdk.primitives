@@ -7,6 +7,7 @@ import java.util.random.RandomGenerator;
 
 import jdk.prim.util.PrimitiveArrays;
 import jdk.prim.util.PrimitiveComparator;
+import jdk.prim.util.map.PrimitiveEntry;
 import jdk.prim.util.sort.PrimitiveBasicQuickSort;
 import jdk.prim.util.sort.PrimitiveDualPivot;
 import jdk.prim.util.sort.PrimitiveNaiveQuickSort;
@@ -102,6 +103,10 @@ public class Main
             initBooleanArray(random, i);
         }
     }
+
+    public static PrimitiveEntry.OfChar.AndBoolean c() {
+        return null;
+    }
 	
     public static void main( String[] args ) {
         var d = Arrays.toString(BOOLEAN);
@@ -112,5 +117,10 @@ public class Main
 
         d = Arrays.toString(sorted);
         System.err.println(d);
+
+        var c = c();
+        var k = c.getKeyChar();
+        var c2 = c.mapToDoubleKey(x -> x);
+        var k2 = c2.getKeyDouble();
     }
 }

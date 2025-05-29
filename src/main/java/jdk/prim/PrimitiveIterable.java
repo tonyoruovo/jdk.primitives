@@ -56,105 +56,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToDouble(mapper);
+			return () -> iteratorDouble().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Double>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToLong(mapper);
+			return () -> iteratorDouble().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Double>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToInt(mapper);
+			return () -> iteratorDouble().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Double>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToFloat(mapper);
+			return () -> iteratorDouble().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Double>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToChar(mapper);
+			return () -> iteratorDouble().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Double>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToShort(mapper);
+			return () -> iteratorDouble().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Double>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToByte(mapper);
+			return () -> iteratorDouble().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code double} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code double} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code double} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Double>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Double>, RM extends PrimitiveFunction<? extends java.lang.Double, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorDouble().mapToBoolean(mapper);
+			return () -> iteratorDouble().mapToBoolean(mapper, rm);
 		}
 
 		/**
@@ -335,105 +351,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Long>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToDouble(mapper);
+			return () -> iteratorLong().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToLong(mapper);
+			return () -> iteratorLong().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Long>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToInt(mapper);
+			return () -> iteratorLong().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Long>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToFloat(mapper);
+			return () -> iteratorLong().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Long>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToChar(mapper);
+			return () -> iteratorLong().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Long>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToShort(mapper);
+			return () -> iteratorLong().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Long>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToByte(mapper);
+			return () -> iteratorLong().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code long} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code long} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code long} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Long>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Long>, RM extends PrimitiveFunction<? extends java.lang.Long, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorLong().mapToBoolean(mapper);
+			return () -> iteratorLong().mapToBoolean(mapper, rm);
 		}
 
 		/**
@@ -614,105 +646,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Integer>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToDouble(mapper);
+			return () -> iteratorInt().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Integer>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToLong(mapper);
+			return () -> iteratorInt().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToInt(mapper);
+			return () -> iteratorInt().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Integer>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToFloat(mapper);
+			return () -> iteratorInt().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Integer>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToChar(mapper);
+			return () -> iteratorInt().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Integer>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToShort(mapper);
+			return () -> iteratorInt().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Integer>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToByte(mapper);
+			return () -> iteratorInt().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code int} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code int} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code int} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Integer>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Integer>, RM extends PrimitiveFunction<? extends java.lang.Integer, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorInt().mapToBoolean(mapper);
+			return () -> iteratorInt().mapToBoolean(mapper, rm);
 		}
 
 		/**
@@ -893,105 +941,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Float>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToDouble(mapper);
+			return () -> iteratorFloat().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Float>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToLong(mapper);
+			return () -> iteratorFloat().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Float>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToInt(mapper);
+			return () -> iteratorFloat().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToFloat(mapper);
+			return () -> iteratorFloat().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Float>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToChar(mapper);
+			return () -> iteratorFloat().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Float>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToShort(mapper);
+			return () -> iteratorFloat().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Float>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToByte(mapper);
+			return () -> iteratorFloat().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code float} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code float} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code float} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Float>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Float>, RM extends PrimitiveFunction<? extends java.lang.Float, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorFloat().mapToBoolean(mapper);
+			return () -> iteratorFloat().mapToBoolean(mapper, rm);
 		}
 
 		/**
@@ -1172,105 +1236,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Character>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToDouble(mapper);
+			return () -> iteratorChar().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Character>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToLong(mapper);
+			return () -> iteratorChar().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Character>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToInt(mapper);
+			return () -> iteratorChar().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Character>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToFloat(mapper);
+			return () -> iteratorChar().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToChar(mapper);
+			return () -> iteratorChar().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Character>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToShort(mapper);
+			return () -> iteratorChar().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Character>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToByte(mapper);
+			return () -> iteratorChar().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code char} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code char} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code char} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Character>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Character>, RM extends PrimitiveFunction<? extends java.lang.Character, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorChar().mapToBoolean(mapper);
+			return () -> iteratorChar().mapToBoolean(mapper, rm);
 		}
 
 		/**
@@ -1451,105 +1531,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Short>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToDouble(mapper);
+			return () -> iteratorShort().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Short>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToLong(mapper);
+			return () -> iteratorShort().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Short>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToInt(mapper);
+			return () -> iteratorShort().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Short>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToFloat(mapper);
+			return () -> iteratorShort().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Short>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToChar(mapper);
+			return () -> iteratorShort().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToShort(mapper);
+			return () -> iteratorShort().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Short>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToByte(mapper);
+			return () -> iteratorShort().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code short} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code short} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code short} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Short>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Short>, RM extends PrimitiveFunction<? extends java.lang.Short, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorShort().mapToBoolean(mapper);
+			return () -> iteratorShort().mapToBoolean(mapper, rm);
 		}
 
 		/**
@@ -1730,105 +1826,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Byte>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToDouble(mapper);
+			return () -> iteratorByte().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Byte>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToLong(mapper);
+			return () -> iteratorByte().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Byte>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToInt(mapper);
+			return () -> iteratorByte().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Byte>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToFloat(mapper);
+			return () -> iteratorByte().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Byte>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToChar(mapper);
+			return () -> iteratorByte().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Byte>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToShort(mapper);
+			return () -> iteratorByte().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToByte(mapper);
+			return () -> iteratorByte().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code byte} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code byte} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code byte} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Byte>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Byte>, RM extends PrimitiveFunction<? extends java.lang.Byte, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorByte().mapToBoolean(mapper);
+			return () -> iteratorByte().mapToBoolean(mapper, rm);
 		}
 
 		/**
@@ -2009,105 +2121,121 @@ public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitiv
 		 * Creates and return a new iterable of {@code double} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code double}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToDouble} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code double} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfDouble} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Boolean>> PrimitiveIterable.OfDouble mapToDouble(M mapper) {
+		default <M extends PrimitiveFunction.ToDouble<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Double>> PrimitiveIterable.OfDouble mapToDouble(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToDouble(mapper);
+			return () -> iteratorBoolean().mapToDouble(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code long} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code long}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToLong} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code long} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfLong} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToLong<? super java.lang.Boolean>> PrimitiveIterable.OfLong mapToLong(M mapper) {
+		default <M extends PrimitiveFunction.ToLong<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Long>> PrimitiveIterable.OfLong mapToLong(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToLong(mapper);
+			return () -> iteratorBoolean().mapToLong(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code int} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code int}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToInt} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code int} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfInt} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToInt<? super java.lang.Boolean>> PrimitiveIterable.OfInt mapToInt(M mapper) {
+		default <M extends PrimitiveFunction.ToInt<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Integer>> PrimitiveIterable.OfInt mapToInt(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToInt(mapper);
+			return () -> iteratorBoolean().mapToInt(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code float} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code float}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToFloat} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code float} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfFloat} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Boolean>> PrimitiveIterable.OfFloat mapToFloat(M mapper) {
+		default <M extends PrimitiveFunction.ToFloat<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Float>> PrimitiveIterable.OfFloat mapToFloat(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToFloat(mapper);
+			return () -> iteratorBoolean().mapToFloat(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code char} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code char}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToChar} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code char} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfChar} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToChar<? super java.lang.Boolean>> PrimitiveIterable.OfChar mapToChar(M mapper) {
+		default <M extends PrimitiveFunction.ToChar<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Character>> PrimitiveIterable.OfChar mapToChar(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToChar(mapper);
+			return () -> iteratorBoolean().mapToChar(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code short} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code short}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToShort} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code short} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfShort} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToShort<? super java.lang.Boolean>> PrimitiveIterable.OfShort mapToShort(M mapper) {
+		default <M extends PrimitiveFunction.ToShort<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Short>> PrimitiveIterable.OfShort mapToShort(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToShort(mapper);
+			return () -> iteratorBoolean().mapToShort(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code byte} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code byte}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToByte} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code byte} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfByte} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToByte<? super java.lang.Boolean>> PrimitiveIterable.OfByte mapToByte(M mapper) {
+		default <M extends PrimitiveFunction.ToByte<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Byte>> PrimitiveIterable.OfByte mapToByte(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToByte(mapper);
+			return () -> iteratorBoolean().mapToByte(mapper, rm);
 		}
 		/**
 		 * Creates and return a new iterable of {@code boolean} using the provided mapper as a processor to map elements from
 		 * {@code boolean} to {@code boolean}
 		 * @param <M> the type of the mapper function, which must extend {@link PrimitiveFunction.ToBoolean} and accept {@code boolean} values
+		 * @param <RM> the reverse mapper which is never used as no iterator methods declare a primitive parameter
 		 * @param mapper a mapper to which will be used to process {@code boolean} values into {@code boolean} values
+		 * @param rm can be {@code null}
 		 * @return a new {@link PrimitiveIterable.OfBoolean} instance
 		 * @throws NullPointerException if {@code mapper} is {@code null}
-		 * @implSpec The actual implementation leverages the underlying iterator
+		 * @implSpec The actual implementation leverages the underlying iterator. The parameter {@code rm} is ignored in the default implementation
 		 */
-		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper) {
+		default <M extends PrimitiveFunction.ToBoolean<? super java.lang.Boolean>, RM extends PrimitiveFunction<? extends java.lang.Boolean, ? super java.lang.Boolean>> PrimitiveIterable.OfBoolean mapToBoolean(M mapper, RM rm) {
 			if(mapper == null) throw new NullPointerException();
-			return () -> iteratorBoolean().mapToBoolean(mapper);
+			return () -> iteratorBoolean().mapToBoolean(mapper, rm);
 		}
 
 		/**
