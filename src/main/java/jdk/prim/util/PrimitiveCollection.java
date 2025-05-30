@@ -156,6 +156,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Double> spliterator() { return spliteratorDouble(); }
+		@Override default PrimitiveSpliterator.OfDouble spliteratorDouble() { return new PrimitiveCollectionSpliterator.OfDouble(this, 0); }
 		/**
 		 * The {@code double} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfDouble} (sequential or otherwise)
@@ -294,6 +295,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Long> spliterator() { return spliteratorLong(); }
+		@Override default PrimitiveSpliterator.OfLong spliteratorLong() { return new PrimitiveCollectionSpliterator.OfLong(this, 0); }
 		/**
 		 * The {@code long} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfLong} (sequential or otherwise)
@@ -432,6 +434,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Integer> spliterator() { return spliteratorInt(); }
+		@Override default PrimitiveSpliterator.OfInt spliteratorInt() { return new PrimitiveCollectionSpliterator.OfInt(this, 0); }
 		/**
 		 * The {@code int} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfInt} (sequential or otherwise)
@@ -570,6 +573,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Float> spliterator() { return spliteratorFloat(); }
+		@Override default PrimitiveSpliterator.OfFloat spliteratorFloat() { return new PrimitiveCollectionSpliterator.OfFloat(this, 0); }
 		/**
 		 * The {@code float} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfFloat} (sequential or otherwise)
@@ -708,6 +712,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Character> spliterator() { return spliteratorChar(); }
+		@Override default PrimitiveSpliterator.OfChar spliteratorChar() { return new PrimitiveCollectionSpliterator.OfChar(this, 0); }
 		/**
 		 * The {@code char} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfChar} (sequential or otherwise)
@@ -846,6 +851,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Short> spliterator() { return spliteratorShort(); }
+		@Override default PrimitiveSpliterator.OfShort spliteratorShort() { return new PrimitiveCollectionSpliterator.OfShort(this, 0); }
 		/**
 		 * The {@code short} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfShort} (sequential or otherwise)
@@ -984,6 +990,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Byte> spliterator() { return spliteratorByte(); }
+		@Override default PrimitiveSpliterator.OfByte spliteratorByte() { return new PrimitiveCollectionSpliterator.OfByte(this, 0); }
 		/**
 		 * The {@code byte} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfByte} (sequential or otherwise)
@@ -1122,6 +1129,7 @@ T_CONS> extends PrimitiveIterable<T, T_CONS>, Collection<T> {
 		 * @return {@inheritDoc}
 		 */
 		default Spliterator<java.lang.Boolean> spliterator() { return spliteratorBoolean(); }
+		@Override default PrimitiveSpliterator.OfBoolean spliteratorBoolean() { return new PrimitiveCollectionSpliterator.OfBoolean(this, 0); }
 		/**
 		 * The {@code boolean} specialization of {@link #stream()}
 		 * @return a {@code PrimitiveStream.OfBoolean} (sequential or otherwise)

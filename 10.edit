@@ -1,3 +1,12 @@
+java.lang.Double
+java.lang.Long
+java.lang.Integer
+java.lang.Float
+java.lang.Character
+java.lang.Short
+java.lang.Byte
+java.lang.Boolean
+
 -----------------------------------------------------------------
 <!-- #region 8 primitives per 8 members per type (interface/class) -->
 -----------------------------------------------------------------

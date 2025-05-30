@@ -10,6 +10,12 @@ import jdk.prim.util.function.PrimitiveConsumer;
 import jdk.prim.util.function.PrimitiveFunction;
 /**
  * A list of primitive elements.
+ * <p>
+ * A major difference between this interface and the other {@code PrimitiveCollection} implementations is the replacement of
+ * {@link #remove(int)} with {@code removeElementAtIndex(int)} (as seen at {@link OfInt#removeElementAtIndex(int)} for
+ * example) which breaks the convention set by this project. This is a
+ * necessary exception because {@code removeXxx(int)} is already being used by {@link PrimitiveCollection}, and that
+ * declaration returns a {@code boolean}. Hence, convention is broken here to prevent compile-time errors
  * @param <T> The type of primitive wrapper for this sequenced collection
  * @param <T_CONS> the type of consumer for the generic {@link #forEach(Object) forEach}
  * 

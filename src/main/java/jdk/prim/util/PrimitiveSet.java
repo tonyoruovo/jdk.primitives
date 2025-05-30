@@ -6,6 +6,9 @@ import java.util.Spliterator;
 
 import jdk.prim.util.function.PrimitiveConsumer;
 
+/**
+ * The base interface for the primitive equivalent of a {@link java.util.Set Set}
+ */
 public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, E_CONS> {
     /**
      * The {@code double} equivalent of a {@link java.util.Set set}
@@ -26,17 +29,21 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Double> iterator() { return PrimitiveCollection.OfDouble.super.iterator(); }
+        @Override default Iterator<java.lang.Double> iterator() { return PrimitiveSet.OfDouble.this.iteratorDouble(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Double> spliterator() { return PrimitiveCollection.OfDouble.super.spliterator(); }
+        @Override default Spliterator<java.lang.Double> spliterator() { return PrimitiveCollection.OfDouble.super.spliteratorDouble(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Double[] toArray() { return PrimitiveCollection.OfDouble.super.toArray(); }
+
+        /////////////// double overrides
+        
+        @Override default PrimitiveSpliterator.OfDouble spliteratorDouble() { return new PrimitiveCollectionSpliterator.OfDouble(this, PrimitiveSpliterator.DISTINCT); }
     }
     /**
      * The {@code long} equivalent of a {@link java.util.Set set}
@@ -57,17 +64,21 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Long> iterator() { return PrimitiveCollection.OfLong.super.iterator(); }
+        @Override default Iterator<java.lang.Long> iterator() { return PrimitiveSet.OfLong.this.iteratorLong(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Long> spliterator() { return PrimitiveCollection.OfLong.super.spliterator(); }
+        @Override default Spliterator<java.lang.Long> spliterator() { return PrimitiveCollection.OfLong.super.spliteratorLong(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Long[] toArray() { return PrimitiveCollection.OfLong.super.toArray(); }
+
+        /////////////// long overrides
+        
+        @Override default PrimitiveSpliterator.OfLong spliteratorLong() { return new PrimitiveCollectionSpliterator.OfLong(this, PrimitiveSpliterator.DISTINCT); }
     }
     /**
      * The {@code int} equivalent of a {@link java.util.Set set}
@@ -88,17 +99,21 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Integer> iterator() { return PrimitiveCollection.OfInt.super.iterator(); }
+        @Override default Iterator<java.lang.Integer> iterator() { return PrimitiveSet.OfInt.this.iteratorInt(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Integer> spliterator() { return PrimitiveCollection.OfInt.super.spliterator(); }
+        @Override default Spliterator<java.lang.Integer> spliterator() { return PrimitiveCollection.OfInt.super.spliteratorInt(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Integer[] toArray() { return PrimitiveCollection.OfInt.super.toArray(); }
+
+        /////////////// int overrides
+        
+        @Override default PrimitiveSpliterator.OfInt spliteratorInt() { return new PrimitiveCollectionSpliterator.OfInt(this, PrimitiveSpliterator.DISTINCT); }
     }
     /**
      * The {@code float} equivalent of a {@link java.util.Set set}
@@ -119,17 +134,21 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Float> iterator() { return PrimitiveCollection.OfFloat.super.iterator(); }
+        @Override default Iterator<java.lang.Float> iterator() { return PrimitiveSet.OfFloat.this.iteratorFloat(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Float> spliterator() { return PrimitiveCollection.OfFloat.super.spliterator(); }
+        @Override default Spliterator<java.lang.Float> spliterator() { return PrimitiveCollection.OfFloat.super.spliteratorFloat(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Float[] toArray() { return PrimitiveCollection.OfFloat.super.toArray(); }
+
+        /////////////// float overrides
+        
+        @Override default PrimitiveSpliterator.OfFloat spliteratorFloat() { return new PrimitiveCollectionSpliterator.OfFloat(this, PrimitiveSpliterator.DISTINCT); }
     }
     /**
      * The {@code char} equivalent of a {@link java.util.Set set}
@@ -150,17 +169,21 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Character> iterator() { return PrimitiveCollection.OfChar.super.iterator(); }
+        @Override default Iterator<java.lang.Character> iterator() { return PrimitiveSet.OfChar.this.iteratorChar(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Character> spliterator() { return PrimitiveCollection.OfChar.super.spliterator(); }
+        @Override default Spliterator<java.lang.Character> spliterator() { return PrimitiveCollection.OfChar.super.spliteratorChar(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Character[] toArray() { return PrimitiveCollection.OfChar.super.toArray(); }
+
+        /////////////// char overrides
+        
+        @Override default PrimitiveSpliterator.OfChar spliteratorChar() { return new PrimitiveCollectionSpliterator.OfChar(this, PrimitiveSpliterator.DISTINCT); }
     }
     /**
      * The {@code short} equivalent of a {@link java.util.Set set}
@@ -181,17 +204,21 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Short> iterator() { return PrimitiveCollection.OfShort.super.iterator(); }
+        @Override default Iterator<java.lang.Short> iterator() { return PrimitiveSet.OfShort.this.iteratorShort(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Short> spliterator() { return PrimitiveCollection.OfShort.super.spliterator(); }
+        @Override default Spliterator<java.lang.Short> spliterator() { return PrimitiveCollection.OfShort.super.spliteratorShort(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Short[] toArray() { return PrimitiveCollection.OfShort.super.toArray(); }
+
+        /////////////// short overrides
+        
+        @Override default PrimitiveSpliterator.OfShort spliteratorShort() { return new PrimitiveCollectionSpliterator.OfShort(this, PrimitiveSpliterator.DISTINCT); }
     }
     /**
      * The {@code byte} equivalent of a {@link java.util.Set set}
@@ -212,17 +239,21 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Byte> iterator() { return PrimitiveCollection.OfByte.super.iterator(); }
+        @Override default Iterator<java.lang.Byte> iterator() { return PrimitiveSet.OfByte.this.iteratorByte(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Byte> spliterator() { return PrimitiveCollection.OfByte.super.spliterator(); }
+        @Override default Spliterator<java.lang.Byte> spliterator() { return PrimitiveCollection.OfByte.super.spliteratorByte(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Byte[] toArray() { return PrimitiveCollection.OfByte.super.toArray(); }
+
+        /////////////// byte overrides
+        
+        @Override default PrimitiveSpliterator.OfByte spliteratorByte() { return new PrimitiveCollectionSpliterator.OfByte(this, PrimitiveSpliterator.DISTINCT); }
     }
     /**
      * The {@code boolean} equivalent of a {@link java.util.Set set}
@@ -243,16 +274,20 @@ public interface PrimitiveSet<E, E_CONS> extends Set<E>, PrimitiveCollection<E, 
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Iterator<java.lang.Boolean> iterator() { return PrimitiveCollection.OfBoolean.super.iterator(); }
+        @Override default Iterator<java.lang.Boolean> iterator() { return PrimitiveSet.OfBoolean.this.iteratorBoolean(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
-        @Override default Spliterator<java.lang.Boolean> spliterator() { return PrimitiveCollection.OfBoolean.super.spliterator(); }
+        @Override default Spliterator<java.lang.Boolean> spliterator() { return PrimitiveCollection.OfBoolean.super.spliteratorBoolean(); }
         /**
          * {@inheritDoc}
          * @return {@inheritDoc}
          */
         @Override default java.lang.Boolean[] toArray() { return PrimitiveCollection.OfBoolean.super.toArray(); }
+
+        /////////////// boolean overrides
+        
+        @Override default PrimitiveSpliterator.OfBoolean spliteratorBoolean() { return new PrimitiveCollectionSpliterator.OfBoolean(this, PrimitiveSpliterator.DISTINCT); }
     }
 }
