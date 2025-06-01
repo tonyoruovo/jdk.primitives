@@ -16,7 +16,7 @@ import java.util.function.Predicate;
  * {@link NullPointerException}
  */
 public final class PrimitiveArrays {
-    /** Uninstatiable */
+    /** Uninstantiable */
     private PrimitiveArrays() {
     }
 
@@ -5117,6 +5117,55 @@ public final class PrimitiveArrays {
         boolean tmp = array[index1];
         array[index1] = array[index2];
         array[index2] = tmp;
+    }
+
+    static void rangeCheck(int len, int from, int to) {
+        if (from > to) {
+            throw new IllegalArgumentException(
+                "from(" + from + ") > to(" + to + ")");
+        }
+        if (from < 0) {
+            throw new ArrayIndexOutOfBoundsException(from);
+        }
+        if (to > len) {
+            throw new ArrayIndexOutOfBoundsException(to);
+        }
+    }
+
+    /**
+     * @see java.util.Arrays#parallelPrefix
+     */
+    public static void parallelPrefix(float[] a, jdk.prim.util.function.PrimitiveBiFunction.ToFloat.OfFloat.AndFloat op) {
+        if(a.length > 0)
+            new PrimitiveArrayHelper.FloatCummulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * @see java.util.Arrays#parallelPrefix
+     */
+    public static void parallelPrefix(char[] a, jdk.prim.util.function.PrimitiveBiFunction.ToChar.OfChar.AndChar op) {
+        if(a.length > 0)
+            new PrimitiveArrayHelper.CharCummulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * @see java.util.Arrays#parallelPrefix
+     */
+    public static void parallelPrefix(short[] a, jdk.prim.util.function.PrimitiveBiFunction.ToShort.OfShort.AndShort op) {
+        if(a.length > 0)
+            new PrimitiveArrayHelper.ShortCummulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * @see java.util.Arrays#parallelPrefix
+     */
+    public static void parallelPrefix(byte[] a, jdk.prim.util.function.PrimitiveBiFunction.ToByte.OfByte.AndByte op) {
+        if(a.length > 0)
+            new PrimitiveArrayHelper.ByteCummulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * @see java.util.Arrays#parallelPrefix
+     */
+    public static void parallelPrefix(boolean[] a, jdk.prim.util.function.PrimitiveBiFunction.ToBoolean.OfBoolean.AndBoolean op) {
+        if(a.length > 0)
+            new PrimitiveArrayHelper.BooleanCummulateTask(null, op, a, 0, a.length, op).invoke();
     }
 
 }

@@ -10,6 +10,7 @@ import jdk.prim.util.PrimitiveComparator;
 import jdk.prim.util.map.PrimitiveEntry;
 import jdk.prim.util.sort.PrimitiveBasicQuickSort;
 import jdk.prim.util.sort.PrimitiveDualPivot;
+import jdk.prim.util.PrimitiveArrays;
 import jdk.prim.util.sort.PrimitiveNaiveQuickSort;
 
 /**
@@ -109,18 +110,18 @@ public class Main
     }
 	
     public static void main( String[] args ) {
-        var d = Arrays.toString(BOOLEAN);
-        System.err.println(d);
+        // var d = Arrays.toString(BOOLEAN);
+        // System.err.println(d);
 
-        var sorted = new boolean[BOOLEAN.length];
-        PrimitiveDualPivot.ofBoolean(ForkJoinPool.getCommonPoolParallelism()).sort(BOOLEAN, sorted);
+        // var sorted = new boolean[BOOLEAN.length];
+        // PrimitiveDualPivot.ofBoolean(ForkJoinPool.getCommonPoolParallelism()).sort(BOOLEAN, sorted);
 
-        d = Arrays.toString(sorted);
-        System.err.println(d);
+        // d = Arrays.toString(sorted);
+        // System.err.println(d);
 
-        var c = c();
-        var k = c.getKeyChar();
-        var c2 = c.mapToDoubleKey(x -> x);
-        var k2 = c2.getKeyDouble();
+        float[] fa = { 1f, 2f, 4f, 5f, };
+
+        PrimitiveArrays.parallelPrefix(fa, (x, y) -> x + y);
+        System.out.println(Arrays.toString(fa));
     }
 }

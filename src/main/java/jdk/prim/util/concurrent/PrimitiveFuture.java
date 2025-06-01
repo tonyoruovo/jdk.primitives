@@ -126,7 +126,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getDouble()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
@@ -262,7 +262,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getLong()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
@@ -398,7 +398,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getInt()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
@@ -534,7 +534,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getFloat()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
@@ -670,7 +670,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getChar()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
@@ -806,7 +806,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getShort()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
@@ -942,7 +942,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getByte()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
@@ -1078,7 +1078,7 @@ public interface PrimitiveFuture<TO> extends Future<TO> {
          * @implNote This is overridden to allow for the specialised
          * {@link #getBoolean()} to be used instead of {@link #get()}
          */
-        @Override default State state() {
+        @Override default Future.State state() {
         if (!isDone())
             return State.RUNNING;
         if (isCancelled())
