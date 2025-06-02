@@ -5373,7 +5373,7 @@ public final class PrimitiveArrays {
      * @param op the defined modification of the elements
      */
     public static void parallelPrefix(float[] a, jdk.prim.util.function.PrimitiveBiFunction.ToFloat.OfFloat.AndFloat op) {
-        new PrimitiveArrayHelper.FloatCumulateTask(null, op, a, 0, a.length, op).invoke();
+        new PrimitiveArrayHelper.FloatCumulateTask(null, op, a, 0, a.length).invoke();
     }
     /**
      * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code char} array
@@ -5381,7 +5381,7 @@ public final class PrimitiveArrays {
      * @param op the defined modification of the elements
      */
     public static void parallelPrefix(char[] a, jdk.prim.util.function.PrimitiveBiFunction.ToChar.OfChar.AndChar op) {
-        new PrimitiveArrayHelper.CharCumulateTask(null, op, a, 0, a.length, op).invoke();
+        new PrimitiveArrayHelper.CharCumulateTask(null, op, a, 0, a.length).invoke();
     }
     /**
      * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code short} array
@@ -5389,7 +5389,7 @@ public final class PrimitiveArrays {
      * @param op the defined modification of the elements
      */
     public static void parallelPrefix(short[] a, jdk.prim.util.function.PrimitiveBiFunction.ToShort.OfShort.AndShort op) {
-        new PrimitiveArrayHelper.ShortCumulateTask(null, op, a, 0, a.length, op).invoke();
+        new PrimitiveArrayHelper.ShortCumulateTask(null, op, a, 0, a.length).invoke();
     }
     /**
      * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code byte} array
@@ -5397,7 +5397,7 @@ public final class PrimitiveArrays {
      * @param op the defined modification of the elements
      */
     public static void parallelPrefix(byte[] a, jdk.prim.util.function.PrimitiveBiFunction.ToByte.OfByte.AndByte op) {
-        new PrimitiveArrayHelper.ByteCumulateTask(null, op, a, 0, a.length, op).invoke();
+        new PrimitiveArrayHelper.ByteCumulateTask(null, op, a, 0, a.length).invoke();
     }
     /**
      * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code boolean} array
@@ -5405,9 +5405,65 @@ public final class PrimitiveArrays {
      * @param op the defined modification of the elements
      */
     public static void parallelPrefix(boolean[] a, jdk.prim.util.function.PrimitiveBiFunction.ToBoolean.OfBoolean.AndBoolean op) {
-        new PrimitiveArrayHelper.BooleanCumulateTask(null, op, a, 0, a.length, op).invoke();
+        new PrimitiveArrayHelper.BooleanCumulateTask(null, op, a, 0, a.length).invoke();
     }
 
+    /**
+     * Utility for creating an empty {@code double} array
+     * @return a {@code double[]} whose {@code length} is {@code 0}
+     */
+    public static final double[] emptyDouble() {
+        return new double[]{};
+    }
+    /**
+     * Utility for creating an empty {@code long} array
+     * @return a {@code long[]} whose {@code length} is {@code 0}
+     */
+    public static final long[] emptyLong() {
+        return new long[]{};
+    }
+    /**
+     * Utility for creating an empty {@code int} array
+     * @return a {@code int[]} whose {@code length} is {@code 0}
+     */
+    public static final int[] emptyInt() {
+        return new int[]{};
+    }
+    /**
+     * Utility for creating an empty {@code float} array
+     * @return a {@code float[]} whose {@code length} is {@code 0}
+     */
+    public static final float[] emptyFloat() {
+        return new float[]{};
+    }
+    /**
+     * Utility for creating an empty {@code char} array
+     * @return a {@code char[]} whose {@code length} is {@code 0}
+     */
+    public static final char[] emptyChar() {
+        return new char[]{};
+    }
+    /**
+     * Utility for creating an empty {@code short} array
+     * @return a {@code short[]} whose {@code length} is {@code 0}
+     */
+    public static final short[] emptyShort() {
+        return new short[]{};
+    }
+    /**
+     * Utility for creating an empty {@code byte} array
+     * @return a {@code byte[]} whose {@code length} is {@code 0}
+     */
+    public static final byte[] emptyByte() {
+        return new byte[]{};
+    }
+    /**
+     * Utility for creating an empty {@code boolean} array
+     * @return a {@code boolean[]} whose {@code length} is {@code 0}
+     */
+    public static final boolean[] emptyBoolean() {
+        return new boolean[]{};
+    }
     static void rangeCheck(int len, int from, int to) {
         if (from > to) {
             throw new IllegalArgumentException(

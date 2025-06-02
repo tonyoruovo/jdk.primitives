@@ -40,6 +40,16 @@ import jdk.prim.util.function.PrimitiveConsumer;
 import jdk.prim.util.function.PrimitiveFunction;
 import jdk.prim.util.function.PrimitivePredicate;
 
+/**
+ * @see java.util.stream.Streams
+ * @see java.util.stream.StreamSupport
+ * @see java.util.stream.IntPipeline
+ * @see java.util.stream.AbstractPipeline
+ * @see java.util.stream.PipelineHelper
+ * @see java.util.stream.Sink
+ * @see java.util.stream.Node
+ * @see java.util.stream.Node.Builder
+ */
 public interface PrimitiveStream<
 T,
 DoubleMapper extends PrimitiveFunction.ToDouble<T>,

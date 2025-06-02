@@ -119,9 +119,9 @@ public class Main
         // d = Arrays.toString(sorted);
         // System.err.println(d);
 
-        float[] fa = { 1f, 2f, 4f, 5f, };
+        int[] fa = { 1, 2, 4, 5, };
 
-        PrimitiveArrays.parallelPrefix(fa, (x, y) -> x + y);
+        Arrays.parallelPrefix(fa, (x, y) -> x + y);
         System.out.println(Arrays.toString(fa));
     }
 }
