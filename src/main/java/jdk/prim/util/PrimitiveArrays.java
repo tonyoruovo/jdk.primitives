@@ -4796,10 +4796,25 @@ public final class PrimitiveArrays {
         return array;
     }
 
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(double[])}
+     */
     public static void sort(double[] array, PrimitiveComparator.OfDouble comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(double[], int, int)}
+     */
     public static void sort(double[] array, int from, int to, PrimitiveComparator.OfDouble comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4807,10 +4822,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(double[])}
+     */
     public static void parallelSort(double[] array, PrimitiveComparator.OfDouble comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(double[], int, int)}
+     */
     public static void parallelSort(double[] array, int from, int to, PrimitiveComparator.OfDouble comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4818,10 +4849,25 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofDouble(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfDouble.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(long[])}
+     */
     public static void sort(long[] array, PrimitiveComparator.OfLong comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofLong(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(long[], int, int)}
+     */
     public static void sort(long[] array, int from, int to, PrimitiveComparator.OfLong comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4829,10 +4875,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofLong(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(long[])}
+     */
     public static void parallelSort(long[] array, PrimitiveComparator.OfLong comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofLong(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(long[], int, int)}
+     */
     public static void parallelSort(long[] array, int from, int to, PrimitiveComparator.OfLong comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4840,10 +4902,25 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofLong(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfLong.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(int[])}
+     */
     public static void sort(int[] array, PrimitiveComparator.OfInt comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofInt(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(int[], int, int)}
+     */
     public static void sort(int[] array, int from, int to, PrimitiveComparator.OfInt comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4851,10 +4928,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofInt(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(int[])}
+     */
     public static void parallelSort(int[] array, PrimitiveComparator.OfInt comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofInt(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(int[], int, int)}
+     */
     public static void parallelSort(int[] array, int from, int to, PrimitiveComparator.OfInt comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4862,10 +4955,25 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofInt(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfInt.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(float[])}
+     */
     public static void sort(float[] array, PrimitiveComparator.OfFloat comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(float[], int, int)}
+     */
     public static void sort(float[] array, int from, int to, PrimitiveComparator.OfFloat comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4873,10 +4981,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(float[])}
+     */
     public static void parallelSort(float[] array, PrimitiveComparator.OfFloat comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(float[], int, int)}
+     */
     public static void parallelSort(float[] array, int from, int to, PrimitiveComparator.OfFloat comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4884,10 +5008,25 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofFloat(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfFloat.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(char[])}
+     */
     public static void sort(char[] array, PrimitiveComparator.OfChar comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofChar(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(char[], int, int)}
+     */
     public static void sort(char[] array, int from, int to, PrimitiveComparator.OfChar comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4895,10 +5034,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofChar(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(char[])}
+     */
     public static void parallelSort(char[] array, PrimitiveComparator.OfChar comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofChar(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(char[], int, int)}
+     */
     public static void parallelSort(char[] array, int from, int to, PrimitiveComparator.OfChar comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4906,10 +5061,25 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofChar(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfChar.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(short[])}
+     */
     public static void sort(short[] array, PrimitiveComparator.OfShort comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofShort(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(short[], int, int)}
+     */
     public static void sort(short[] array, int from, int to, PrimitiveComparator.OfShort comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4917,10 +5087,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofShort(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(short[])}
+     */
     public static void parallelSort(short[] array, PrimitiveComparator.OfShort comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofShort(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(short[], int, int)}
+     */
     public static void parallelSort(short[] array, int from, int to, PrimitiveComparator.OfShort comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4928,10 +5114,25 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofShort(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfShort.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(byte[])}
+     */
     public static void sort(byte[] array, PrimitiveComparator.OfByte comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofByte(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(byte[], int, int)}
+     */
     public static void sort(byte[] array, int from, int to, PrimitiveComparator.OfByte comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4939,10 +5140,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofByte(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(byte[])}
+     */
     public static void parallelSort(byte[] array, PrimitiveComparator.OfByte comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofByte(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(byte[], int, int)}
+     */
     public static void parallelSort(byte[] array, int from, int to, PrimitiveComparator.OfByte comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4950,10 +5167,25 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofByte(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfByte.sort(array, ForkJoinPool.getCommonPoolParallelism(), from, to, comparator);
     }
+    /**
+     * Sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * @see {@link java.util.Arrays#sort(boolean[])}
+     */
     public static void sort(boolean[] array, PrimitiveComparator.OfBoolean comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofBoolean(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfBoolean.sort(array, 0, 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering of the elements of the array
+     * 
+     * @see {@link java.util.Arrays#sort(boolean[], int, int)}
+     */
     public static void sort(boolean[] array, int from, int to, PrimitiveComparator.OfBoolean comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -4961,10 +5193,26 @@ public final class PrimitiveArrays {
         jdk.prim.util.sort.PrimitiveDualPivot.ofBoolean(0).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfBoolean.sort(array, 0, from, to, comparator);
     }
+    /**
+     * Parallel sort operation that supports a comparator
+     * @param array the array to be sorted
+     * @param comparator the comparator that defined ordering fot the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(boolean[])}
+     */
     public static void parallelSort(boolean[] array, PrimitiveComparator.OfBoolean comparator) {
         jdk.prim.util.sort.PrimitiveDualPivot.ofBoolean(ForkJoinPool.getCommonPoolParallelism()).sort(array, comparator, null);
         // jdk.prim.util.dpqs.OfBoolean.sort(array, ForkJoinPool.getCommonPoolParallelism(), 0, array.length, comparator);
     }
+    /**
+     * Parallel range sort operator that supports a comparator
+     * @param array the array to be sorted
+     * @param from the beginning of the range (inclusive)
+     * @param to the end of the range (exclusive)
+     * @param comparator the comparator that defines the ordering for the elements of the array
+     * 
+     * @see {@link java.util.Arrays#parallelSort(boolean[], int, int)}
+     */
     public static void parallelSort(boolean[] array, int from, int to, PrimitiveComparator.OfBoolean comparator) {
         Objects.checkFromIndexSize(from, to - from - 1, array.length);
         Objects.checkIndex(to, array.length);
@@ -5119,6 +5367,47 @@ public final class PrimitiveArrays {
         array[index2] = tmp;
     }
 
+    /**
+     * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code float} array
+     * @param a the array to be modified
+     * @param op the defined modification of the elements
+     */
+    public static void parallelPrefix(float[] a, jdk.prim.util.function.PrimitiveBiFunction.ToFloat.OfFloat.AndFloat op) {
+        new PrimitiveArrayHelper.FloatCumulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code char} array
+     * @param a the array to be modified
+     * @param op the defined modification of the elements
+     */
+    public static void parallelPrefix(char[] a, jdk.prim.util.function.PrimitiveBiFunction.ToChar.OfChar.AndChar op) {
+        new PrimitiveArrayHelper.CharCumulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code short} array
+     * @param a the array to be modified
+     * @param op the defined modification of the elements
+     */
+    public static void parallelPrefix(short[] a, jdk.prim.util.function.PrimitiveBiFunction.ToShort.OfShort.AndShort op) {
+        new PrimitiveArrayHelper.ShortCumulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code byte} array
+     * @param a the array to be modified
+     * @param op the defined modification of the elements
+     */
+    public static void parallelPrefix(byte[] a, jdk.prim.util.function.PrimitiveBiFunction.ToByte.OfByte.AndByte op) {
+        new PrimitiveArrayHelper.ByteCumulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+    /**
+     * Implements {@link java.util.Arrays#parallelPrefix parallel prefix} for {@code boolean} array
+     * @param a the array to be modified
+     * @param op the defined modification of the elements
+     */
+    public static void parallelPrefix(boolean[] a, jdk.prim.util.function.PrimitiveBiFunction.ToBoolean.OfBoolean.AndBoolean op) {
+        new PrimitiveArrayHelper.BooleanCumulateTask(null, op, a, 0, a.length, op).invoke();
+    }
+
     static void rangeCheck(int len, int from, int to) {
         if (from > to) {
             throw new IllegalArgumentException(
@@ -5130,42 +5419,6 @@ public final class PrimitiveArrays {
         if (to > len) {
             throw new ArrayIndexOutOfBoundsException(to);
         }
-    }
-
-    /**
-     * @see java.util.Arrays#parallelPrefix
-     */
-    public static void parallelPrefix(float[] a, jdk.prim.util.function.PrimitiveBiFunction.ToFloat.OfFloat.AndFloat op) {
-        if(a.length > 0)
-            new PrimitiveArrayHelper.FloatCummulateTask(null, op, a, 0, a.length, op).invoke();
-    }
-    /**
-     * @see java.util.Arrays#parallelPrefix
-     */
-    public static void parallelPrefix(char[] a, jdk.prim.util.function.PrimitiveBiFunction.ToChar.OfChar.AndChar op) {
-        if(a.length > 0)
-            new PrimitiveArrayHelper.CharCummulateTask(null, op, a, 0, a.length, op).invoke();
-    }
-    /**
-     * @see java.util.Arrays#parallelPrefix
-     */
-    public static void parallelPrefix(short[] a, jdk.prim.util.function.PrimitiveBiFunction.ToShort.OfShort.AndShort op) {
-        if(a.length > 0)
-            new PrimitiveArrayHelper.ShortCummulateTask(null, op, a, 0, a.length, op).invoke();
-    }
-    /**
-     * @see java.util.Arrays#parallelPrefix
-     */
-    public static void parallelPrefix(byte[] a, jdk.prim.util.function.PrimitiveBiFunction.ToByte.OfByte.AndByte op) {
-        if(a.length > 0)
-            new PrimitiveArrayHelper.ByteCummulateTask(null, op, a, 0, a.length, op).invoke();
-    }
-    /**
-     * @see java.util.Arrays#parallelPrefix
-     */
-    public static void parallelPrefix(boolean[] a, jdk.prim.util.function.PrimitiveBiFunction.ToBoolean.OfBoolean.AndBoolean op) {
-        if(a.length > 0)
-            new PrimitiveArrayHelper.BooleanCummulateTask(null, op, a, 0, a.length, op).invoke();
     }
 
 }
