@@ -1,6 +1,7 @@
 package jdk.prim.util;
 
 import java.util.Objects;
+import java.util.Spliterator;
 
 import jdk.prim.util.function.PrimitiveConsumer;
 
@@ -8,6 +9,10 @@ public class PrimitiveSpliterators {
     public static PrimitiveSpliterator.OfDouble spliterator(double[] array, int from, int to, int additionalCharacteristics) {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfDouble(array, from, to, additionalCharacteristics);
+    }
+    public static PrimitiveSpliterator.OfDouble spliterator(double[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfDouble(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
     public static PrimitiveSpliterator.OfDouble emptyDouble() {
         return new PrimitiveSpliterator.OfDouble() {
@@ -37,6 +42,10 @@ public class PrimitiveSpliterators {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfLong(array, from, to, additionalCharacteristics);
     }
+    public static PrimitiveSpliterator.OfLong spliterator(long[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfLong(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+    }
     public static PrimitiveSpliterator.OfLong emptyLong() {
         return new PrimitiveSpliterator.OfLong() {
             public int characteristics() { return PrimitiveSpliterator.SIZED | PrimitiveSpliterator.SUBSIZED; }
@@ -64,6 +73,10 @@ public class PrimitiveSpliterators {
     public static PrimitiveSpliterator.OfInt spliterator(int[] array, int from, int to, int additionalCharacteristics) {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfInt(array, from, to, additionalCharacteristics);
+    }
+    public static PrimitiveSpliterator.OfInt spliterator(int[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfInt(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
     public static PrimitiveSpliterator.OfInt emptyInt() {
         return new PrimitiveSpliterator.OfInt() {
@@ -93,6 +106,10 @@ public class PrimitiveSpliterators {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfFloat(array, from, to, additionalCharacteristics);
     }
+    public static PrimitiveSpliterator.OfFloat spliterator(float[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfFloat(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+    }
     public static PrimitiveSpliterator.OfFloat emptyFloat() {
         return new PrimitiveSpliterator.OfFloat() {
             public int characteristics() { return PrimitiveSpliterator.SIZED | PrimitiveSpliterator.SUBSIZED; }
@@ -120,6 +137,10 @@ public class PrimitiveSpliterators {
     public static PrimitiveSpliterator.OfChar spliterator(char[] array, int from, int to, int additionalCharacteristics) {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfChar(array, from, to, additionalCharacteristics);
+    }
+    public static PrimitiveSpliterator.OfChar spliterator(char[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfChar(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
     public static PrimitiveSpliterator.OfChar emptyChar() {
         return new PrimitiveSpliterator.OfChar() {
@@ -149,6 +170,10 @@ public class PrimitiveSpliterators {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfShort(array, from, to, additionalCharacteristics);
     }
+    public static PrimitiveSpliterator.OfShort spliterator(short[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfShort(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+    }
     public static PrimitiveSpliterator.OfShort emptyShort() {
         return new PrimitiveSpliterator.OfShort() {
             public int characteristics() { return PrimitiveSpliterator.SIZED | PrimitiveSpliterator.SUBSIZED; }
@@ -177,6 +202,10 @@ public class PrimitiveSpliterators {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfByte(array, from, to, additionalCharacteristics);
     }
+    public static PrimitiveSpliterator.OfByte spliterator(byte[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfByte(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+    }
     public static PrimitiveSpliterator.OfByte emptyByte() {
         return new PrimitiveSpliterator.OfByte() {
             public int characteristics() { return PrimitiveSpliterator.SIZED | PrimitiveSpliterator.SUBSIZED; }
@@ -204,6 +233,10 @@ public class PrimitiveSpliterators {
     public static PrimitiveSpliterator.OfBoolean spliterator(boolean[] array, int from, int to, int additionalCharacteristics) {
         checkFromToBounds(Objects.requireNonNull(array).length, from, to);
         return new ArraySpliterator.OfBoolean(array, from, to, additionalCharacteristics);
+    }
+    public static PrimitiveSpliterator.OfBoolean spliterator(boolean[] array, int from, int to) {
+        checkFromToBounds(Objects.requireNonNull(array).length, from, to);
+        return new ArraySpliterator.OfBoolean(array, from, to, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
     public static PrimitiveSpliterator.OfBoolean emptyBoolean() {
         return new PrimitiveSpliterator.OfBoolean() {
