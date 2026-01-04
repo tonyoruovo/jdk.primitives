@@ -29,15 +29,15 @@ import jdk.prim.util.function.PrimitivePredicate;
  * @apiNote In the future I intend to implement the following
  *          <code>PrimitiveIterators</code>:
  *          <ul>
- *          <li>ConsumerIterator with the {@code PrimitiveIterators.consumer(int[] data)}
+ *          <li>Consumer-Iterator with the {@code PrimitiveIterators.consumer(int[] data)}
  *          and {@code PrimitiveIterators.asConsumer(PrimitiveIterator.OfInt iterator)}
  *          static methods. This {@code Iterator} will always call
  *          {@link Iterator#remove()} after every call. if the call throws an
  *          Exception, that exception is caught and the user never sees it.</li>
- *          <li>{@code Examiner} an iterator that supports examining an
+ *          <li>{@code Examiner} an iterator that supports examining or
  *          accessing an element without advancing the cursor
  *          </li>
- *          <li>PartitionedIterator with {@code PrimitiveIterators.partition(int[] data)}
+ *          <li>Partitioned-Iterator with {@code PrimitiveIterators.partition(int[] data)}
  *          which will return an Iterator of IntList where each of the list
  *          contains equal int elements.</li>
  *          </ul>
@@ -283,7 +283,7 @@ public final class PrimitiveIterators {
 	 * Creates an {@code Iterator} for an array of type {@code <T>}
 	 *
 	 * @param <T>  the type of the elements of this array
-	 * @param data the array to iterate over
+	 * @param collection the array to iterate over
 	 * @return an {@code Iterator} for the specified array
 	 */
 	public static <T> Iterator<T> i(T[] collection) {
@@ -350,7 +350,7 @@ public final class PrimitiveIterators {
 	 * iteration over the elements of the iterator.
 	 * </p>
 	 * 
-	 * @param producer a supplier function that produces an iterator. An infinite
+	 * @param producer an idempotent supplier function that produces an iterator. An infinite
 	 *                 {@code Iterator} can never be cycled.
 	 * @param <T>      the type of elements in the iterator
 	 * @return a cyclic iterator generated from the provided iterator
@@ -358,13 +358,13 @@ public final class PrimitiveIterators {
 	public static <T> PrimitiveCyclicIterator<T> asCyclic(Supplier<? extends Iterator<? extends T>> producer) {
 		return new PrimitiveCyclicIterator<>() {
 			int rev = 0;// revolutions
-			Iterator<? extends T> doppleganger = producer.get();
+			Iterator<? extends T> doppelganger = producer.get();
 
 			@Override
 			public T next() throws NoSuchElementException {
-				T next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = producer.get();
+				T next = doppelganger.next();
+				if (!doppelganger.hasNext()) {
+					doppelganger = producer.get();
 					rev++;
 				}
 				return next;
@@ -390,13 +390,13 @@ public final class PrimitiveIterators {
 	public static <T> PrimitiveCyclicIterator<T> c(Iterable<? extends T> collection) {
 		return new PrimitiveCyclicIterator<>() {
 			int rev = 0;// revolutions
-			Iterator<? extends T> doppleganger = collection.iterator();
+			Iterator<? extends T> doppelganger = collection.iterator();
 
 			@Override
 			public T next() throws NoSuchElementException {
-				T next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = collection.iterator();
+				T next = doppelganger.next();
+				if (!doppelganger.hasNext()) {
+					doppelganger = collection.iterator();
 					rev++;
 				}
 				return next;
@@ -422,13 +422,13 @@ public final class PrimitiveIterators {
 	public static <T> PrimitiveCyclicIterator<T> c(T[] collection) {
 		return new PrimitiveCyclicIterator<>() {
 			int rev = 0;// revolutions
-			Iterator<T> doppleganger = i(collection);
+			Iterator<T> doppelganger = i(collection);
 
 			@Override
 			public T next() throws NoSuchElementException {
-				T next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(collection);
+				T next = doppelganger.next();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(collection);
 					rev++;
 				}
 				return next;
@@ -453,7 +453,7 @@ public final class PrimitiveIterators {
 	public static PrimitiveCyclicIterator.OfDouble c(double[] data) {
 		return new PrimitiveCyclicIterator.OfDouble() {
 			int rev = 0;// revolutions
-			PrimitiveIterator.OfDouble doppleganger = i(data);
+			PrimitiveIterator.OfDouble doppelganger = i(data);
 
 			@Override
 			public int getRevolutions() {
@@ -462,9 +462,9 @@ public final class PrimitiveIterators {
 
 			@Override
 			public double nextDouble() {
-				double next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(data);
+				double next = doppelganger.nextDouble();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
 					rev++;
 				}
 				return next;
@@ -484,7 +484,7 @@ public final class PrimitiveIterators {
 	public static PrimitiveCyclicIterator.OfLong c(long[] data) {
 		return new PrimitiveCyclicIterator.OfLong() {
 			int rev = 0;// revolutions
-			PrimitiveIterator.OfLong doppleganger = i(data);
+			PrimitiveIterator.OfLong doppelganger = i(data);
 
 			@Override
 			public int getRevolutions() {
@@ -493,16 +493,16 @@ public final class PrimitiveIterators {
 
 			@Override
 			public long nextLong() {
-				long next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(data);
+				long next = doppelganger.nextLong();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
 					rev++;
 				}
 				return next;
-//				if (doppleganger.hasNext())
-//					return doppleganger.next();
+//				if (doppelganger.hasNext())
+//					return doppelganger.next();
 //				rev++;
-//				doppleganger = i(data);
+//				doppelganger = i(data);
 //				return next();
 			}
 		};
@@ -520,7 +520,7 @@ public final class PrimitiveIterators {
 	public static PrimitiveCyclicIterator.OfInt c(int[] data) {
 		return new PrimitiveCyclicIterator.OfInt() {
 			int rev = 0;// revolutions
-			PrimitiveIterator.OfInt doppleganger = i(data);
+			PrimitiveIterator.OfInt doppelganger = i(data);
 
 			@Override
 			public int getRevolutions() {
@@ -529,9 +529,9 @@ public final class PrimitiveIterators {
 
 			@Override
 			public int nextInt() {
-				int next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(data);
+				int next = doppelganger.nextInt();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
 					rev++;
 				}
 				return next;
@@ -551,7 +551,7 @@ public final class PrimitiveIterators {
 	public static PrimitiveCyclicIterator.OfChar c(char[] data) {
 		return new PrimitiveCyclicIterator.OfChar() {
 			int rev = 0;// revolutions
-			PrimitiveIterator.OfChar doppleganger = i(data);
+			PrimitiveIterator.OfChar doppelganger = i(data);
 
 			@Override
 			public int getRevolutions() {
@@ -560,9 +560,9 @@ public final class PrimitiveIterators {
 
 			@Override
 			public char nextChar() {
-				char next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(data);
+				char next = doppelganger.nextChar();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
 					rev++;
 				}
 				return next;
@@ -582,7 +582,7 @@ public final class PrimitiveIterators {
 	public static PrimitiveCyclicIterator.OfShort c(short[] data) {
 		return new PrimitiveCyclicIterator.OfShort() {
 			int rev = 0;// revolutions
-			PrimitiveIterator.OfShort doppleganger = i(data);
+			PrimitiveIterator.OfShort doppelganger = i(data);
 
 			@Override
 			public int getRevolutions() {
@@ -591,9 +591,36 @@ public final class PrimitiveIterators {
 
 			@Override
 			public short nextShort() {
-				short next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(data);
+				short next = doppelganger.nextShort();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
+					rev++;
+				}
+				return next;
+			}
+		};
+	}
+
+	/**
+	 * Creates a {@code PrimitiveCyclicIterator.OfFloat} for a {@code float} array.
+	 * @param data the {@code float} array to iterate over cyclically
+	 * @return a {@code PrimitiveCyclicIterator.OfFloat} for the specified array
+	 */
+	public static PrimitiveCyclicIterator.OfFloat c(float[] data) {
+		return new PrimitiveCyclicIterator.OfFloat() {
+			int rev = 0;// revolutions
+			PrimitiveIterator.OfFloat doppelganger = i(data);
+
+			@Override
+			public int getRevolutions() {
+				return rev > -1 ? rev : Integer.MAX_VALUE;
+			}
+
+			@Override
+			public float nextFloat() {
+				float next = doppelganger.nextFloat();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
 					rev++;
 				}
 				return next;
@@ -613,7 +640,7 @@ public final class PrimitiveIterators {
 	public static PrimitiveCyclicIterator.OfByte c(byte[] data) {
 		return new PrimitiveCyclicIterator.OfByte() {
 			int rev = 0;// revolutions
-			PrimitiveIterator.OfByte doppleganger = i(data);
+			PrimitiveIterator.OfByte doppelganger = i(data);
 
 			@Override
 			public int getRevolutions() {
@@ -622,9 +649,9 @@ public final class PrimitiveIterators {
 
 			@Override
 			public byte nextByte() {
-				byte next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(data);
+				byte next = doppelganger.nextByte();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
 					rev++;
 				}
 				return next;
@@ -644,7 +671,7 @@ public final class PrimitiveIterators {
 	public static PrimitiveCyclicIterator.OfBoolean c(boolean[] data) {
 		return new PrimitiveCyclicIterator.OfBoolean() {
 			int rev = 0;// revolutions
-			PrimitiveIterator.OfBoolean doppleganger = i(data);
+			PrimitiveIterator.OfBoolean doppelganger = i(data);
 
 			@Override
 			public int getRevolutions() {
@@ -653,9 +680,9 @@ public final class PrimitiveIterators {
 
 			@Override
 			public boolean nextBoolean() {
-				boolean next = doppleganger.next();
-				if (!doppleganger.hasNext()) {
-					doppleganger = i(data);
+				boolean next = doppelganger.nextBoolean();
+				if (!doppelganger.hasNext()) {
+					doppelganger = i(data);
 					rev++;
 				}
 				return next;
@@ -1169,7 +1196,7 @@ public final class PrimitiveIterators {
 	 * @param data the {@code long} array to be iterated over
 	 * @return a {@code PrimitiveListIterator.OfLong} for the specified {@code long}
 	 *         array
-	 * @throws NullPolongerException if the specified array is null
+	 * @throws NullPointerException if the specified array is null
 	 */
 	public static PrimitiveListIterator.OfLong li(long[] data) {
 		return new PrimitiveListIterator.OfLong() {
@@ -1248,7 +1275,7 @@ public final class PrimitiveIterators {
 	 * @param data the {@code double} array to be iterated over
 	 * @return a {@code PrimitiveListIterator.OfDouble} for the specified
 	 *         {@code double} array
-	 * @throws NullPodoubleerException if the specified array is null
+	 * @throws NullPointerException if the specified array is null
 	 */
 	public static PrimitiveListIterator.OfDouble li(double[] data) {
 		return new PrimitiveListIterator.OfDouble() {
@@ -1506,8 +1533,8 @@ public final class PrimitiveIterators {
 	 * @param endExclusive   the end value of the iterator (exclusive)
 	 * @return a primitive iterator of {@code long} values
 	 */
-	public static PrimitiveIterator.OfLong l(long startInclusive, long step, long endExlusive) {
-		return l(startInclusive, l -> l + step, l -> Math.abs(l + step) < Math.abs(endExlusive));
+	public static PrimitiveIterator.OfLong l(long startInclusive, long step, long endExclusive) {
+		return l(startInclusive, l -> l + step, l -> Math.abs(l + step) < Math.abs(endExclusive));
 	}
 
 	/*
@@ -1615,8 +1642,8 @@ public final class PrimitiveIterators {
 	 * @param endExclusive   the end value of the iterator (exclusive)
 	 * @return a primitive iterator of {@code int} values
 	 */
-	public static PrimitiveIterator.OfInt i(int startInclusive, int step, int endExlusive) {
-		return i(startInclusive, l -> l + step, l -> Math.abs(l) < Math.abs(endExlusive));
+	public static PrimitiveIterator.OfInt i(int startInclusive, int step, int endExclusive) {
+		return i(startInclusive, l -> l + step, l -> Math.abs(l) < Math.abs(endExclusive));
 	}
 
 	/*
@@ -1703,8 +1730,8 @@ public final class PrimitiveIterators {
 	 * @param endExclusive   the end value of the iterator (exclusive)
 	 * @return a primitive iterator of {@code float} values
 	 */
-	public static PrimitiveIterator.OfFloat f(float startInclusive, float step, float endExlusive) {
-		return f(startInclusive, l -> l + step, l -> Math.abs(l) < Math.abs(endExlusive));
+	public static PrimitiveIterator.OfFloat f(float startInclusive, float step, float endExclusive) {
+		return f(startInclusive, l -> l + step, l -> Math.abs(l) < Math.abs(endExclusive));
 	}
 
 	/*
@@ -1770,8 +1797,8 @@ public final class PrimitiveIterators {
 	 * @param endExclusive   the end value of the iterator (exclusive)
 	 * @return a primitive iterator of {@code short} values
 	 */
-	public static PrimitiveIterator.OfShort s(short startInclusive, short step, short endExlusive) {
-		return s(startInclusive, l -> (short) (l + step), l -> Math.abs(l) < Math.abs(endExlusive));
+	public static PrimitiveIterator.OfShort s(short startInclusive, short step, short endExclusive) {
+		return s(startInclusive, l -> (short) (l + step), l -> Math.abs(l) < Math.abs(endExclusive));
 	}
 
 	/*
@@ -1837,8 +1864,8 @@ public final class PrimitiveIterators {
 	 * @param endExclusive   the end value of the iterator (exclusive)
 	 * @return a primitive iterator of {@code byte} values
 	 */
-	public static PrimitiveIterator.OfByte b(byte startInclusive, byte step, byte endExlusive) {
-		return b(startInclusive, l -> (byte) (l + step), l -> Math.abs(l) < Math.abs(endExlusive));
+	public static PrimitiveIterator.OfByte b(byte startInclusive, byte step, byte endExclusive) {
+		return b(startInclusive, l -> (byte) (l + step), l -> Math.abs(l) < Math.abs(endExclusive));
 	}
 
 	/*
@@ -2599,7 +2626,7 @@ public final class PrimitiveIterators {
 	 */
 	public static <T> Iterator<T> consume(T[] array) {
 		return new Iterator<T>() {
-			private T[] a = array;
+			private final T[] a = array;
 			private boolean isExhausted = false;
 			public boolean hasNext() { return a.length > 0; }
 			@SuppressWarnings("unchecked")
@@ -2609,14 +2636,14 @@ public final class PrimitiveIterators {
 				if(a.length > 1)
 				System.arraycopy(a, 1, a, 0, a.length - 1);
 				else isExhausted = true;
-				System.err.println(a.length);
+//				System.err.println(a.length);
 				return e;
 			}
 		};
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfDouble#nextDouble()}. After
+	 * successful {@link PrimitiveIterator.OfDouble#nextDouble()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -2641,7 +2668,7 @@ public final class PrimitiveIterators {
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfLong#nextLong()}. After
+	 * successful {@link PrimitiveIterator.OfLong#nextLong()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -2666,7 +2693,7 @@ public final class PrimitiveIterators {
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfInt#nextInt()}. After
+	 * successful {@link PrimitiveIterator.OfInt#nextInt()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -2691,7 +2718,7 @@ public final class PrimitiveIterators {
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfFloat#nextFloat()}. After
+	 * successful {@link PrimitiveIterator.OfFloat#nextFloat()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -2716,7 +2743,7 @@ public final class PrimitiveIterators {
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfChar#nextChar()}. After
+	 * successful {@link PrimitiveIterator.OfChar#nextChar()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -2741,7 +2768,7 @@ public final class PrimitiveIterators {
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfShort#nextShort()}. After
+	 * successful {@link PrimitiveIterator.OfShort#nextShort()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -2766,7 +2793,7 @@ public final class PrimitiveIterators {
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfByte#nextByte()}. After
+	 * successful {@link PrimitiveIterator.OfByte#nextByte()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -2791,7 +2818,7 @@ public final class PrimitiveIterators {
 	}
 	/**
 	 * Creates an array that removes and returns the first element on every
-	 * successful {@link PrimtitiveIterator.OfBoolean#nextBoolean()}. After
+	 * successful {@link PrimitiveIterator.OfBoolean#nextBoolean()}. After
 	 * this method returns, the input array will be exhausted i.e will be empty.
 	 * <p>
 	 * An empty array will throw a {@link IllegalStateException} when an
@@ -3593,14 +3620,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfDouble} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addDouble(double) addDouble} methods
+	 * Returns a {@link PrimitiveListIterator.OfDouble} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfDouble#addDouble(double) addDouble} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextDouble()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -3634,14 +3661,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfLong} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addLong(long) addLong} methods
+	 * Returns a {@link PrimitiveListIterator.OfLong} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfLong#addLong(long) addLong} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextLong()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -3675,14 +3702,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfInt} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addInt(int) addInt} methods
+	 * Returns a {@link PrimitiveListIterator.OfInt} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfInt#addInt(int) addInt} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextInt()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -3716,14 +3743,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfFloat} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addFloat(float) addFloat} methods
+	 * Returns a {@link PrimitiveListIterator.OfFloat} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfFloat#addFloat(float) addFloat} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextFloat()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -3757,14 +3784,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfChar} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addChar(char) addChar} methods
+	 * Returns a {@link PrimitiveListIterator.OfChar} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfChar#addChar(char) addChar} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextChar()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -3798,14 +3825,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfShort} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addShort(short) addShort} methods
+	 * Returns a {@link PrimitiveListIterator.OfShort} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfShort#addShort(short) addShort} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextShort()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -3839,14 +3866,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfByte} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addByte(byte) addByte} methods
+	 * Returns a {@link PrimitiveListIterator.OfByte} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfByte#addByte(byte) addByte} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextByte()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -3880,14 +3907,14 @@ public final class PrimitiveIterators {
 		};
 	}
 	/**
-	 * Returns a {@link PrimitiveListIterator.OfBoolean} whose {@link ListIterator#remove() remove} and {@link PrimitiveListIterator#addBoolean(boolean) addBoolean} methods
+	 * Returns a {@link PrimitiveListIterator.OfBoolean} whose {@link java.util.ListIterator#remove() remove} and {@link PrimitiveListIterator.OfBoolean#addBoolean(boolean) addBoolean} methods
 	 * will attempt to mutate the underlying array according to
 	 * the rules of iteration in java.
 	 * @param array the underlying (backing) array
 	 * @return a mutable list-iterator whose mutable methods will not throw an
 	 * exception when called within the bounds of the {@code ListIterator}'s rules.
-	 * @see ListIterator#remove()
-	 * @see ListIterator#add(Object)
+	 * @see java.util.ListIterator#remove()
+	 * @see java.util.ListIterator#add(Object)
 	 * @throws IllegalStateException if {@code PrimitiveIterator.nextBoolean()} was not called prior to {@code Iterator.remove()}
 	 * @throws IllegalStateException if no elements remain in the backing array
 	 */
@@ -4170,6 +4197,239 @@ public final class PrimitiveIterators {
 				if(array.length < 1) throw new IllegalStateException("No more elements remaining");
 				System.arraycopy(array, i, array, i - 1, array.length - i--);
 				next = false;
+			}
+		};
+	}
+
+	public static PrimitiveIterator.OfDouble fromSpliterator(PrimitiveSpliterator.OfDouble spliterator) {
+		return new PrimitiveIterator.OfDouble() {
+			boolean valueReady = false;
+			double nextElement;
+
+			private void accept(double val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public double nextDouble() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfDouble consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptDouble(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
+			}
+		};
+	}
+	public static PrimitiveIterator.OfLong fromSpliterator(PrimitiveSpliterator.OfLong spliterator) {
+		return new PrimitiveIterator.OfLong() {
+			boolean valueReady = false;
+			long nextElement;
+
+			private void accept(long val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public long nextLong() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfLong consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptLong(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
+			}
+		};
+	}
+	public static PrimitiveIterator.OfInt fromSpliterator(PrimitiveSpliterator.OfInt spliterator) {
+		return new PrimitiveIterator.OfInt() {
+			boolean valueReady = false;
+			int nextElement;
+
+			private void accept(int val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public int nextInt() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfInt consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptInt(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
+			}
+		};
+	}
+	public static PrimitiveIterator.OfFloat fromSpliterator(PrimitiveSpliterator.OfFloat spliterator) {
+		return new PrimitiveIterator.OfFloat() {
+			boolean valueReady = false;
+			float nextElement;
+
+			private void accept(float val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public float nextFloat() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfFloat consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptFloat(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
+			}
+		};
+	}
+	public static PrimitiveIterator.OfChar fromSpliterator(PrimitiveSpliterator.OfChar spliterator) {
+		return new PrimitiveIterator.OfChar() {
+			boolean valueReady = false;
+			char nextElement;
+
+			private void accept(char val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public char nextChar() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfChar consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptChar(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
+			}
+		};
+	}
+	public static PrimitiveIterator.OfShort fromSpliterator(PrimitiveSpliterator.OfShort spliterator) {
+		return new PrimitiveIterator.OfShort() {
+			boolean valueReady = false;
+			short nextElement;
+
+			private void accept(short val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public short nextShort() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfShort consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptShort(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
+			}
+		};
+	}
+	public static PrimitiveIterator.OfByte fromSpliterator(PrimitiveSpliterator.OfByte spliterator) {
+		return new PrimitiveIterator.OfByte() {
+			boolean valueReady = false;
+			byte nextElement;
+
+			private void accept(byte val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public byte nextByte() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfByte consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptByte(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
+			}
+		};
+	}
+	public static PrimitiveIterator.OfBoolean fromSpliterator(PrimitiveSpliterator.OfBoolean spliterator) {
+		return new PrimitiveIterator.OfBoolean() {
+			boolean valueReady = false;
+			boolean nextElement;
+
+			private void accept(boolean val) {
+				valueReady = true;
+				nextElement = val;
+			}
+			public boolean hasNext() {
+				if(!valueReady) spliterator.tryAdvance(this::accept);
+				return valueReady;
+			}
+			public boolean nextBoolean() {
+				if(!valueReady && !hasNext()) throw  new NoSuchElementException();
+				else {
+					valueReady = false;
+					return nextElement;
+				}
+			}
+			public void forEachRemaining(jdk.prim.util.function.PrimitiveConsumer.OfBoolean consumer) {
+				if(valueReady) {
+					valueReady = false;
+					consumer.acceptBoolean(nextElement);
+				}
+				spliterator.forEachRemaining(consumer);
 			}
 		};
 	}

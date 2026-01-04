@@ -36,10 +36,7 @@ import jdk.prim.util.function.PrimitiveFunction;
  * 
  * @param <T>      the wrapper type for the primitive type being iterated.
  * @param <T_CONS> the type of the {@link PrimitiveConsumer primitive consumer}
- * @param <T_ITR>  the type of {@link PrimitiveIterator primitive iterator}
- * @param <T_SPTR> the type of {@link PrimitiveSpliterator primitive
- *                 spliterator}
- * 
+ *
  * @author Oruovo Etineakpopha Anthony
  */
 public interface PrimitiveIterable<T, T_CONS> extends Iterable<T>, BoxedPrimitive<Iterable<T>, T> {

@@ -74,7 +74,7 @@
  * </ol>
  * ... and many more to come.
  * <p>
- * Generally if a type (for example an interface) is defined as {@code Type<T>}, and it's (or one of it's) generic
+ * Generally if a type (for example, an interface) is defined as {@code Type<T>}, and it's (or one of it's) generic
  * method is {@code foo(T t)} then a primitive specialisation (for example a
  * {@code float}) for such a type would be {@code PrimitiveType.OfFloat extends PrimitiveType<java.lang.Float>}
  * and the specialised method would be {@code fooFloat(float f)}.
@@ -87,6 +87,6 @@ module jdk.primitives {
     exports jdk.prim.util.function;
     exports jdk.prim.util.map;
     exports jdk.prim.util.stream;
-    requires jdk.unsupported;// Used by the jdk.prim.util.dpqs package
-    requires java.logging;//Only used by the test enviroment
+    requires jdk.unsupported;// Used by the jdk.prim.util.dualpivot package
+    requires java.logging;//Only used by the test environment
 }

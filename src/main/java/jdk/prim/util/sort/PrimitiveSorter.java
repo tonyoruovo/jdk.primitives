@@ -20,11 +20,14 @@ public interface PrimitiveSorter<A, C extends PrimitiveComparator<?>> {
     enum Algorithm {
         /**
          * Represents Quick sort algorithms
-         * 
+         *
          * @see <a href="https://en.wikipedia.org/wiki/Quicksort">Wikipedia's Quick
          *      sort</a>
-         * @see https://awdesh.medium.com/dual-pivot-quick-sort-javas-default-sorting-algorithm-for-primitive-types-77342e1df5e5#:~:text=When%20input%20size%20array%20is,three%20parts%20around%202%20pivots.
-         * @see https://www.researchgate.net/publication/283532116_Why_Is_Dual-Pivot_Quicksort_Fast
+         * @see <a
+         *          href="https://awdesh.medium.com/dual-pivot-quick-sort-javas-default-sorting-algorithm-for-primitive-types-77342e1df5e5#:~:text=When%20input%20size%20array%20is,three%20parts%20around%202%20pivots">
+         *          Dual Pivot Quick Sort: Java’s default sorting algorithm for primitive types.
+         *       </a>.
+         * @see <a href="https://www.researchgate.net/publication/283532116_Why_Is_Dual-Pivot_Quicksort_Fast">Why Is Dual-Pivot Quicksort Fast</a>
          */
         QUICK,
         /**

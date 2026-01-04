@@ -16,44 +16,26 @@ import jdk.prim.util.function.PrimitiveConsumer;
  * 
  * @see Spliterator
  */
-public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.OfPrimitive<T, T_CONS, T_SPLITR>>
-		extends Spliterator.OfPrimitive<T, T_CONS, T_SPLITR> {
+public interface PrimitiveSpliterator<T, T_SPLITR extends Spliterator<T>>
+		extends Spliterator<T> {
 
 	/**
 	 * A spliterator for {@code double} values
 	 */
-	interface OfDouble extends PrimitiveSpliterator<Double, DoubleConsumer, Spliterator.OfDouble>, Spliterator.OfDouble {
+	interface OfDouble extends PrimitiveSpliterator<Double, PrimitiveSpliterator.OfDouble>, Spliterator.OfDouble {
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @return {@inheritDoc}
+		 * @see OfPrimitive#trySplit()
 		 */
 		@Override
 		PrimitiveSpliterator.OfDouble trySplit();
 
 		/**
-		 * 
-		 * If a remaining element exists: performs the given action on it,
-		 * returning {@code true}; else returns {@code false}. If this
-		 * Spliterator is {@link #ORDERED} the action is performed on the
-		 * next element in encounter order. Exceptions thrown by the
-		 * action are relayed to the caller.
-		 * <p>
-		 * Subsequent behavior of a spliterator is unspecified if the action throws
-		 * an exception.
-		 *
-		 * @param action The action whose operation is performed at-most once
-		 * @return {@code false} if no remaining elements existed
-		 *         upon entry to this method, else {@code true}.
-		 * @throws NullPointerException if the specified action is null
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
 		boolean tryAdvance(PrimitiveConsumer.OfDouble action);
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
-		 * @return {@inheritDoc}
+		 * @see java.util.Spliterator.OfDouble#tryAdvance(DoubleConsumer)
 		 */
 		@Override
 		default boolean tryAdvance(DoubleConsumer action) {
@@ -64,10 +46,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
-		 * @return {@inheritDoc}
+		 * @see java.util.Spliterator#tryAdvance(Consumer)
 		 */
 		@Override
 		default boolean tryAdvance(Consumer<? super java.lang.Double> action) {
@@ -78,24 +57,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * 
-		 * Performs the given action for each remaining element, sequentially in
-		 * the current thread, until all elements have been processed or the action
-		 * throws an exception. If this Spliterator is {@link #ORDERED}, actions
-		 * are performed in encounter order. Exceptions thrown by the action
-		 * are relayed to the caller.
-		 * <p>
-		 * Subsequent behavior of a spliterator is unspecified if the action throws
-		 * an exception.
-		 *
-		 * @implSpec
-		 *           The default implementation repeatedly invokes {@link #tryAdvance}
-		 *           until
-		 *           it returns {@code false}. It should be overridden whenever
-		 *           possible.
-		 *
-		 * @param action The action
-		 * @throws NullPointerException if the specified action is null
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
 		default void forEachRemaining(PrimitiveConsumer.OfDouble action) {
 			do {
@@ -103,9 +65,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
+		 * @see java.util.Spliterator.OfDouble#forEachRemaining(DoubleConsumer)
 		 */
 		@Override
 		default void forEachRemaining(DoubleConsumer action) {
@@ -116,9 +76,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
+		 * @see java.util.Spliterator#forEachRemaining(Consumer)
 		 */
 		@Override
 		default void forEachRemaining(Consumer<? super java.lang.Double> action) {
@@ -129,18 +87,16 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @return {@inheritDoc}
+		 * @see Spliterator#getComparator()
 		 */
 		@Override
-		PrimitiveComparator.OfDouble getComparator();
+		default PrimitiveComparator.OfDouble getComparator() { throw new IllegalStateException(); }
 	}
 
 	/**
 	 * A spliterator for {@code long} values
 	 */
-	interface OfLong extends PrimitiveSpliterator<Long, LongConsumer, Spliterator.OfLong>, Spliterator.OfLong {
+	interface OfLong extends PrimitiveSpliterator<Long, PrimitiveSpliterator.OfLong>, Spliterator.OfLong {
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -150,20 +106,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		PrimitiveSpliterator.OfLong trySplit();
 
 		/**
-		 * 
-		 * If a remaining element exists: performs the given action on it,
-		 * returning {@code true}; else returns {@code false}. If this
-		 * Spliterator is {@link #ORDERED} the action is performed on the
-		 * next element in encounter order. Exceptions thrown by the
-		 * action are relayed to the caller.
-		 * <p>
-		 * Subsequent behavior of a spliterator is unspecified if the action throws
-		 * an exception.
-		 *
-		 * @param action The action whose operation is performed at-most once
-		 * @return {@code false} if no remaining elements existed
-		 *         upon entry to this method, else {@code true}.
-		 * @throws NullPointerException if the specified action is null
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
 		boolean tryAdvance(PrimitiveConsumer.OfLong action);
 
@@ -196,24 +139,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * 
-		 * Performs the given action for each remaining element, sequentially in
-		 * the current thread, until all elements have been processed or the action
-		 * throws an exception. If this Spliterator is {@link #ORDERED}, actions
-		 * are performed in encounter order. Exceptions thrown by the action
-		 * are relayed to the caller.
-		 * <p>
-		 * Subsequent behavior of a spliterator is unspecified if the action throws
-		 * an exception.
-		 *
-		 * @implSpec
-		 *           The default implementation repeatedly invokes {@link #tryAdvance}
-		 *           until
-		 *           it returns {@code false}. It should be overridden whenever
-		 *           possible.
-		 *
-		 * @param action The action
-		 * @throws NullPointerException if the specified action is null
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
 		default void forEachRemaining(PrimitiveConsumer.OfLong action) {
 			do {
@@ -252,13 +178,13 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		 * @return {@inheritDoc}
 		 */
 		@Override
-		PrimitiveComparator.OfLong getComparator();
+		default PrimitiveComparator.OfLong getComparator() { throw new IllegalStateException(); }
 	}
 
 	/**
 	 * A spliterator for {@code int} values
 	 */
-	interface OfInt extends PrimitiveSpliterator<Integer, IntConsumer, Spliterator.OfInt>, Spliterator.OfInt {
+	interface OfInt extends PrimitiveSpliterator<Integer, PrimitiveSpliterator.OfInt>, Spliterator.OfInt {
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -268,20 +194,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		PrimitiveSpliterator.OfInt trySplit();
 
 		/**
-		 * 
-		 * If a remaining element exists: performs the given action on it,
-		 * returning {@code true}; else returns {@code false}. If this
-		 * Spliterator is {@link #ORDERED} the action is performed on the
-		 * next element in encounter order. Exceptions thrown by the
-		 * action are relayed to the caller.
-		 * <p>
-		 * Subsequent behavior of a spliterator is unspecified if the action throws
-		 * an exception.
-		 *
-		 * @param action The action whose operation is performed at-most once
-		 * @return {@code false} if no remaining elements existed
-		 *         upon entry to this method, else {@code true}.
-		 * @throws NullPointerException if the specified action is null
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
 		boolean tryAdvance(PrimitiveConsumer.OfInt action);
 
@@ -314,24 +227,7 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * 
-		 * Performs the given action for each remaining element, sequentially in
-		 * the current thread, until all elements have been processed or the action
-		 * throws an exception. If this Spliterator is {@link #ORDERED}, actions
-		 * are performed in encounter order. Exceptions thrown by the action
-		 * are relayed to the caller.
-		 * <p>
-		 * Subsequent behavior of a spliterator is unspecified if the action throws
-		 * an exception.
-		 *
-		 * @implSpec
-		 *           The default implementation repeatedly invokes {@link #tryAdvance}
-		 *           until
-		 *           it returns {@code false}. It should be overridden whenever
-		 *           possible.
-		 *
-		 * @param action The action
-		 * @throws NullPointerException if the specified action is null
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
 		default void forEachRemaining(PrimitiveConsumer.OfInt action) {
 			do {
@@ -370,13 +266,13 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		 * @return {@inheritDoc}
 		 */
 		@Override
-		PrimitiveComparator.OfInt getComparator();
+		default PrimitiveComparator.OfInt getComparator() { throw new IllegalStateException(); }
 	}
 
 	/**
 	 * A spliterator for {@code float} values
 	 */
-	interface OfFloat extends PrimitiveSpliterator<Float, PrimitiveConsumer.OfFloat, OfFloat> {
+	interface OfFloat extends PrimitiveSpliterator<Float, OfFloat> {
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -386,12 +282,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		OfFloat trySplit();
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
-		 * @return {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
-		@Override
 		boolean tryAdvance(PrimitiveConsumer.OfFloat action);
 
 		/**
@@ -409,11 +301,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
-		@Override
 		default void forEachRemaining(PrimitiveConsumer.OfFloat action) {
 			do {
 			} while (tryAdvance(action));
@@ -438,13 +327,13 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		 * @return {@inheritDoc}
 		 */
 		@Override
-		PrimitiveComparator.OfFloat getComparator();
+		default PrimitiveComparator.OfFloat getComparator() { throw new IllegalStateException(); }
 	}
 
 	/**
 	 * A spliterator for {@code char} values
 	 */
-	interface OfChar extends PrimitiveSpliterator<Character, PrimitiveConsumer.OfChar, OfChar> {
+	interface OfChar extends PrimitiveSpliterator<Character, OfChar> {
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -454,12 +343,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		OfChar trySplit();
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
-		 * @return {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
-		@Override
 		boolean tryAdvance(PrimitiveConsumer.OfChar action);
 
 		/**
@@ -477,11 +362,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
-		@Override
 		default void forEachRemaining(PrimitiveConsumer.OfChar action) {
 			do {
 			} while (tryAdvance(action));
@@ -506,13 +388,13 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		 * @return {@inheritDoc}
 		 */
 		@Override
-		PrimitiveComparator.OfChar getComparator();
+		default PrimitiveComparator.OfChar getComparator() { throw new IllegalStateException(); }
 	}
 
 	/**
 	 * A spliterator for {@code short} values
 	 */
-	interface OfShort extends PrimitiveSpliterator<Short, PrimitiveConsumer.OfShort, OfShort> {
+	interface OfShort extends PrimitiveSpliterator<Short, OfShort> {
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -522,12 +404,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		OfShort trySplit();
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
-		 * @return {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
-		@Override
 		boolean tryAdvance(PrimitiveConsumer.OfShort action);
 
 		/**
@@ -545,11 +423,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
-		@Override
 		default void forEachRemaining(PrimitiveConsumer.OfShort action) {
 			do {
 			} while (tryAdvance(action));
@@ -574,13 +449,13 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		 * @return {@inheritDoc}
 		 */
 		@Override
-		PrimitiveComparator.OfShort getComparator();
+		default PrimitiveComparator.OfShort getComparator() { throw new IllegalStateException(); }
 	}
 
 	/**
 	 * A spliterator for {@code byte} values
 	 */
-	interface OfByte extends PrimitiveSpliterator<Byte, PrimitiveConsumer.OfByte, OfByte> {
+	interface OfByte extends PrimitiveSpliterator<Byte, OfByte> {
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -590,12 +465,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		OfByte trySplit();
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
-		 * @return {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
-		@Override
 		boolean tryAdvance(PrimitiveConsumer.OfByte action);
 
 		/**
@@ -613,11 +484,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
-		@Override
 		default void forEachRemaining(PrimitiveConsumer.OfByte action) {
 			do {
 			} while (tryAdvance(action));
@@ -642,13 +510,13 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		 * @return {@inheritDoc}
 		 */
 		@Override
-		PrimitiveComparator.OfByte getComparator();
+		default PrimitiveComparator.OfByte getComparator() { throw new IllegalStateException(); }
 	}
 
 	/**
 	 * A spliterator for {@code boolean} values
 	 */
-	interface OfBoolean extends PrimitiveSpliterator<Boolean, PrimitiveConsumer.OfBoolean, OfBoolean> {
+	interface OfBoolean extends PrimitiveSpliterator<Boolean, OfBoolean> {
 		/**
 		 * {@inheritDoc}
 		 * 
@@ -658,12 +526,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		OfBoolean trySplit();
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
-		 * @return {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#tryAdvance(Object)
 		 */
-		@Override
 		boolean tryAdvance(PrimitiveConsumer.OfBoolean action);
 
 		/**
@@ -681,11 +545,8 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		}
 
 		/**
-		 * {@inheritDoc}
-		 * 
-		 * @param action {@inheritDoc}
+		 * @see java.util.Spliterator.OfPrimitive#forEachRemaining(Object)
 		 */
-		@Override
 		default void forEachRemaining(PrimitiveConsumer.OfBoolean action) {
 			do {
 			} while (tryAdvance(action));
@@ -710,6 +571,12 @@ public interface PrimitiveSpliterator<T, T_CONS, T_SPLITR extends Spliterator.Of
 		 * @return {@inheritDoc}
 		 */
 		@Override
-		PrimitiveComparator.OfBoolean getComparator();
+		default PrimitiveComparator.OfBoolean getComparator() { throw new IllegalStateException(); }
 	}
+
+	/**
+	 * @see OfPrimitive#trySplit()
+	 */
+	T_SPLITR trySplit();
+
 }

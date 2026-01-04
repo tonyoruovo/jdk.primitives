@@ -166,7 +166,7 @@ public final class OfInt {
 
                 /*
                  * Use the third of the five sorted elements as the pivot.
-                 * This value is inexpensive approximation of the median.
+                 * This value is an inexpensive approximation of the median.
                  */
                 int[] pivotIndices = partition(a, low, high, e3, e3, comparator, OfInt::partitionSinglePivot);
                 lower = pivotIndices[0];
@@ -190,7 +190,7 @@ public final class OfInt {
     /**
      * Partitions the specified range of the array using the two pivots provided.
      *
-     * @param array the array to be partitioned
+     * @param a the array to be partitioned
      * @param low the index of the first element, inclusive, for partitioning
      * @param high the index of the last element, exclusive, for partitioning
      * @param pivotIndex1 the index of pivot1, the first pivot
@@ -277,7 +277,7 @@ public final class OfInt {
     /**
      * Partitions the specified range of the array using a single pivot provided.
      *
-     * @param array the array to be partitioned
+     * @param a the array to be partitioned
      * @param low the index of the first element, inclusive, for partitioning
      * @param high the index of the last element, exclusive, for partitioning
      * @param pivotIndex1 the index of pivot1, the first pivot
