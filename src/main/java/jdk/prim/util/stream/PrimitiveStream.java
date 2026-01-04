@@ -59,9 +59,10 @@ FloatMapper extends PrimitiveFunction.ToFloat<T>,
 CharMapper extends PrimitiveFunction.ToChar<T>,
 ShortMapper extends PrimitiveFunction.ToShort<T>,
 ByteMapper extends PrimitiveFunction.ToByte<T>,
-BooleanMapper extends PrimitiveFunction.ToBoolean<T>
-> {
-    interface OfDouble extends PrimitiveStream<java.lang.Double, PrimitiveFunction.ToDouble.OfDouble, PrimitiveFunction.ToLong.OfDouble, PrimitiveFunction.ToInt.OfDouble, PrimitiveFunction.ToFloat.OfDouble, PrimitiveFunction.ToChar.OfDouble, PrimitiveFunction.ToShort.OfDouble, PrimitiveFunction.ToByte.OfDouble, PrimitiveFunction.ToBoolean.OfDouble>, DoubleStream {
+BooleanMapper extends PrimitiveFunction.ToBoolean<T>,
+PS extends PrimitiveStream<T, DoubleMapper, LongMapper, IntMapper, FloatMapper, CharMapper, ShortMapper, ByteMapper, BooleanMapper, PS>
+> extends BaseStream<T, PS> {
+    interface OfDouble extends PrimitiveStream<java.lang.Double, PrimitiveFunction.ToDouble.OfDouble, PrimitiveFunction.ToLong.OfDouble, PrimitiveFunction.ToInt.OfDouble, PrimitiveFunction.ToFloat.OfDouble, PrimitiveFunction.ToChar.OfDouble, PrimitiveFunction.ToShort.OfDouble, PrimitiveFunction.ToByte.OfDouble, PrimitiveFunction.ToBoolean.OfDouble, OfDouble> {
         boolean allMatchDouble(PrimitivePredicate.OfDouble predicate);
         boolean anyMatchDouble(PrimitivePredicate.OfDouble predicate);
         OptionalDouble average();
@@ -108,7 +109,7 @@ BooleanMapper extends PrimitiveFunction.ToBoolean<T>
             return mapToInt((DoubleToIntFunction) mapper);
         }
     }
-    interface OfLong extends PrimitiveStream<java.lang.Long, PrimitiveFunction.ToDouble.OfLong, PrimitiveFunction.ToLong.OfLong, PrimitiveFunction.ToInt.OfLong, PrimitiveFunction.ToFloat.OfLong, PrimitiveFunction.ToChar.OfLong, PrimitiveFunction.ToShort.OfLong, PrimitiveFunction.ToByte.OfLong, PrimitiveFunction.ToBoolean.OfLong>, LongStream {
+    interface OfLong extends PrimitiveStream<java.lang.Long, PrimitiveFunction.ToDouble.OfLong, PrimitiveFunction.ToLong.OfLong, PrimitiveFunction.ToInt.OfLong, PrimitiveFunction.ToFloat.OfLong, PrimitiveFunction.ToChar.OfLong, PrimitiveFunction.ToShort.OfLong, PrimitiveFunction.ToByte.OfLong, PrimitiveFunction.ToBoolean.OfLong, OfLong> {
         boolean allMatchLong(PrimitivePredicate.OfLong predicate);
         boolean anyMatchLong(PrimitivePredicate.OfLong predicate);
         OptionalDouble average();
@@ -155,7 +156,7 @@ BooleanMapper extends PrimitiveFunction.ToBoolean<T>
             return mapToInt((LongToIntFunction) mapper);
         }
     }
-    interface OfInt extends PrimitiveStream<java.lang.Integer, PrimitiveFunction.ToDouble.OfInt, PrimitiveFunction.ToLong.OfInt, PrimitiveFunction.ToInt.OfInt, PrimitiveFunction.ToFloat.OfInt, PrimitiveFunction.ToChar.OfInt, PrimitiveFunction.ToShort.OfInt, PrimitiveFunction.ToByte.OfInt, PrimitiveFunction.ToBoolean.OfInt>, IntStream {
+    interface OfInt extends PrimitiveStream<java.lang.Integer, PrimitiveFunction.ToDouble.OfInt, PrimitiveFunction.ToLong.OfInt, PrimitiveFunction.ToInt.OfInt, PrimitiveFunction.ToFloat.OfInt, PrimitiveFunction.ToChar.OfInt, PrimitiveFunction.ToShort.OfInt, PrimitiveFunction.ToByte.OfInt, PrimitiveFunction.ToBoolean.OfInt, OfInt> {
         boolean allMatchInt(PrimitivePredicate.OfInt predicate);
         boolean anyMatchInt(PrimitivePredicate.OfInt predicate);
         OptionalDouble average();
@@ -202,7 +203,7 @@ BooleanMapper extends PrimitiveFunction.ToBoolean<T>
             return map((IntUnaryOperator) mapper);
         }
     }
-    interface OfFloat extends PrimitiveStream<java.lang.Float, PrimitiveFunction.ToDouble.OfFloat, PrimitiveFunction.ToLong.OfFloat, PrimitiveFunction.ToInt.OfFloat, PrimitiveFunction.ToFloat.OfFloat, PrimitiveFunction.ToChar.OfFloat, PrimitiveFunction.ToShort.OfFloat, PrimitiveFunction.ToByte.OfFloat, PrimitiveFunction.ToBoolean.OfFloat>, BaseStream<java.lang.Float, OfFloat> {
+    interface OfFloat extends PrimitiveStream<java.lang.Float, PrimitiveFunction.ToDouble.OfFloat, PrimitiveFunction.ToLong.OfFloat, PrimitiveFunction.ToInt.OfFloat, PrimitiveFunction.ToFloat.OfFloat, PrimitiveFunction.ToChar.OfFloat, PrimitiveFunction.ToShort.OfFloat, PrimitiveFunction.ToByte.OfFloat, PrimitiveFunction.ToBoolean.OfFloat, OfFloat> {
         boolean allMatchFloat(PrimitivePredicate.OfFloat predicate);
         boolean anyMatchFloat(PrimitivePredicate.OfFloat predicate);
         OptionalDouble average();
@@ -231,7 +232,7 @@ BooleanMapper extends PrimitiveFunction.ToBoolean<T>
         OfFloat takeWhileFloat(PrimitivePredicate.OfFloat predicate);
         float[] toArray();
     }
-    interface OfChar extends PrimitiveStream<java.lang.Character, PrimitiveFunction.ToDouble.OfChar, PrimitiveFunction.ToLong.OfChar, PrimitiveFunction.ToInt.OfChar, PrimitiveFunction.ToFloat.OfChar, PrimitiveFunction.ToChar.OfChar, PrimitiveFunction.ToShort.OfChar, PrimitiveFunction.ToByte.OfChar, PrimitiveFunction.ToBoolean.OfChar>, BaseStream<java.lang.Character, OfChar> {
+    interface OfChar extends PrimitiveStream<java.lang.Character, PrimitiveFunction.ToDouble.OfChar, PrimitiveFunction.ToLong.OfChar, PrimitiveFunction.ToInt.OfChar, PrimitiveFunction.ToFloat.OfChar, PrimitiveFunction.ToChar.OfChar, PrimitiveFunction.ToShort.OfChar, PrimitiveFunction.ToByte.OfChar, PrimitiveFunction.ToBoolean.OfChar, OfChar> {
         boolean allMatchChar(PrimitivePredicate.OfChar predicate);
         boolean anyMatchChar(PrimitivePredicate.OfChar predicate);
         Optional<String> average();
@@ -260,7 +261,7 @@ BooleanMapper extends PrimitiveFunction.ToBoolean<T>
         OfChar takeWhileChar(PrimitivePredicate.OfChar predicate);
         char[] toArray();
     }
-    interface OfShort extends PrimitiveStream<java.lang.Short, PrimitiveFunction.ToDouble.OfShort, PrimitiveFunction.ToLong.OfShort, PrimitiveFunction.ToInt.OfShort, PrimitiveFunction.ToFloat.OfShort, PrimitiveFunction.ToChar.OfShort, PrimitiveFunction.ToShort.OfShort, PrimitiveFunction.ToByte.OfShort, PrimitiveFunction.ToBoolean.OfShort>, BaseStream<java.lang.Short, OfShort> {
+    interface OfShort extends PrimitiveStream<java.lang.Short, PrimitiveFunction.ToDouble.OfShort, PrimitiveFunction.ToLong.OfShort, PrimitiveFunction.ToInt.OfShort, PrimitiveFunction.ToFloat.OfShort, PrimitiveFunction.ToChar.OfShort, PrimitiveFunction.ToShort.OfShort, PrimitiveFunction.ToByte.OfShort, PrimitiveFunction.ToBoolean.OfShort, OfShort> {
         boolean allMatchShort(PrimitivePredicate.OfShort predicate);
         boolean anyMatchShort(PrimitivePredicate.OfShort predicate);
         OptionalShort average();
@@ -289,7 +290,7 @@ BooleanMapper extends PrimitiveFunction.ToBoolean<T>
         OfShort takeWhileShort(PrimitivePredicate.OfShort predicate);
         short[] toArray();
     }
-    interface OfByte extends PrimitiveStream<java.lang.Byte, PrimitiveFunction.ToDouble.OfByte, PrimitiveFunction.ToLong.OfByte, PrimitiveFunction.ToInt.OfByte, PrimitiveFunction.ToFloat.OfByte, PrimitiveFunction.ToChar.OfByte, PrimitiveFunction.ToShort.OfByte, PrimitiveFunction.ToByte.OfByte, PrimitiveFunction.ToBoolean.OfByte>, BaseStream<java.lang.Byte, OfByte> {
+    interface OfByte extends PrimitiveStream<java.lang.Byte, PrimitiveFunction.ToDouble.OfByte, PrimitiveFunction.ToLong.OfByte, PrimitiveFunction.ToInt.OfByte, PrimitiveFunction.ToFloat.OfByte, PrimitiveFunction.ToChar.OfByte, PrimitiveFunction.ToShort.OfByte, PrimitiveFunction.ToByte.OfByte, PrimitiveFunction.ToBoolean.OfByte, OfByte> {
         boolean allMatchByte(PrimitivePredicate.OfByte predicate);
         boolean anyMatchByte(PrimitivePredicate.OfByte predicate);
         OptionalByte average();
@@ -318,7 +319,7 @@ BooleanMapper extends PrimitiveFunction.ToBoolean<T>
         OfByte takeWhileByte(PrimitivePredicate.OfByte predicate);
         byte[] toArray();
     }
-    interface OfBoolean extends PrimitiveStream<java.lang.Boolean, PrimitiveFunction.ToDouble.OfBoolean, PrimitiveFunction.ToLong.OfBoolean, PrimitiveFunction.ToInt.OfBoolean, PrimitiveFunction.ToFloat.OfBoolean, PrimitiveFunction.ToChar.OfBoolean, PrimitiveFunction.ToShort.OfBoolean, PrimitiveFunction.ToByte.OfBoolean, PrimitiveFunction.ToBoolean.OfBoolean>, BaseStream<java.lang.Boolean, OfBoolean> {
+    interface OfBoolean extends PrimitiveStream<java.lang.Boolean, PrimitiveFunction.ToDouble.OfBoolean, PrimitiveFunction.ToLong.OfBoolean, PrimitiveFunction.ToInt.OfBoolean, PrimitiveFunction.ToFloat.OfBoolean, PrimitiveFunction.ToChar.OfBoolean, PrimitiveFunction.ToShort.OfBoolean, PrimitiveFunction.ToByte.OfBoolean, PrimitiveFunction.ToBoolean.OfBoolean, OfBoolean> {
         boolean allMatchBoolean(PrimitivePredicate.OfBoolean predicate);
         boolean anyMatchBoolean(PrimitivePredicate.OfBoolean predicate);
         OptionalBoolean average();

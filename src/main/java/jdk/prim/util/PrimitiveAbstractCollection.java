@@ -31,11 +31,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static double realloc(double[] array, PrimitiveIterator.OfDouble it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return (double) 0.0;
         }
     }
     /**
@@ -65,11 +66,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static long realloc(long[] array, PrimitiveIterator.OfLong it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return (long) 0.0;
         }
     }
     /**
@@ -99,11 +101,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static int realloc(int[] array, PrimitiveIterator.OfInt it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return (int) 0.0;
         }
     }
     /**
@@ -133,11 +136,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static float realloc(float[] array, PrimitiveIterator.OfFloat it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return (float) 0.0;
         }
     }
     /**
@@ -167,11 +171,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static char realloc(char[] array, PrimitiveIterator.OfChar it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return (char) 0.0;
         }
     }
     /**
@@ -201,11 +206,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static short realloc(short[] array, PrimitiveIterator.OfShort it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return (short) 0.0;
         }
     }
     /**
@@ -235,11 +241,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static byte realloc(byte[] array, PrimitiveIterator.OfByte it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return (byte) 0.0;
         }
     }
     /**
@@ -269,11 +276,12 @@ public final class PrimitiveAbstractCollection {
         }
 
         private static boolean realloc(boolean[] array, PrimitiveIterator.OfBoolean it) {
-            int len = array.length;
-            int i = len;
-            while(it.hasNext()) {
-                if(i == len)
-            }
+//            int len = array.length;
+//            int i = len;
+//            while(it.hasNext()) {
+//                if(i == len)
+//            }
+            return false;
         }
     }
 }
