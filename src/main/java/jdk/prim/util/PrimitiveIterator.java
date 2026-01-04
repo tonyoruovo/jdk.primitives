@@ -1836,8 +1836,8 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 * {@inheritDoc}
 		 */
 		@Override
-		default OfDouble toDouble() {
-			return new OfDouble() {
+		default jdk.prim.util.PrimitiveIterator.OfDouble toDouble() {
+			return new jdk.prim.util.PrimitiveIterator.OfDouble() {
 
 				@Override
 				public boolean hasNext() {
@@ -2892,8 +2892,8 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 * {@inheritDoc}
 		 */
 		@Override
-		default OfDouble toDouble() {
-			return new OfDouble() {
+		default jdk.prim.util.PrimitiveIterator.OfDouble toDouble() {
+			return new jdk.prim.util.PrimitiveIterator.OfDouble() {
 
 				@Override
 				public boolean hasNext() {
@@ -3419,8 +3419,8 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 * {@inheritDoc}
 		 */
 		@Override
-		default OfDouble toDouble() {
-			return new OfDouble() {
+		default jdk.prim.util.PrimitiveIterator.OfDouble toDouble() {
+			return new jdk.prim.util.PrimitiveIterator.OfDouble() {
 
 				@Override
 				public boolean hasNext() {
@@ -3946,8 +3946,8 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 		 * {@inheritDoc}
 		 */
 		@Override
-		default OfDouble toDouble() {
-			return new OfDouble() {
+		default jdk.prim.util.PrimitiveIterator.OfDouble toDouble() {
+			return new jdk.prim.util.PrimitiveIterator.OfDouble() {
 
 				@Override
 				public boolean hasNext() {
@@ -4181,9 +4181,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * 
 	 * @return an iterator of {@code double} whereby each element returned is cast
 	 *         to a {@code double}.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Double, DoubleConsumer> toDouble();
 
@@ -4196,9 +4196,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * 
 	 * @return an iterator of {@code long} whereby each element returned is cast to
 	 *         a {@code long}.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Long, LongConsumer> toLong();
 
@@ -4211,9 +4211,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * 
 	 * @return an iterator of {@code int} whereby each element returned is cast to a
 	 *         {@code int}.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Integer, IntConsumer> toInt();
 
@@ -4226,9 +4226,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * 
 	 * @return an iterator of {@code float} whereby each element returned is cast to
 	 *         a {@code float}.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Float, PrimitiveConsumer.OfFloat> toFloat();
 
@@ -4240,9 +4240,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * primitive conversion to take place.
 	 * 
 	 * @return an iterator of {@code char} cast of each element returned.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Character, PrimitiveConsumer.OfChar> toChar();
 
@@ -4255,9 +4255,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * 
 	 * @return an iterator of {@code short} whereby each element returned is cast to
 	 *         a {@code short}.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Short, PrimitiveConsumer.OfShort> toShort();
 
@@ -4270,9 +4270,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * 
 	 * @return an iterator of {@code byte} whereby each element returned is cast to
 	 *         a {@code byte}.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Byte, PrimitiveConsumer.OfByte> toByte();
 
@@ -4285,9 +4285,9 @@ public interface PrimitiveIterator<T, T_CONS> extends java.util.PrimitiveIterato
 	 * 
 	 * @return an iterator of {@code boolean} whereby each element returned is cast
 	 *         to a {@code boolean}.
-	 * @apiNote The returned iterator contains a reference to {@code this}. Hence
+	 * @apiNote The returned iterator contains a reference to {@code this}. Hence,
 	 *          any changes to the returned iterator affects {@code this} and
-	 *          vice-versa.
+	 *          vice versa.
 	 */
 	PrimitiveIterator<Boolean, PrimitiveConsumer.OfBoolean> toBoolean();
 }
